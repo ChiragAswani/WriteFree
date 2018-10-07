@@ -3,6 +3,9 @@
 # dependencies
 draftjs/node_modules
 
+#webstorm
+.idea/
+
 # testing
 /coverage
 
