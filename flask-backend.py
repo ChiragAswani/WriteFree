@@ -18,7 +18,7 @@ db = MongoEngine(app)
 #global counter
 counter = 0
 
-# stored class
+# defining the document structure
 class credentials(Document):
     name = StringField(required=True, max_length=15)
     pwd = StringField(required=True, max_length=12)
@@ -30,6 +30,7 @@ class Post(Document):
     # allow for inheritance
     meta = {'allow_inheritance': True}
 
+# --------------------------------------URL binding -----------------------------------------
 @app.route('/')
 def hello():
     global counter
