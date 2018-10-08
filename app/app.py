@@ -2,9 +2,11 @@ from flask import Flask, request, jsonify
 from flask_mongoengine import MongoEngine
 from mongoengine import *
 import time
+from flask_cors import CORS
 
 # initializations
 app = Flask(__name__)
+CORS(app)
 
 app.config['MONGODB_SETTINGS'] = {
     'db': 'WriteFreeDB',
@@ -28,7 +30,7 @@ class Post(Document):
     meta = {'allow_inheritance': True}
 
 # create account and store info into DB
-@app.route('/create-account', methods= ['POST'])
+@app.route('/create-account', methods= ['POST', 'OPTIONS'])
 def create():
     email = request.args['email']
     fullName = request.args['fullName']
@@ -41,7 +43,7 @@ def create():
         'fullName': fullName,
         'password': password
     }
-    return jsonify(savedDocument);
+    return jsonify(savedDocument), 200;
 
 # retrieve the account info and display it to the web
 @app.route ('/retrieve')
