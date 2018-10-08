@@ -1,27 +1,24 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_mongoengine import MongoEngine
 from mongoengine import *
-'''
-Date: Oct 7th 2018
-Descrption: This is the file for the flask backend
-'''
+import time
+
 # initializations
 app = Flask(__name__)
 
 app.config['MONGODB_SETTINGS'] = {
     'db': 'WriteFreeDB',
-
     'host': '127.0.0.1',
     'port': 27017
 }
 db = MongoEngine(app)
-#global counter
-counter = 0
 
 # stored class
 class credentials(Document):
-    name = StringField(required=True, max_length=15)
-    pwd = StringField(required=True, max_length=12)
+    timeStamp = StringField(required=True)
+    email = StringField(required=True)
+    fullName = StringField(required=True)
+    password = StringField(required=True)
 
 # post definition
 class Post(Document):
@@ -30,23 +27,21 @@ class Post(Document):
     # allow for inheritance
     meta = {'allow_inheritance': True}
 
-@app.route('/')
-def hello():
-    global counter
-    return str(counter)
-
 # create account and store info into DB
 @app.route('/create-account', methods= ['POST'])
 def create():
-    global counter
-    counter += 1
-    if request.method == 'POST':
-        usrname = request.args['username']
-        pwd = request.args['password']
-    usr = credentials(name=usrname, pwd=pwd).save()
-    post = Post(title=usrname, author=usr)
-    post.save()
-    return 'Account ' + str(counter) + ' added'
+    email = request.args['email']
+    fullName = request.args['fullName']
+    password = request.args['password']
+    timeStamp = str(time.time())
+    credentials(timeStamp=timeStamp, email=email, fullName=fullName, password=password).save()
+    savedDocument = {
+        'timeStamp': timeStamp,
+        'email': email,
+        'fullName': fullName,
+        'password': password
+    }
+    return jsonify(savedDocument);
 
 # retrieve the account info and display it to the web
 @app.route ('/retrieve')
