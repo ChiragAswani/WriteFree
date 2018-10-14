@@ -1,0 +1,1 @@
+{"_id":{"$oid":"5bc3821671cb33b0c0ae0dd3"},"timeStamp":"1539539478.65","email":"sp@g.c","fullName":"sid","password":"p","userNotes":[{"title":"test1","timeStamp":"1539539478.65","content":"this is the content ","noteSettings":{},"category":"History"},{"title":"test2","timeStamp":"153953944.65","content":"test2 content","noteSettings":{},"category":"Math"}]}
