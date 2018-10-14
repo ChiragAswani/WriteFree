@@ -2,6 +2,7 @@
 
 # dependencies
 draftjs/node_modules
+node_modules/
 
 #webstorm
 .idea/
