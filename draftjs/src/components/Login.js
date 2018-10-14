@@ -30,10 +30,13 @@ class Login extends React.Component {
                 this.setState({errors: body})
             } else {
                 console.log(body)
+                this.props.history.push({
+                    pathname: "/dashboard",
+                    state: {userData: body}
+                });
             }
         }.bind(this));
     }
-
     render() {
         return (
             <div>
