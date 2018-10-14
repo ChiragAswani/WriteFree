@@ -3,6 +3,8 @@ from flask_mongoengine import MongoEngine
 from mongoengine import *
 import time
 from flask_cors import CORS
+from pymongo import MongoClient
+
 
 # initializations
 app = Flask(__name__)
@@ -13,7 +15,11 @@ app.config['MONGODB_SETTINGS'] = {
     'host': '127.0.0.1',
     'port': 27017
 }
-db = MongoEngine(app)
+mongoDB = MongoEngine(app)
+
+client = MongoClient('mongodb://localhost:27017/')
+db = client['WriteFreeDB']
+
 
 # stored class
 class credentials(Document):
@@ -36,14 +42,34 @@ def create():
     fullName = request.args['fullName']
     password = request.args['password']
     timeStamp = str(time.time())
-    credentials(timeStamp=timeStamp, email=email, fullName=fullName, password=password).save()
+    credentials_collection = db['credentials']
+    if(credentials_collection.find_one({'email': email})):
+        return "An account already exists with " + email, 401;
+    else:
+        credentials(timeStamp=timeStamp, email=email, fullName=fullName, password=password).save()
+        savedDocument = {
+            'timeStamp': timeStamp,
+            'email': email,
+            'fullName': fullName,
+            'password': password
+        }
+        return jsonify(savedDocument), 200;
+
+# verify username and password, returns account details and notes
+@app.route('/login', methods= ['GET', 'OPTIONS'])
+def login():
+    email = request.args['email']
+    password = request.args['password']
     savedDocument = {
-        'timeStamp': timeStamp,
         'email': email,
-        'fullName': fullName,
         'password': password
     }
-    return jsonify(savedDocument), 200;
+    credentials_collection = db['credentials']
+    credentials = credentials_collection.find_one({'email': email, 'password': password})
+    if (credentials):
+        del credentials['_id']
+        return jsonify(credentials), 200;
+    return "Invalid Username or Password", 401;
 
 # retrieve the account info and display it to the web
 @app.route ('/retrieve')
