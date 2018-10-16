@@ -3,6 +3,7 @@
 # dependencies
 draftjs/node_modules
 node_modules/
+
 #webstorm
 .idea/
 
@@ -21,8 +22,6 @@ node_modules/
 
 npm-debug.log*
 yarn-debug.log*
-yarn-error.log*
 *.xml
 
-*.xml
-*.xml
+
