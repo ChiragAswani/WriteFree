@@ -1,11 +1,11 @@
 import React from 'react';
 import request from 'request';
-import { Form, Icon, Input, Button, Checkbox, Card } from 'antd';
+import { Input, Button, Card } from 'antd';
 import 'antd/dist/antd.css';
 import {withRouter} from "react-router-dom";
-import createHistory from "history/createBrowserHistory";
+//import createHistory from "history/createBrowserHistory";
 
-const history = createHistory()
+//const history = createHistory()
 
 class CreateAccount extends React.Component {
     constructor(props) {
@@ -33,16 +33,18 @@ class CreateAccount extends React.Component {
             };
             request(postCreateAnAccountInformation, function (error, response, body) {
                 if (error) throw new Error(error);
-                if (response.statusCode == 401){
+                if (response.statusCode === 401){
                     this.setState({errors: body})
                 } else {
-                    console.log(body)
+                    this.props.history.push({
+                        pathname: "/dashboard",
+                        state: {userData: body}
+                    });
                 }
             }.bind(this));
         }
     }
     render() {
-        console.log(this.state)
         return (
             <div>
                 <Card

@@ -1,11 +1,11 @@
 import React from 'react';
 import request from 'request';
-import { Form, Icon, Input, Button, Checkbox, Card } from 'antd';
+import { Input, Button, Card } from 'antd';
 import 'antd/dist/antd.css';
 import {withRouter} from "react-router-dom";
-import createHistory from "history/createBrowserHistory";
+//import createHistory from "history/createBrowserHistory";
 
-const history = createHistory()
+//const history = createHistory()
 
 class Login extends React.Component {
     constructor(props) {
@@ -26,10 +26,9 @@ class Login extends React.Component {
 
         request(postLoginInformation, function (error, response, body) {
             if (error) throw new Error(error);
-            if (response.statusCode == 401){
+            if (response.statusCode === 401){
                 this.setState({errors: body})
             } else {
-                console.log(body)
                 this.props.history.push({
                     pathname: "/dashboard",
                     state: {userData: body}

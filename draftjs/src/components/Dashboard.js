@@ -1,10 +1,9 @@
 import React from 'react';
-import request from 'request';
-import { Form, Icon, Input, Button, Checkbox, Card, Table } from 'antd';
+import { Table, Button } from 'antd';
 import 'antd/dist/antd.css';
 import {withRouter} from "react-router-dom";
-import createHistory from "history/createBrowserHistory";
-const history = createHistory()
+//import createHistory from "history/createBrowserHistory";
+//const history = createHistory()
 
 class Dashboard extends React.Component {
     constructor(props) {
@@ -60,12 +59,11 @@ class Dashboard extends React.Component {
     }
 
     render() {
-
-
+        console.log(this.state)
+        console.log(this.props)
         return (
-
             <div>
-
+            <Button type="primary" onClick={() =>this.props.history.push({ pathname: "/new-note", state: {userData: this.props.location.state.userData}})}>New Note</Button>
                 <Table  rowSelection={this.rowSelection} dataSource={this.createTable()} columns={this.state.columns} />
             </div>
         )
