@@ -12,6 +12,7 @@
     ...
   },
   "userNotes":[{
+    "noteid": "string"
     "title": "string",
     "timeStamp": "timeStamp/Date",
     "content": "string",
@@ -19,3 +20,6 @@
     "category": "history/english/math..."
   }, {}, {}, {}, etc..],
 }
+
+
+notes = [{}]

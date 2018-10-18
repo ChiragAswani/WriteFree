@@ -4,7 +4,7 @@ from mongoengine import *
 import time
 from flask_cors import CORS
 from pymongo import MongoClient
-
+import json
 
 # initializations
 app = Flask(__name__)
@@ -27,6 +27,7 @@ class credentials(Document):
     email = StringField(required=True)
     fullName = StringField(required=True)
     password = StringField(required=True)
+    userNotes = []
 
 # post definition
 class Post(Document):
@@ -46,24 +47,23 @@ def create():
     if(credentials_collection.find_one({'email': email})):
         return "An account already exists with " + email, 401;
     else:
-        credentials(timeStamp=timeStamp, email=email, fullName=fullName, password=password).save()
+        #credentials(timeStamp=timeStamp, email=email, fullName=fullName, password=password, userNotes=[]).save()
         savedDocument = {
-            'timeStamp': timeStamp,
-            'email': email,
-            'fullName': fullName,
-            'password': password
+            "timeStamp": timeStamp,
+            "email": email,
+            "fullName": fullName,
+            "password": password,
+            "userNotes": []
         }
-        return jsonify(savedDocument), 200;
+        credentials_collection.insert_one(savedDocument)
+        del savedDocument['_id']
+        return ((json.dumps(savedDocument)), 200);
 
 # verify username and password, returns account details and notes
 @app.route('/login', methods= ['GET', 'OPTIONS'])
 def login():
     email = request.args['email']
     password = request.args['password']
-    savedDocument = {
-        'email': email,
-        'password': password
-    }
     credentials_collection = db['credentials']
     credentials = credentials_collection.find_one({'email': email, 'password': password})
     if (credentials):
