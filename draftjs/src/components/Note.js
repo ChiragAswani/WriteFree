@@ -1,13 +1,14 @@
 import React from 'react';
 import {Editor, EditorState, RichUtils, convertToRaw, convertFromRaw} from "draft-js";
 import {withRouter} from "react-router-dom";
-import { Input } from 'antd';
+import { Input, Button} from 'antd';
+import request from 'request';
 
-class NewNote extends React.Component {
+class Note extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {editorState: EditorState.createEmpty()};
+        this.state = {editorState: EditorState.createEmpty(), noteCategory: this.props.location.state.noteData.category, noteHeader: this.props.location.state.noteData.title};
         this.focus = () => this.refs.editor.focus();
         this.onChange = (editorState) => this.setState({editorState});
 
@@ -44,14 +45,33 @@ class NewNote extends React.Component {
         );
     }
     componentDidMount(){
-        let contentState = '{"blocks":[{"key":"fg9l3","text":"Chirag","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}},{"key":"aclrs","text":"This is so cool","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}},{"key":"49ndr","text":"fdsfsdfsdfsdfsdfsdf","type":"ordered-list-item","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}'
-        this.setState({editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(contentState)))});
+        if (this.props.location.state.noteData.title){
+            let contentState = this.props.location.state.noteData.content
+            this.setState({editorState: EditorState.createWithContent(convertFromRaw((contentState)))});
+        }
     }
+    saveNote(title, category, noteID, noteContent){
+        const convertedNoteContent = convertToRaw(noteContent)
+        const obj = {title, category, noteID, noteContent: convertedNoteContent}
+        var saveNote = {
+            method: 'POST',
+            url: 'http://127.0.0.1:5000/save-note',
+            body: JSON.stringify(obj),
+            //qs: { title: title, category: category, noteID: noteID, content: convertedNoteContent},
+            headers: {'Content-Type': 'application/x-www-form-urlencoded' }
+        };
+        request(saveNote, function (error, response, body) {
+            if (error) throw new Error(error);
+            if (response.statusCode === 401){
+                this.setState({errors: body})
+            } else {
+                console.log(body)
+            }
+        }.bind(this));
 
+    }
     render() {
         const {editorState} = this.state;
-        // If the user changes block type before entering any text, we can
-        // either style the placeholder or hide it. Let's just hide it now.
         let className = 'RichEditor-editor';
         var contentState = editorState.getCurrentContent();
         if (!contentState.hasText()) {
@@ -59,11 +79,11 @@ class NewNote extends React.Component {
                 className += ' RichEditor-hidePlaceholder';
             }
         }
+        console.log(this.props)
         return (
-
             <div className="RichEditor-root">
-                <Input placeholder={"Note Header"}></Input>
-                <Input placeholder={"Note Category"}></Input>
+                <Input placeholder={"Note Header"} value={this.state.noteHeader} onChange={noteHeader => this.setState({noteHeader: noteHeader.target.value})}></Input>
+                <Input placeholder={"Note Category"} value={this.state.noteCategory} onChange={noteCategory => {this.setState({noteCategory: noteCategory.target.value})}}></Input>
                 <BlockStyleControls
                     editorState={editorState}
                     onToggle={this.toggleBlockType}
@@ -88,6 +108,7 @@ class NewNote extends React.Component {
                 <div>-------------------------------------</div>
                 <p> State Representation of Note </p>
                 <div>{JSON.stringify(convertToRaw(editorState.getCurrentContent()))}</div>
+                <Button onClick={() => this.saveNote(this.state.noteHeader, this.state.noteCategory, this.props.location.state.noteData._id, editorState.getCurrentContent())}>Save Note</Button>
             </div>
         );
     }
@@ -193,4 +214,4 @@ const InlineStyleControls = (props) => {
     );
 };
 
-export default withRouter(NewNote);
+export default withRouter(Note);

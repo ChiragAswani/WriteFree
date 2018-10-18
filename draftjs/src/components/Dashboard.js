@@ -2,6 +2,7 @@ import React from 'react';
 import { Table, Button } from 'antd';
 import 'antd/dist/antd.css';
 import {withRouter} from "react-router-dom";
+import request from 'request';
 //import createHistory from "history/createBrowserHistory";
 //const history = createHistory()
 
@@ -12,12 +13,11 @@ class Dashboard extends React.Component {
             columns: [{
                 title:"Document Name",
                 dataIndex: "title",
-                key: "title",
-                render: (text,record) => <a onClick={() => console.log(record)}>{text}</a>,
+                key: "title"
             }, {
-                title:"Date Modified",
-                dataIndex:"timeStamp",
-                key:"timeStamp",
+                title:"Date Created",
+                dataIndex:"createdAt",
+                key:"createdAt",
             }, {    
                 title:"Category",
                 dataIndex: "category",
@@ -25,24 +25,51 @@ class Dashboard extends React.Component {
             }, {
                 title: 'Action',
                 key: 'action',
-                render: () => (
-                    <span>
-                        <a href="javascript:;">Delete</a>
-                    </span>
-                ),
+                render: (text,record) =>
+                    <div>
+                        <a onClick={() => this.editNote(this.props.location.state.credentials.email, record._id)}>Edit | </a>
+                        <a onClick={() => this.deleteNote(this.props.location.state.credentials.email, record._id)}>Delete</a>
+                    </div>,
             }]
         }
     }
 
+    editNote(email, noteID){
+        var editNote = {
+            method: 'GET',
+            url: 'http://127.0.0.1:5000/fetch-note',
+            qs: { email, noteID },
+            headers: {'Content-Type': 'application/x-www-form-urlencoded' }
+        };
+        request(editNote, function (error, response, body) {
+            if (error) throw new Error(error);
+            this.props.history.push({
+                pathname: "/new-note",
+                state: {
+                    credentials: this.props.location.state.credentials,
+                    noteData: JSON.parse(body)
+                }
+            });
+        }.bind(this));
+    }
 
-    createTable(){
-        var data = JSON.parse(this.props.location.state.userData);
-        var userNotes = data.userNotes;
-
-        // for(var i = 0; i < userNotes.length; i++) {
-        //     delete userNotes[i]["noteSettings"]
-        // }
-        return userNotes;
+    deleteNote(email, noteID){
+        var deleteNote = {
+            method: 'DELETE',
+            url: 'http://127.0.0.1:5000/delete-note',
+            qs: { email, noteID },
+            headers: {'Content-Type': 'application/x-www-form-urlencoded' }
+        };
+        request(deleteNote, function (error, response, body) {
+            if (error) throw new Error(error);
+            this.props.history.push({
+                pathname: "/dashboard",
+                state: {
+                    credentials: this.props.location.state.credentials,
+                    noteData: this.props.location.state.noteData
+                }
+            });
+        }.bind(this));
     }
 
     rowSelection(){
@@ -58,13 +85,37 @@ class Dashboard extends React.Component {
         return rowSelection;
     }
 
+    generateNewNote(email){
+        var postNewNote = {
+            method: 'POST',
+            url: 'http://127.0.0.1:5000/new-note',
+            qs: { email },
+            headers: {'Content-Type': 'application/x-www-form-urlencoded' }
+        };
+        request(postNewNote, function (error, response, body) {
+            if (error) throw new Error(error);
+            if (response.statusCode === 401){
+                this.setState({errors: body})
+            } else {
+                console.log(body)
+                this.props.history.push({
+                    pathname: "/new-note",
+                    state: {
+                        credentials: this.props.location.state.credentials,
+                        noteData: JSON.parse(body)
+                    }
+                })
+            }
+        }.bind(this));
+    }
+
     render() {
         console.log(this.state)
         console.log(this.props)
         return (
             <div>
-            <Button type="primary" onClick={() =>this.props.history.push({ pathname: "/new-note", state: {userData: this.props.location.state.userData}})}>New Note</Button>
-                <Table  rowSelection={this.rowSelection} dataSource={this.createTable()} columns={this.state.columns} />
+            <Button type="primary" onClick={() => this.generateNewNote(this.props.location.state.credentials.email)}>New Note</Button>
+                <Table  rowSelection={this.rowSelection} dataSource={this.props.location.state.userData} columns={this.state.columns} />
             </div>
         )
     }

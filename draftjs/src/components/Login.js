@@ -23,15 +23,15 @@ class Login extends React.Component {
             qs:{email, password },
             headers: {'Content-Type': 'application/x-www-form-urlencoded' }
         };
-
         request(postLoginInformation, function (error, response, body) {
             if (error) throw new Error(error);
             if (response.statusCode === 401){
                 this.setState({errors: body})
             } else {
+                const parsedData = (JSON.parse(body))
                 this.props.history.push({
                     pathname: "/dashboard",
-                    state: {userData: body}
+                    state: {userData: parsedData.noteData, credentials: parsedData.credentials}
                 });
             }
         }.bind(this));

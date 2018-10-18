@@ -5,7 +5,7 @@ import './css/index.css';
 import CreateAccount from './components/CreateAccount';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
-import NewNote from './components/NewNote';
+import NewNote from './components/Note';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
