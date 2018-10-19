@@ -38,7 +38,7 @@ class CreateAccount extends React.Component {
                 } else {
                     this.props.history.push({
                         pathname: "/dashboard",
-                        state: {userData: body}
+                        state: {userData: [], credentials: (JSON.parse(body))}
                     });
                 }
             }.bind(this));
