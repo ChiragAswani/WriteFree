@@ -5,6 +5,7 @@ import time
 from flask_cors import CORS
 from pymongo import MongoClient
 import json
+from bson.objectid import ObjectId
 
 # initializations
 app = Flask(__name__)
@@ -15,26 +16,12 @@ app.config['MONGODB_SETTINGS'] = {
     'host': '127.0.0.1',
     'port': 27017
 }
-mongoDB = MongoEngine(app)
 
 client = MongoClient('mongodb://localhost:27017/')
 db = client['WriteFreeDB']
+credentials_collection = db['credentials']
+notes_collection = db['notes']
 
-
-# stored class
-class credentials(Document):
-    timeStamp = StringField(required=True)
-    email = StringField(required=True)
-    fullName = StringField(required=True)
-    password = StringField(required=True)
-    userNotes = []
-
-# post definition
-class Post(Document):
-    title = StringField(max_length=120, required=True)
-    author = ReferenceField(credentials)
-    # allow for inheritance
-    meta = {'allow_inheritance': True}
 
 # create account and store info into DB
 @app.route('/create-account', methods= ['POST', 'OPTIONS'])
@@ -42,18 +29,17 @@ def create():
     email = request.args['email']
     fullName = request.args['fullName']
     password = request.args['password']
-    timeStamp = str(time.time())
-    credentials_collection = db['credentials']
+    createdAt = str(time.time())
+
     if(credentials_collection.find_one({'email': email})):
         return "An account already exists with " + email, 401;
     else:
-        #credentials(timeStamp=timeStamp, email=email, fullName=fullName, password=password, userNotes=[]).save()
         savedDocument = {
-            "timeStamp": timeStamp,
+            "createdAt": createdAt,
             "email": email,
             "fullName": fullName,
             "password": password,
-            "userNotes": []
+            "defaultNoteSettings": {},
         }
         credentials_collection.insert_one(savedDocument)
         del savedDocument['_id']
@@ -64,16 +50,56 @@ def create():
 def login():
     email = request.args['email']
     password = request.args['password']
-    credentials_collection = db['credentials']
     credentials = credentials_collection.find_one({'email': email, 'password': password})
+    credentials["_id"] = str(credentials["_id"])
     if (credentials):
-        del credentials['_id']
-        return jsonify(credentials), 200;
+        userNotes = notes_collection.find({'email': email})
+        arrayOfNotes = []
+        for doc in userNotes:
+            doc["_id"] = str(doc["_id"])
+            arrayOfNotes.append(doc)
+        print(arrayOfNotes)
+        return jsonify({"noteData": arrayOfNotes, "credentials": credentials}), 200;
     return "Invalid Username or Password", 401;
 
-# retrieve the account info and display it to the web
-@app.route ('/retrieve')
-def retrieve():
-    for post in Post.objects:
-        print(post.title)
-    return 'Done retrieving'
+@app.route ('/delete-note', methods= ['DELETE', 'OPTIONS'])
+def deleteNote():
+    email = request.args['email']
+    noteID = request.args['noteID']
+    notes_collection.delete_one({'email': email, "_id": ObjectId(noteID)})
+    return "Successfull Deleted", 200;
+
+
+@app.route ('/new-note', methods= ['POST', 'OPTIONS'])
+def addNote():
+    email = request.args['email']
+    baseNewNote = {
+        "email": email,
+        "title": None,
+        "createdAt": str(time.time()),
+        "content": None,
+        "noteSettings": {},
+        "category": None,
+
+    }
+    _id = notes_collection.insert(baseNewNote);
+    x = (notes_collection.find_one({"_id": ObjectId(_id)}))
+    x["_id"] = str(x["_id"])
+    return jsonify(x), 200;
+
+@app.route ('/save-note', methods= ['POST', 'GET', 'OPTIONS'])
+def saveNote():
+    form_data = json.loads(request.get_data())
+    query = {"_id": ObjectId(form_data["noteID"])}
+    new_values={"title": form_data['title'], "category": form_data['category'], "content": form_data['noteContent']}
+    notes_collection.update_one(query, {"$set": new_values})
+    return "HI", 200;
+
+@app.route ('/fetch-note', methods= ['GET', 'OPTIONS'])
+def fetchNote():
+    email = request.args['email']
+    noteID = request.args['noteID']
+    print(email, noteID)
+    data = notes_collection.find_one({'email': email, "_id": ObjectId(noteID)})
+    data["_id"] = str(data["_id"])
+    return jsonify(data), 200;
