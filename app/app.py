@@ -1,6 +1,4 @@
 from flask import Flask, request, jsonify
-from flask_mongoengine import MongoEngine
-from mongoengine import *
 import time
 from flask_cors import CORS
 from pymongo import MongoClient

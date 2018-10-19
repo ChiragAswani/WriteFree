@@ -6,3 +6,6 @@ __pycache__/
 
 *.xml
 
+package-lock.json
+
+node_modules
