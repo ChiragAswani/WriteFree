@@ -32,6 +32,9 @@ class Dashboard extends React.Component {
                     </div>,
             }]
         }
+
+
+
     }
 
     editNote(email, noteID){
@@ -109,15 +112,55 @@ class Dashboard extends React.Component {
         }.bind(this));
     }
 
-    render() {
-        console.log(this.state)
-        console.log(this.props)
-        return (
-            <div>
-            <Button type="primary" onClick={() => this.generateNewNote(this.props.location.state.credentials.email)}>New Note</Button>
-                <Table  rowSelection={this.rowSelection} dataSource={this.props.location.state.userData} columns={this.state.columns} />
-            </div>
-        )
+    validate() {
+        let key = 'email'
+        if (!sessionStorage.getItem(key)) {
+            return false
+        }
+        return true
+    }
+
+    updateUserData(email){
+        var userData = {
+            method: 'GET',
+            url: 'http://127.0.0.1:5000/updateUserData',
+            qs: {email},
+            credentials: 'same-origin',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        };
+        request(userData, function (error, response, body) {
+            if (error) throw new Error(error);
+            if (response.statusCode === 401){
+                this.setState({errors: body})
+            } else {
+                const parsedData = (JSON.parse(body))
+                console.log("hello")
+                console.log(parsedData.noteData)
+                return parsedData.noteData
+            }
+        }.bind(this));
+    }
+
+    render(){
+        if(this.validate()) {
+            // Need to find a way to update the table
+            // this.updateUserData(sessionStorage.getItem('email'))
+            return (
+                <div>
+                    <Button type="primary"
+                            onClick={() => this.generateNewNote(this.props.location.state.credentials.email)}>New
+                        Note</Button>
+                    <Table rowSelection={this.rowSelection} dataSource={this.props.location.state.userData}
+                           columns={this.state.columns}/>
+                </div>
+            )
+        } else {
+            return (
+                <div>
+                    <p> You are not Logged In </p>
+                </div>
+            )
+        }
     }
 }
 

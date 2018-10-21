@@ -17,13 +17,25 @@ class CreateAccount extends React.Component {
             errors: []
         }
     }
+    validatePassword(password){
+        if(password.length >= 8 )
+            return true
+        return false
+    }
+
     validateEmail(email) {
         let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(String(email).toLowerCase());
     }
     createAnAccount(email, fullName, password) {
-        if (!this.validateEmail(email)){
-           this.setState({errors: "Please enter a valid email"})
+        if (!this.validatePassword(password) && !this.validateEmail(email)){
+            this.setState({errors: "Please enter a valid email and a password of at least 8 characters"})
+        }
+        else if (!this.validateEmail(email)) {
+            this.setState({errors: "Please enter a valid email"})
+        }
+        else if (!this.validatePassword(password)){
+            this.setState({errors: "Please enter a password of at least 8 characters"})
         } else {
             var postCreateAnAccountInformation = {
                 method: 'POST',
@@ -51,9 +63,9 @@ class CreateAccount extends React.Component {
                     title="Create An Account"
                     style={{ width: 400 }}
                 >
-                <Input placeholder="Email" onChange={email => this.setState({email: email.target.value})}/> <br/>
+                <Input placeholder="Email" type="email" name="username" onChange={email => this.setState({email: email.target.value})}/> <br/>
                 <Input placeholder="Full Name" onChange={fullName => this.setState({fullName: fullName.target.value})}/> <br/>
-                <Input placeholder="Password" onChange={password => this.setState({password: password.target.value})}/> <br/>
+                <Input placeholder="Password" type="password" name="password" onChange={password => this.setState({password: password.target.value})}/> <br/>
                 <Button type="primary" onClick={() => this.createAnAccount(this.state.email, this.state.fullName, this.state.password)}>Sign Up</Button><br/>
                     {this.state.errors}
                     <Card>
@@ -61,6 +73,7 @@ class CreateAccount extends React.Component {
                     </Card>
                 </Card>
             </div>
+
         )
     }
 }
