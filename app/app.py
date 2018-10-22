@@ -30,7 +30,7 @@ def create():
     createdAt = str(time.time())
 
     if(credentials_collection.find_one({'email': email})):
-        return "An account already exists with " + email, 401;
+        return "An account already exists with " + email, 401
     else:
         savedDocument = {
             "createdAt": createdAt,
@@ -41,7 +41,7 @@ def create():
         }
         credentials_collection.insert_one(savedDocument)
         del savedDocument['_id']
-        return ((json.dumps(savedDocument)), 200);
+        return ((json.dumps(savedDocument)), 200)
 
 # verify username and password, returns account details and notes
 @app.route('/login', methods= ['GET', 'OPTIONS'])
@@ -57,15 +57,15 @@ def login():
             doc["_id"] = str(doc["_id"])
             arrayOfNotes.append(doc)
         print(arrayOfNotes)
-        return jsonify({"noteData": arrayOfNotes, "credentials": credentials}), 200;
-    return "Invalid Username or Password", 401;
+        return jsonify({"noteData": arrayOfNotes, "credentials": credentials}), 200
+    return "Invalid Username or Password", 401
 
 @app.route ('/delete-note', methods= ['DELETE', 'OPTIONS'])
 def deleteNote():
     email = request.args['email']
     noteID = request.args['noteID']
     notes_collection.delete_one({'email': email, "_id": ObjectId(noteID)})
-    return "Successfull Deleted", 200;
+    return "Successfull Deleted", 200
 
 
 @app.route ('/new-note', methods= ['POST', 'OPTIONS'])
@@ -80,10 +80,10 @@ def addNote():
         "category": None,
 
     }
-    _id = notes_collection.insert(baseNewNote);
+    _id = notes_collection.insert(baseNewNote)
     x = (notes_collection.find_one({"_id": ObjectId(_id)}))
     x["_id"] = str(x["_id"])
-    return jsonify(x), 200;
+    return jsonify(x), 200
 
 @app.route ('/save-note', methods= ['POST', 'GET', 'OPTIONS'])
 def saveNote():
@@ -91,7 +91,7 @@ def saveNote():
     query = {"_id": ObjectId(form_data["noteID"])}
     new_values={"title": form_data['title'], "category": form_data['category'], "content": form_data['noteContent']}
     notes_collection.update_one(query, {"$set": new_values})
-    return "HI", 200;
+    return "HI", 200
 
 @app.route ('/fetch-note', methods= ['GET', 'OPTIONS'])
 def fetchNote():
@@ -100,4 +100,4 @@ def fetchNote():
     print(email, noteID)
     data = notes_collection.find_one({'email': email, "_id": ObjectId(noteID)})
     data["_id"] = str(data["_id"])
-    return jsonify(data), 200;
+    return jsonify(data), 200
