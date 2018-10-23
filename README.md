@@ -1,4 +1,16 @@
-## Python 3 w/ Virtual Enviornment
+## Configure Database
+#### Initialize Mongo
+```
+mongod
+```
+#### Create Database
+```
+use WriteFreeDB
+```
+[MongoDB GUI](https://www.mongodb.com/products/compass) 
+
+
+## Run Through Virtual Enviornment
 #### Install Python 3 
 ```
 brew install python3
@@ -14,4 +26,10 @@ source venv/bin/activate
 #### Install Dependencies:
 ```
 pip install -r requirements.txt
+```
+#### Run Application:
+```
+cd into the app/ folder (cd .., cd .., cd app/)
+FLASK_APP=app.py
+flask run
 ```
