@@ -28,6 +28,9 @@ class Login extends React.Component {
             if (response.statusCode === 401){
                 this.setState({errors: body})
             } else {
+                sessionStorage.clear();
+                let key = 'email'
+                sessionStorage.setItem(key, email)
                 const parsedData = JSON.parse(body)
                 this.props.history.push({
                     pathname: "/dashboard",

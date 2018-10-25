@@ -120,16 +120,35 @@ class Dashboard extends React.Component {
         })
     }
 
+    validate() {
+        let key = 'email'
+        if (!sessionStorage.getItem(key)) {
+            return false
+        }
+        return true
+    }
+
     render() {
         console.log("STATE", this.state)
         console.log("HISTORY", this.props.location.state)
-        return (
-            <div>
-            <Button type="primary" onClick={() => this.generateNewNote(this.props.location.state.credentials.email)}>New Note</Button>
-            <Button type="danger" onClick={() => this.goToDefaultSettings()}>Default Settings</Button>
-            <Table  rowSelection={this.rowSelection} dataSource={this.props.location.state.notes} columns={this.state.columns} />
-            </div>
-        )
+        if(this.validate()) {
+            return (
+                <div>
+                    <Button type="primary"
+                            onClick={() => this.generateNewNote(this.props.location.state.credentials.email)}>New
+                        Note</Button>
+                    <Button type="danger" onClick={() => this.goToDefaultSettings()}>Default Settings</Button>
+                    <Table rowSelection={this.rowSelection} dataSource={this.props.location.state.notes}
+                           columns={this.state.columns}/>
+                </div>
+            )
+        } else {
+            return (
+                <div>
+                    <p>You are not logged in</p>
+                </div>
+            )
+        }
     }
 }
 
