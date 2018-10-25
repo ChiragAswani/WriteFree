@@ -6,6 +6,7 @@ import CreateAccount from './components/CreateAccount';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import NewNote from './components/Note';
+import DefaultSettings from './components/DefaultSettings';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
@@ -15,6 +16,7 @@ ReactDOM.render(
             <Route path="/login" component={Login} />
             <Route path="/dashboard" component={Dashboard}/>
             <Route path="/new-note" component={NewNote}/>
+            <Route path="/default-settings" component={DefaultSettings}/>
         </Switch>
     </BrowserRouter >,
     document.getElementById('root'));

@@ -3,6 +3,7 @@ import {Editor, EditorState, RichUtils, convertToRaw, convertFromRaw} from "draf
 import {withRouter} from "react-router-dom";
 import { Input, Button} from 'antd';
 import request from 'request';
+import GoToDashboardButton from './GoToDashboardButton';
 
 class Note extends React.Component {
 
@@ -65,7 +66,7 @@ class Note extends React.Component {
             if (response.statusCode === 401){
                 this.setState({errors: body})
             } else {
-                console.log(body)
+                //console.log(body)
             }
         }.bind(this));
 
@@ -79,7 +80,8 @@ class Note extends React.Component {
                 className += ' RichEditor-hidePlaceholder';
             }
         }
-        console.log(this.props)
+        console.log("STATE", this.state)
+        console.log("HISTORY", this.props.location.state)
         return (
             <div className="RichEditor-root">
                 <Input placeholder={"Note Header"} value={this.state.noteHeader} onChange={noteHeader => this.setState({noteHeader: noteHeader.target.value})}></Input>
@@ -109,6 +111,7 @@ class Note extends React.Component {
                 <p> State Representation of Note </p>
                 <div>{JSON.stringify(convertToRaw(editorState.getCurrentContent()))}</div>
                 <Button onClick={() => this.saveNote(this.state.noteHeader, this.state.noteCategory, this.props.location.state.noteData._id, editorState.getCurrentContent())}>Save Note</Button>
+                <GoToDashboardButton/>
             </div>
         );
     }

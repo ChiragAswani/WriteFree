@@ -62,11 +62,12 @@ class Dashboard extends React.Component {
         };
         request(deleteNote, function (error, response, body) {
             if (error) throw new Error(error);
+            const parsedData = JSON.parse(body)
             this.props.history.push({
                 pathname: "/dashboard",
                 state: {
                     credentials: this.props.location.state.credentials,
-                    noteData: this.props.location.state.noteData
+                    notes: parsedData.notes
                 }
             });
         }.bind(this));
@@ -75,7 +76,7 @@ class Dashboard extends React.Component {
     rowSelection(){
         var rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+                //console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
             },
             getCheckboxProps: record => ({
                 disabled: record.name === 'Disabled User', // Column configuration not to be checked
@@ -97,11 +98,11 @@ class Dashboard extends React.Component {
             if (response.statusCode === 401){
                 this.setState({errors: body})
             } else {
-                console.log(body)
                 this.props.history.push({
                     pathname: "/new-note",
                     state: {
                         credentials: this.props.location.state.credentials,
+                        notes: this.props.location.state.notes,
                         noteData: JSON.parse(body)
                     }
                 })
@@ -109,13 +110,24 @@ class Dashboard extends React.Component {
         }.bind(this));
     }
 
+    goToDefaultSettings(){
+        this.props.history.push({
+            pathname: "/default-settings",
+            state: {
+                credentials: this.props.location.state.credentials,
+                notes: this.props.location.state.notes
+            }
+        })
+    }
+
     render() {
-        console.log(this.state)
-        console.log(this.props)
+        console.log("STATE", this.state)
+        console.log("HISTORY", this.props.location.state)
         return (
             <div>
             <Button type="primary" onClick={() => this.generateNewNote(this.props.location.state.credentials.email)}>New Note</Button>
-                <Table  rowSelection={this.rowSelection} dataSource={this.props.location.state.userData} columns={this.state.columns} />
+            <Button type="danger" onClick={() => this.goToDefaultSettings()}>Default Settings</Button>
+            <Table  rowSelection={this.rowSelection} dataSource={this.props.location.state.notes} columns={this.state.columns} />
             </div>
         )
     }

@@ -36,15 +36,18 @@ class CreateAccount extends React.Component {
                 if (response.statusCode === 401){
                     this.setState({errors: body})
                 } else {
+                    const parsedBody = JSON.parse(body)
                     this.props.history.push({
                         pathname: "/dashboard",
-                        state: {userData: [], credentials: (JSON.parse(body))}
+                        state: {notes: parsedBody.notes, credentials: parsedBody.credentials}
                     });
                 }
             }.bind(this));
         }
     }
     render() {
+        console.log("STATE", this.state)
+        console.log("HISTORY", this.props.location.state)
         return (
             <div>
                 <Card

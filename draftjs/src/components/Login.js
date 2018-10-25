@@ -28,15 +28,17 @@ class Login extends React.Component {
             if (response.statusCode === 401){
                 this.setState({errors: body})
             } else {
-                const parsedData = (JSON.parse(body))
+                const parsedData = JSON.parse(body)
                 this.props.history.push({
                     pathname: "/dashboard",
-                    state: {userData: parsedData.noteData, credentials: parsedData.credentials}
+                    state: {notes: parsedData.notes, credentials: parsedData.credentials}
                 });
             }
         }.bind(this));
     }
     render() {
+        console.log("STATE", this.state)
+        console.log("HISTORY", this.props.location.state)
         return (
             <div>
                 <Card
