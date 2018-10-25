@@ -1,13 +1,19 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session
 import time
 from flask_cors import CORS
 from pymongo import MongoClient
 import json
 from bson.objectid import ObjectId
+from flask_bcrypt import Bcrypt
+
+
 
 # initializations
 app = Flask(__name__)
 CORS(app)
+app.secret_key = 'super secret key'
+SESSION_TYPE = 'redis'
+bcrypt = Bcrypt(app)
 
 app.config['MONGODB_SETTINGS'] = {
     'db': 'WriteFreeDB',
@@ -20,6 +26,10 @@ db = client['WriteFreeDB']
 credentials_collection = db['credentials']
 notes_collection = db['notes']
 
+@app.before_request
+def session_management():
+    # make the session last indefinitely until it is cleared
+    session.permanent = True
 
 # create account and store info into DB
 @app.route('/create-account', methods= ['POST', 'OPTIONS'])
@@ -28,7 +38,8 @@ def create():
     fullName = request.args['fullName']
     password = request.args['password']
     createdAt = str(time.time())
-
+    # hash the password and save it in pw_hash
+    pw_hash = bcrypt.generate_password_hash(password)
     if(credentials_collection.find_one({'email': email})):
         return "An account already exists with " + email, 401
     else:
@@ -36,13 +47,13 @@ def create():
             "createdAt": createdAt,
             "email": email,
             "fullName": fullName,
-            "password": password,
+            "password": pw_hash,
             "defaultNoteSettings": {},
         }
         credentials_collection.insert_one(savedDocument)
         savedDocument["_id"] = str(savedDocument["_id"])
+        del savedDocument['password']
         document = jsonify({"notes": [], "credentials": savedDocument})
-        print(document)
         return (document, 200)
 
 # verify username and password, returns account details and notes
@@ -50,13 +61,20 @@ def create():
 def login():
     email = request.args['email']
     password = request.args['password']
-    credentials = credentials_collection.find_one({'email': email, 'password': password})
-    print(credentials)
+    credentials = credentials_collection.find_one({'email': email})
     if (credentials):
-        credentials["_id"] = str(credentials["_id"])
-        arrayOfNotes = getArrayOfNotes(email)
-        return jsonify({"notes": arrayOfNotes, "credentials": credentials}), 200
-    return "Invalid Username or Password", 401
+        hashed_password = bcrypt.generate_password_hash(password)
+        if (bcrypt.check_password_hash(hashed_password, password)):
+            arrayOfNotes = getArrayOfNotes(email)
+            del credentials["password"]
+            return jsonify({"noteData": arrayOfNotes, "credentials": credentials}), 200;
+        return "Invalid Email or Password", 401;
+    return "Email Does Not Exist", 401
+
+#TODO: Add logout feature
+#@app.route ('/logout....
+#   ensure that the user is out of the session too
+#   session.pop('email', None)
 
 @app.route('/get-notes', methods= ['GET', 'OPTIONS'])
 def getNotes():
