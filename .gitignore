@@ -31,3 +31,4 @@ yarn-debug.log*
 *.json
 .idea/workspace.xml
 draftjs/package.json
+.idea/workspace.xml

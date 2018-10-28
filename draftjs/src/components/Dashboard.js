@@ -32,6 +32,12 @@ class Dashboard extends React.Component {
                     </div>,
             }]
         }
+        //create a rowkey for each notes
+        for (var i = 0; i < this.props.location.state.notes.length; i++)
+        {
+            this.props.location.state.notes[i]["key"] = (i+1);
+            console.log(this.props.location.state.notes[i]);
+        }
     }
 
     editNote(email, noteID){
@@ -129,8 +135,8 @@ class Dashboard extends React.Component {
     }
 
     render() {
-        console.log("STATE", this.state)
-        console.log("HISTORY", this.props.location.state)
+        //console.log("STATE", this.state)
+        //console.log("HISTORY", this.props.location.state)
         if(this.validate()) {
             return (
                 <div>
@@ -138,7 +144,7 @@ class Dashboard extends React.Component {
                             onClick={() => this.generateNewNote(this.props.location.state.credentials.email)}>New
                         Note</Button>
                     <Button type="danger" onClick={() => this.goToDefaultSettings()}>Default Settings</Button>
-                    <Table rowSelection={this.rowSelection} dataSource={this.props.location.state.notes}
+                    <Table rowSelection={this.rowSelection()} dataSource={this.props.location.state.notes}
                            columns={this.state.columns}/>
                 </div>
             )
