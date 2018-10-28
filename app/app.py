@@ -66,8 +66,10 @@ def login():
         hashed_password = bcrypt.generate_password_hash(password)
         if (bcrypt.check_password_hash(hashed_password, password)):
             arrayOfNotes = getArrayOfNotes(email)
+            print(arrayOfNotes)
+            credentials["_id"] = str(credentials["_id"])
             del credentials["password"]
-            return jsonify({"noteData": arrayOfNotes, "credentials": credentials}), 200;
+            return jsonify({"notes": arrayOfNotes, "credentials": credentials}), 200;
         return "Invalid Email or Password", 401;
     return "Email Does Not Exist", 401
 
