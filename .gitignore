@@ -28,3 +28,6 @@ yarn-debug.log*
 *.xml
 *.xml
 *.xml
+*.json
+.idea/workspace.xml
+draftjs/package.json
