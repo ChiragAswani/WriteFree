@@ -94,8 +94,8 @@ class DefaultSettings extends React.Component {
                 }],
             }],
         }];
-        console.log("STATE", this.state)
-        console.log("HISTORY", this.props.location.state)
+        //console.log("STATE", this.state)
+        //console.log("HISTORY", this.props.location.state)
         return (
             <div>
                 <br/>

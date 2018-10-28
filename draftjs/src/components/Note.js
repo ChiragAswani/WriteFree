@@ -80,8 +80,8 @@ class Note extends React.Component {
                 className += ' RichEditor-hidePlaceholder';
             }
         }
-        console.log("STATE", this.state)
-        console.log("HISTORY", this.props.location.state)
+        //console.log("STATE", this.state)
+        //console.log("HISTORY", this.props.location.state)
         return (
             <div className="RichEditor-root">
                 <Input placeholder={"Note Header"} value={this.state.noteHeader} onChange={noteHeader => this.setState({noteHeader: noteHeader.target.value})}></Input>

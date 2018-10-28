@@ -38,8 +38,8 @@ class GoToDashboardButton extends React.Component {
 
 
     render() {
-        console.log("STATE", this.state)
-        console.log("HISTORY", this.props.location.state)
+        //console.log("STATE", this.state)
+        //console.log("HISTORY", this.props.location.state)
         return (
             <Button type="primary" onClick={() => this.goToDashBoard(this.props.location.state.credentials.email)}>Go To Dashboard</Button>
         )

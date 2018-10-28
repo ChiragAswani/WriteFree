@@ -46,8 +46,8 @@ class CreateAccount extends React.Component {
         }
     }
     render() {
-        console.log("STATE", this.state)
-        console.log("HISTORY", this.props.location.state)
+        //console.log("STATE", this.state)
+        //console.log("HISTORY", this.props.location.state)
         return (
             <div>
                 <Card

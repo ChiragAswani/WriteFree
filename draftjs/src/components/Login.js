@@ -42,8 +42,8 @@ class Login extends React.Component {
         }.bind(this));
     }
     render() {
-        console.log("STATE", this.state)
-        console.log("HISTORY", this.props.location.state)
+        //console.log("STATE", this.state)
+        //console.log("HISTORY", this.props.location.state)
         return (
             <div>
                 <Card

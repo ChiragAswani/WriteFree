@@ -32,12 +32,6 @@ class Dashboard extends React.Component {
                     </div>,
             }]
         }
-        //create a rowkey for each notes
-        for (var i = 0; i < this.props.location.state.notes.length; i++)
-        {
-            this.props.location.state.notes[i]["key"] = (i+1);
-            console.log(this.props.location.state.notes[i]);
-        }
     }
 
     editNote(email, noteID){
@@ -60,6 +54,7 @@ class Dashboard extends React.Component {
     }
 
     deleteNote(email, noteID){
+        console.log(this.props.location.state.notes);
         var deleteNote = {
             method: 'DELETE',
             url: 'http://127.0.0.1:5000/delete-note',
