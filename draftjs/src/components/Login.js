@@ -31,7 +31,9 @@ class Login extends React.Component {
                 sessionStorage.clear();
                 let key = 'email'
                 sessionStorage.setItem(key, email)
+
                 const parsedData = JSON.parse(body)
+                console.log("PARSED DATA", parsedData)
                 this.props.history.push({
                     pathname: "/dashboard",
                     state: {notes: parsedData.notes, credentials: parsedData.credentials}
