@@ -136,7 +136,6 @@ class Dashboard extends React.Component {
         //console.log("STATE", this.state)
         //console.log("HISTORY", this.props.location.state)
         if(this.validate()) {
-            var data =[];
             //convert the userDate from the login page to the dateSource so that it can be used in Table opeartions
             for (var i = 0; i < this.props.location.state.notes.length; i++){
 
