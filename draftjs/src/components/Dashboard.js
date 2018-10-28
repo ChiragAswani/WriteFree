@@ -37,14 +37,14 @@ class Dashboard extends React.Component {
     editNote(email, noteID){
         var editNote = {
             method: 'GET',
-            url: 'http://127.0.0.1:5000/fetch-note',
+            url: 'http://127.0.0.1:5000/fetch-note/'+ String(noteID),
             qs: { email, noteID },
             headers: {'Content-Type': 'application/x-www-form-urlencoded' }
         };
         request(editNote, function (error, response, body) {
             if (error) throw new Error(error);
             this.props.history.push({
-                pathname: "/new-note",
+                pathname: "/note/"+noteID,
                 state: {
                     credentials: this.props.location.state.credentials,
                     noteData: JSON.parse(body)
@@ -54,7 +54,7 @@ class Dashboard extends React.Component {
     }
 
     deleteNote(email, noteID){
-        console.log(this.props.location.state.notes);
+        //console.log(this.props.location.state.notes);
         var deleteNote = {
             method: 'DELETE',
             url: 'http://127.0.0.1:5000/delete-note',
@@ -63,7 +63,7 @@ class Dashboard extends React.Component {
         };
         request(deleteNote, function (error, response, body) {
             if (error) throw new Error(error);
-            const parsedData = JSON.parse(body)
+            const parsedData = JSON.parse(body);
             this.props.history.push({
                 pathname: "/dashboard",
                 state: {
@@ -98,15 +98,18 @@ class Dashboard extends React.Component {
             if (error) throw new Error(error);
             if (response.statusCode === 401){
                 this.setState({errors: body})
-            } else {
-                this.props.history.push({
-                    pathname: "/new-note",
-                    state: {
-                        credentials: this.props.location.state.credentials,
-                        notes: this.props.location.state.notes,
-                        noteData: JSON.parse(body)
-                    }
-                })
+            } else
+                {
+                    //convert body to json format
+                    var js_body = JSON.parse(body);
+                    this.props.history.push({
+                            pathname: "/new-note/" + js_body["_id"],
+                            state: {
+                            credentials: this.props.location.state.credentials,
+                            notes: this.props.location.state.notes,
+                            noteData: js_body
+                        }
+                    })
             }
         }.bind(this));
     }
@@ -122,7 +125,7 @@ class Dashboard extends React.Component {
     }
 
     validate() {
-        let key = 'email'
+        let key = 'email';
         if (!sessionStorage.getItem(key)) {
             return false
         }

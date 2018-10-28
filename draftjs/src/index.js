@@ -15,8 +15,9 @@ ReactDOM.render(
             <Route path="/create-account" component={CreateAccount} />
             <Route path="/login" component={Login} />
             <Route path="/dashboard" component={Dashboard}/>
-            <Route path="/new-note" component={NewNote}/>
+            <Route path="/new-note/:noteid" component={NewNote}/>
             <Route path="/default-settings" component={DefaultSettings}/>
+            <Route path="/note/:noteid" component={NewNote}/>
         </Switch>
     </BrowserRouter >,
     document.getElementById('root'));

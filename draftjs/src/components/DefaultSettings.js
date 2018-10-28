@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Cascader} from 'antd';
 import 'antd/dist/antd.css';
 import {withRouter} from "react-router-dom";
-import { CirclePicker, SketchPicker, BlockPicker } from 'react-color';
+import { BlockPicker } from 'react-color';
 import GoToDashboardButton from './GoToDashboardButton';
 import request from 'request';
 

@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button, Cascader} from 'antd';
+import { Button} from 'antd';
 import 'antd/dist/antd.css';
 import {withRouter} from "react-router-dom";
-import { CirclePicker, SketchPicker, BlockPicker } from 'react-color';
+//import { CirclePicker, SketchPicker, BlockPicker } from 'react-color';
 import request from 'request';
 
 class GoToDashboardButton extends React.Component {
