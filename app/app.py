@@ -130,8 +130,9 @@ def updateDefaultSettings():
     credentials_collection.find_one_and_update({'email': email}, query)
     return "HI", 200
 
-@app.route ('/fetch-note', methods= ['GET', 'OPTIONS'])
-def fetchNote():
+@app.route ('/fetch-note/<note_id>', methods= ['GET', 'OPTIONS'])
+def fetchNote(note_id):
+    print("fetch")
     email = request.args['email']
     noteID = request.args['noteID']
     print(email, noteID)
