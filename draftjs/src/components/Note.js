@@ -1,9 +1,17 @@
 import React from 'react';
-import {Editor, EditorState, RichUtils, convertToRaw, convertFromRaw} from "draft-js";
+import {Editor as DraftEditor, EditorState, RichUtils, convertToRaw, convertFromRaw, } from "draft-js";
 import {withRouter} from "react-router-dom";
 import { Input, Button} from 'antd';
 import request from 'request';
+import '../css/note.css';
 import GoToDashboardButton from './GoToDashboardButton';
+import Speech from "react-speech";
+
+import { Editor } from 'react-draft-wysiwyg';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+
+import {stateToHTML} from 'draft-js-export-html';
+
 
 class Note extends React.Component {
 
@@ -47,6 +55,7 @@ class Note extends React.Component {
     }
     componentDidMount(){
         if (this.props.location.state.noteData.title){
+            console.log("HERE")
             let contentState = this.props.location.state.noteData.content
             this.setState({editorState: EditorState.createWithContent(convertFromRaw((contentState)))});
         }
@@ -71,6 +80,33 @@ class Note extends React.Component {
         }.bind(this));
 
     }
+
+    speechNote(noteContent){
+        var text = '';
+        for (var line in noteContent.blocks){
+            text = text + (noteContent.blocks[line].text) + ". "
+        }
+        return text
+    }
+
+    renderPDF(state){
+        const stringState = state.toString()
+        var options = { method: 'POST',
+            url: 'http://localhost:5000/renderPDF',
+            headers:
+                { 'Postman-Token': 'd9553fdb-b451-4dee-bcac-fd2a2bfde76a',
+                    'cache-control': 'no-cache',
+                    'Content-Type': 'application/json' },
+            body: { noteHTML: stringState },
+            json: true };
+
+        request(options, function (error, response, body) {
+            if (error) throw new Error(error);
+
+            console.log(body);
+        });
+    }
+
     render() {
         const {editorState} = this.state;
         let className = 'RichEditor-editor';
@@ -80,39 +116,36 @@ class Note extends React.Component {
                 className += ' RichEditor-hidePlaceholder';
             }
         }
-        //console.log("STATE", this.state)
-        //console.log("HISTORY", this.props.location.state)
         return (
+            <div>
             <div className="RichEditor-root">
                 <Input placeholder={"Note Header"} value={this.state.noteHeader} onChange={noteHeader => this.setState({noteHeader: noteHeader.target.value})}></Input>
                 <Input placeholder={"Note Category"} value={this.state.noteCategory} onChange={noteCategory => {this.setState({noteCategory: noteCategory.target.value})}}></Input>
-                <BlockStyleControls
+
+
+                <Editor
                     editorState={editorState}
-                    onToggle={this.toggleBlockType}
+                    toolbarClassName="rdw-storybook-toolbar"
+                    wrapperClassName="rdw-storybook-wrapper"
+                    editorClassName="rdw-storybook-editor"
+                    onEditorStateChange={this.onChange}
+
                 />
-                <InlineStyleControls
-                    editorState={editorState}
-                    onToggle={this.toggleInlineStyle}
-                />
-                <div>-------------------------------------</div>
-                <div className={className} onClick={this.focus}>
-                    <Editor
-                        blockStyleFn={getBlockStyle}
-                        customStyleMap={styleMap}
-                        editorState={editorState}
-                        handleKeyCommand={this.handleKeyCommand}
-                        onChange={this.onChange}
-                        placeholder="Insert Text Here...."
-                        ref="editor"
-                        spellCheck={true}
-                    />
-                </div>
-                <div>-------------------------------------</div>
+                <Speech
+                    text={this.speechNote(convertToRaw(editorState.getCurrentContent()))}
+                    displayText={"Speech To Text"}
+                    textAsButton={true}
+                    voice="Google UK English Female" />
+
+            </div>
                 <p> State Representation of Note </p>
                 <div>{JSON.stringify(convertToRaw(editorState.getCurrentContent()))}</div>
                 <Button onClick={() => this.saveNote(this.state.noteHeader, this.state.noteCategory, this.props.location.state.noteData._id, editorState.getCurrentContent())}>Save Note</Button>
                 <GoToDashboardButton/>
+                <Button onClick={() => this.renderPDF(stateToHTML(editorState.getCurrentContent()))}>Convert to PDF</Button>
+
             </div>
+
         );
     }
 }
@@ -122,7 +155,7 @@ const styleMap = {
     CODE: {
         backgroundColor: 'rgba(0, 0, 0, 0.05)',
         fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
-        fontSize: 16,
+        fontSize: 60,
         padding: 2,
     },
 };

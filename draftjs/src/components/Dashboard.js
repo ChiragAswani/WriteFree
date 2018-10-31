@@ -6,6 +6,8 @@ import request from 'request';
 //import createHistory from "history/createBrowserHistory";
 //const history = createHistory()
 
+import {Helmet} from 'react-helmet';
+
 class Dashboard extends React.Component {
     constructor(props) {
         super(props);
@@ -142,7 +144,9 @@ class Dashboard extends React.Component {
                 this.props.location.state.notes[i]["key"] = this.props.location.state.notes[i]["_id"];
             }
             return (
+
                 <div>
+
                     <Button type="primary"
                             onClick={() => this.generateNewNote(this.props.location.state.credentials.email)}>New
                         Note</Button>

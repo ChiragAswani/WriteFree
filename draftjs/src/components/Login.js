@@ -46,6 +46,7 @@ class Login extends React.Component {
         //console.log("HISTORY", this.props.location.state)
         return (
             <div>
+
                 <Card
                     title="Login"
                     style={{ width: 400 }}

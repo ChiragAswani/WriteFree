@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Cascader} from 'antd';
 import 'antd/dist/antd.css';
 import {withRouter} from "react-router-dom";
-import { BlockPicker } from 'react-color';
+import { CirclePicker } from 'react-color';
 import GoToDashboardButton from './GoToDashboardButton';
 import request from 'request';
 
@@ -100,12 +100,12 @@ class DefaultSettings extends React.Component {
             <div>
                 <br/>
                 <p>Note Color</p>
-                <BlockPicker
+                <CirclePicker
                     color={ this.state.noteColor }
                     onChangeComplete={ this.changeNoteColor }
                 />
                 <p>Application Color</p>
-                <BlockPicker
+                <CirclePicker
                     color={ this.state.applicationColor }
                     onChangeComplete={ this.changeApplicationColor }
                 />
