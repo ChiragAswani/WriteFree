@@ -1,11 +1,11 @@
-from flask import Flask, request, jsonify, session
+from flask import Flask, request, jsonify, session, render_template, make_response, send_file
 import time
 from flask_cors import CORS
 from pymongo import MongoClient
 import json
 from bson.objectid import ObjectId
 from flask_bcrypt import Bcrypt
-
+import pdfkit
 
 
 # initializations
@@ -139,6 +139,18 @@ def fetchNote(note_id):
     data = notes_collection.find_one({'email': email, "_id": ObjectId(noteID)})
     data["_id"] = str(data["_id"])
     return jsonify(data), 200
+
+@app.route ('/renderPDF', methods= ['GET'])
+def renderPDF():
+    form_data = json.loads(request.get_data())
+    noteHTML = form_data['noteHTML']
+    print(noteHTML)
+    pdf = pdfkit.from_string(noteHTML, False)
+    response = make_response(pdf)
+    response.headers['Content-Type'] ='application/pdf'
+    response.headers['Content-Disposition'] = 'inline; filename=output.pdf'
+    #return send_file(response, attachment_filename='file.pdf')
+    return response
 
 
 

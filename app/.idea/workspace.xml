@@ -15,13 +15,15 @@
     <session id="-2031668007">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="10" />
+          <entry key="project.closed" value="11" />
           <entry key="project.open.time.0" value="1" />
+          <entry key="project.open.time.10" value="1" />
+          <entry key="project.open.time.17" value="1" />
           <entry key="project.open.time.5" value="2" />
           <entry key="project.open.time.6" value="5" />
-          <entry key="project.open.time.7" value="1" />
+          <entry key="project.open.time.7" value="2" />
           <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="10" />
+          <entry key="project.opened" value="13" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -45,7 +47,7 @@
         <counts>
           <entry key="Best Coding Practices" value="129" />
           <entry key="md" value="265" />
-          <entry key="py" value="4613" />
+          <entry key="py" value="5203" />
           <entry key="txt" value="40" />
         </counts>
       </usages-collector>
@@ -53,7 +55,7 @@
         <counts>
           <entry key="Markdown" value="265" />
           <entry key="PLAIN_TEXT" value="169" />
-          <entry key="Python" value="4613" />
+          <entry key="Python" value="5203" />
         </counts>
       </usages-collector>
     </session>
@@ -63,8 +65,12 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="77" column="49" selection-start-line="77" selection-start-column="49" selection-end-line="77" selection-end-column="49" />
+            <state relative-caret-position="33">
+              <caret line="113" selection-start-line="113" selection-end-line="119" selection-end-column="20" />
+              <folding>
+                <element signature="e#0#93#0" expanded="true" />
+                <marker date="1540932493643" expanded="true" signature="5037:5337" ph="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -100,6 +106,7 @@
       <find>login</find>
       <find>getArrayOfNotes</find>
       <find>noteData</find>
+      <find>save</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -130,6 +137,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -146,7 +154,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -202,7 +209,8 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="729" extended-state="6" />
+    <frame x="0" y="23" width="1280" height="729" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15409055" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -215,7 +223,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.3286385" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.2810047" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.27943486" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="10" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -297,8 +305,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="77" column="49" selection-start-line="77" selection-start-column="49" selection-end-line="77" selection-end-column="49" />
+        <state relative-caret-position="33">
+          <caret line="113" selection-start-line="113" selection-end-line="119" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#93#0" expanded="true" />
+            <marker date="1540932493643" expanded="true" signature="5037:5337" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
