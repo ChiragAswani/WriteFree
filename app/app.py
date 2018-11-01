@@ -49,6 +49,7 @@ def create():
             "email": email,
             "fullName": fullName,
             "password": pw_hash,
+            "runTutorial": True,
             "defaultNoteSettings": {},
         }
         credentials_collection.insert_one(savedDocument)
@@ -130,6 +131,13 @@ def updateDefaultSettings():
     font = form_data['font']
     query = {'$set': {'defaultNoteSettings': {'noteColor': noteColor, 'applicationColor': applicationColor, 'font': font}}}
     credentials_collection.find_one_and_update({'email': email}, query)
+    return "HI", 200
+
+@app.route ('/remove-tutorial', methods= ['POST', 'OPTIONS'])
+def removeTutorial():
+    _id = ObjectId(request.args['_id'])
+    query = {'$set': {'runTutorial': False}}
+    credentials_collection.find_one_and_update({'_id': _id}, query)
     return "HI", 200
 
 @app.route ('/fetch-note/<note_id>', methods= ['GET', 'OPTIONS'])

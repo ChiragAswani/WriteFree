@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="91e1bbbb-ea4b-43e9-8e1d-cdb6c9a8282c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -47,7 +46,7 @@
         <counts>
           <entry key="Best Coding Practices" value="129" />
           <entry key="md" value="265" />
-          <entry key="py" value="5247" />
+          <entry key="py" value="5380" />
           <entry key="txt" value="40" />
         </counts>
       </usages-collector>
@@ -55,7 +54,7 @@
         <counts>
           <entry key="Markdown" value="265" />
           <entry key="PLAIN_TEXT" value="169" />
-          <entry key="Python" value="5247" />
+          <entry key="Python" value="5380" />
         </counts>
       </usages-collector>
     </session>
@@ -66,7 +65,7 @@
         <entry file="file://$PROJECT_DIR$/app.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="122">
-              <caret line="40" column="52" selection-start-line="40" selection-start-column="48" selection-end-line="40" selection-end-column="52" />
+              <caret line="142" column="26" selection-start-line="142" selection-start-column="25" selection-end-line="142" selection-end-column="26" />
               <folding>
                 <element signature="e#0#93#0" expanded="true" />
               </folding>
@@ -100,13 +99,14 @@
       <find>new-n</find>
       <find>bcry</find>
       <find>del</find>
-      <find>_id</find>
       <find>login</find>
       <find>getArrayOfNotes</find>
       <find>noteData</find>
       <find>save</find>
       <find>createdAt</find>
       <find>time</find>
+      <find>_id</find>
+      <find>tutorial</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -124,8 +124,8 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="y" value="23" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="y" value="123" />
     <option name="width" value="1280" />
     <option name="height" value="729" />
   </component>
@@ -143,11 +143,6 @@
             <path>
               <item name="app" type="b2602c69:ProjectViewProjectNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="app" type="b2602c69:ProjectViewProjectNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="mongodb (to import)" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -209,8 +204,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="729" extended-state="0" />
-    <editor active="true" />
+    <frame x="0" y="23" width="1280" height="729" extended-state="6" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15409055" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -306,7 +300,7 @@
     <entry file="file://$PROJECT_DIR$/app.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="122">
-          <caret line="40" column="52" selection-start-line="40" selection-start-column="48" selection-end-line="40" selection-end-column="52" />
+          <caret line="142" column="26" selection-start-line="142" selection-start-column="25" selection-end-line="142" selection-end-column="26" />
           <folding>
             <element signature="e#0#93#0" expanded="true" />
           </folding>
