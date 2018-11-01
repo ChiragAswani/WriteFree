@@ -3,10 +3,9 @@ import { Table, Button } from 'antd';
 import 'antd/dist/antd.css';
 import {withRouter} from "react-router-dom";
 import request from 'request';
-//import createHistory from "history/createBrowserHistory";
-//const history = createHistory()
-
-import {Helmet} from 'react-helmet';
+import Joyride from "react-joyride";
+import PropTypes from "prop-types";
+import Walkthrough from './Walkthrough';
 
 class Dashboard extends React.Component {
     constructor(props) {
@@ -33,8 +32,8 @@ class Dashboard extends React.Component {
                 key: 'action',
                 render: (text,record) =>
                     <div>
-                        <a onClick={() => this.editNote(this.props.location.state.credentials.email, record._id)}>Edit | </a>
-                        <a onClick={() => this.deleteNote(this.props.location.state.credentials.email, record._id)}>Delete</a>
+                        <a className={"editNote"} onClick={() => this.editNote(this.props.location.state.credentials.email, record._id)}>Edit | </a>
+                        <a className={"deleteNote"} onClick={() => this.deleteNote(this.props.location.state.credentials.email, record._id)}>Delete</a>
                     </div>,
             }]
         }
@@ -150,13 +149,14 @@ class Dashboard extends React.Component {
             return (
 
                 <div>
-
-                    <Button type="primary"
+                    <Walkthrough/>
+                    <Button type="primary" className="generateNewNote"
                             onClick={() => this.generateNewNote(this.props.location.state.credentials.email)}>New
                         Note</Button>
-                    <Button type="danger" onClick={() => this.goToDefaultSettings()}>Default Settings</Button>
-                    <Table rowSelection={this.rowSelection()} dataSource={this.props.location.state.notes}
+                    <Button type="danger" className={"defaultSettings"} onClick={() => this.goToDefaultSettings()}>Default Settings</Button>
+                    <Table rowSelection={this.rowSelection()} dataSource={this.props.location.state.notes} className={"notesTable"}
                            columns={this.state.columns}/>
+
                 </div>
             )
         } else {

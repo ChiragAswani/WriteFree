@@ -17,7 +17,7 @@ class Note extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {editorState: EditorState.createEmpty(), noteCategory: this.props.location.state.noteData.category, noteHeader: this.props.location.state.noteData.title};
+        this.state = {isButtonLoading: false, editorState: EditorState.createEmpty(), noteCategory: this.props.location.state.noteData.category, noteHeader: this.props.location.state.noteData.title};
         this.focus = () => this.refs.editor.focus();
         this.onChange = (editorState) => this.setState({editorState});
 
@@ -133,7 +133,7 @@ class Note extends React.Component {
                 />
                 <Speech
                     text={this.speechNote(convertToRaw(editorState.getCurrentContent()))}
-                    displayText={"Speech To Text"}
+                    displayText={"Text to Speech"}
                     textAsButton={true}
                     voice="Google UK English Female" />
 

@@ -16,6 +16,7 @@
     "react-dom": "^16.5.2",
     "react-draft-wysiwyg": "^1.12.13",
     "react-helmet": "^5.2.0",
+    "react-joyride": "^2.0.0-15",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.0.4",
     "react-speech": "^0.3.2"
