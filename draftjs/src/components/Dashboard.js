@@ -20,7 +20,11 @@ class Dashboard extends React.Component {
                 title:"Date Created",
                 dataIndex:"createdAt",
                 key:"createdAt",
-            }, {    
+            }, {
+                title:"Last Updated",
+                dataIndex:"lastUpdated",
+                key:"lastUpdated",
+            },{
                 title:"Category",
                 dataIndex: "category",
                 key: "category",
