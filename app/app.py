@@ -6,6 +6,7 @@ import json
 from bson.objectid import ObjectId
 from flask_bcrypt import Bcrypt
 import pdfkit
+import datetime
 
 
 # initializations
@@ -37,7 +38,7 @@ def create():
     email = request.args['email']
     fullName = request.args['fullName']
     password = request.args['password']
-    createdAt = str(time.time())
+    createdAt = datetime.datetime.fromtimestamp(time.time()).strftime('%c')
     # hash the password and save it in pw_hash
     pw_hash = bcrypt.generate_password_hash(password)
     if(credentials_collection.find_one({'email': email})):
@@ -100,9 +101,10 @@ def addNote():
     baseNewNote = {
         "email": email,
         "title": None,
-        "createdAt": str(time.time()),
+        "createdAt": datetime.datetime.fromtimestamp(time.time()).strftime('%c'),
         "content": None,
         "noteSettings": {},
+        "lastUpdated": datetime.datetime.fromtimestamp(time.time()).strftime('%c'),
         "category": None,
 
     }
@@ -115,7 +117,7 @@ def addNote():
 def saveNote():
     form_data = json.loads(request.get_data())
     query = {"_id": ObjectId(form_data["noteID"])}
-    new_values={"title": form_data['title'], "category": form_data['category'], "content": form_data['noteContent']}
+    new_values={"title": form_data['title'], "category": form_data['category'], "content": form_data['noteContent'], "lastUpdated": datetime.datetime.fromtimestamp(time.time()).strftime('%c')}
     notes_collection.update_one(query, {"$set": new_values})
     return "HI", 200
 
