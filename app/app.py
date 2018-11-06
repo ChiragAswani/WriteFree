@@ -40,7 +40,7 @@ def create():
     password = request.args['password']
     createdAt = datetime.datetime.fromtimestamp(time.time()).strftime('%c')
     # hash the password and save it in pw_hash
-    pw_hash = bcrypt.generate_password_hash(password)
+    pw_hash = bcrypt.generate_password_hash(password.encode('utf-8'))
     if(credentials_collection.find_one({'email': email})):
         return "An account already exists with " + email, 401
     else:
@@ -65,15 +65,33 @@ def login():
     password = request.args['password']
     credentials = credentials_collection.find_one({'email': email})
     if (credentials):
-        hashed_password = bcrypt.generate_password_hash(password)
-        if (bcrypt.check_password_hash(hashed_password, password)):
+        if (bcrypt.check_password_hash(credentials['password'], password.encode('utf-8'))):
             arrayOfNotes = getArrayOfNotes(email)
-            print(arrayOfNotes)
+            # print(arrayOfNotes)
             credentials["_id"] = str(credentials["_id"])
             del credentials["password"]
             return jsonify({"notes": arrayOfNotes, "credentials": credentials}), 200;
         return "Invalid Email or Password", 401;
     return "Email Does Not Exist", 401
+
+
+# verify username and password, returns account details and notes
+@app.route('/get-data', methods= ['GET', 'OPTIONS'])
+def getData():
+    email = request.args['email']
+    id = request.args['id']
+    credentials = credentials_collection.find_one({'email': email})
+    db_id = credentials['_id']
+    if (credentials):
+        if (id == str(db_id)):
+            arrayOfNotes = getArrayOfNotes(email)
+            # print(arrayOfNotes)
+            credentials["_id"] = str(credentials["_id"])
+            del credentials["password"]
+            return jsonify({"notes": arrayOfNotes, "credentials": credentials}), 200;
+        return "Invalid Email or Password", 401;
+    return "Email Does Not Exist", 401
+
 
 #TODO: Add logout feature
 #@app.route ('/logout....
