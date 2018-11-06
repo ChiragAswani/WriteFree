@@ -3,6 +3,7 @@ import request from 'request';
 import { Input, Button, Card } from 'antd';
 import 'antd/dist/antd.css';
 import {withRouter} from "react-router-dom";
+import Cookies from 'universal-cookie';
 //import createHistory from "history/createBrowserHistory";
 
 //const history = createHistory()
@@ -37,6 +38,15 @@ class CreateAccount extends React.Component {
                     this.setState({errors: body})
                 } else {
                     const parsedBody = JSON.parse(body)
+
+                    var ident = parsedBody.credentials._id
+
+
+                    const cookies = new Cookies();
+                    cookies.set('email', email, { path: '/', maxAge: 1800 });
+                    const parsedData = JSON.parse(body)
+                    cookies.set('id',ident,{ path: '/', maxAge: 1800 });
+
                     this.props.history.push({
                         pathname: "/dashboard",
                         state: {notes: parsedBody.notes, credentials: parsedBody.credentials}
@@ -56,7 +66,7 @@ class CreateAccount extends React.Component {
                 >
                 <Input placeholder="Email" onChange={email => this.setState({email: email.target.value})}/> <br/>
                 <Input placeholder="Full Name" onChange={fullName => this.setState({fullName: fullName.target.value})}/> <br/>
-                <Input placeholder="Password" onChange={password => this.setState({password: password.target.value})}/> <br/>
+                <Input placeholder="Password" type="password" onChange={password => this.setState({password: password.target.value})}/> <br/>
                 <Button type="primary" onClick={() => this.createAnAccount(this.state.email, this.state.fullName, this.state.password)}>Sign Up</Button><br/>
                     {this.state.errors}
                     <Card>

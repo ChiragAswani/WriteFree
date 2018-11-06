@@ -1,10 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="277c3bf4-190c-4fc0-8628-b299b7861d4d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/draftjs/src/components/Dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/draftjs/src/components/Dashboard.js" afterDir="false" />
     </list>
+=======
+<<<<<<< Updated upstream
+    <list default="true" id="5ecf815d-be9f-4615-9125-23631889070a" name="Default Changelist" comment="" />
+=======
+    <list default="true" id="277c3bf4-190c-4fc0-8628-b299b7861d4d" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/draftjs/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/draftjs/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/draftjs/src/components/CreateAccount.js" beforeDir="false" afterPath="$PROJECT_DIR$/draftjs/src/components/CreateAccount.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/draftjs/src/components/Dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/draftjs/src/components/Dashboard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/draftjs/src/components/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/draftjs/src/components/Login.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/draftjs/src/components/Walkthrough.js" beforeDir="false" afterPath="$PROJECT_DIR$/draftjs/src/components/Walkthrough.js" afterDir="false" />
+    </list>
+>>>>>>> Stashed changes
+>>>>>>> b8583ae426af74e516605298f179746e89e1f6ed
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -15,6 +31,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FUSProjectUsageTrigger">
+<<<<<<< HEAD
     <session id="1132745632">
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
@@ -41,37 +58,316 @@
           <entry key="project.open.time.13" value="1" />
           <entry key="project.open.time.4" value="1" />
           <entry key="project.opened" value="2" />
+=======
+    <session id="-1663101081">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="1" />
+          <entry key="project.open.time.2" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+    </session>
+    <session id="-1901127625">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="1" />
+          <entry key="project.open.time.0" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+    </session>
+    <session id="-955802082">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="3" />
+          <entry key="project.open.time.1" value="1" />
+          <entry key="project.open.time.7" value="1" />
+          <entry key="project.opened" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="js" value="856" />
+          <entry key="js" value="186" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
+          <entry key="JavaScript" value="186" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="js" value="2" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="JavaScript" value="2" />
+        </counts>
+      </usages-collector>
+    </session>
+    <session id="1132745632">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="3" />
+          <entry key="project.open.time.10" value="1" />
+          <entry key="project.open.time.5" value="1" />
+          <entry key="project.open.time.8" value="1" />
+          <entry key="project.opened" value="3" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="css" value="3" />
+          <entry key="js" value="9" />
+          <entry key="md" value="2" />
+          <entry key="svg" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="CSS" value="3" />
+          <entry key="JavaScript" value="9" />
+          <entry key="Markdown" value="2" />
+          <entry key="SVG" value="1" />
+>>>>>>> b8583ae426af74e516605298f179746e89e1f6ed
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+<<<<<<< HEAD
+          <entry key="js" value="856" />
+=======
+          <entry key="js" value="4115" />
+          <entry key="md" value="353" />
+>>>>>>> b8583ae426af74e516605298f179746e89e1f6ed
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+<<<<<<< HEAD
           <entry key="JavaScript" value="856" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="js" value="6" />
+=======
+          <entry key="JavaScript" value="4115" />
+          <entry key="Markdown" value="353" />
+        </counts>
+      </usages-collector>
+    </session>
+    <session id="-1444481949">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.open.time.3" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+    </session>
+    <session id="-1704555019">
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="js" value="5" />
+          <entry key="md" value="1" />
+>>>>>>> b8583ae426af74e516605298f179746e89e1f6ed
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
+<<<<<<< HEAD
           <entry key="JavaScript" value="6" />
+=======
+          <entry key="JavaScript" value="5" />
+          <entry key="PLAIN_TEXT" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="js" value="4232" />
+          <entry key="md" value="101" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="JavaScript" value="4232" />
+          <entry key="PLAIN_TEXT" value="101" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.js.language.service.starts" />
+      <usages-collector id="statistics.vcs.git.usages" />
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="2" />
+          <entry key="project.open.time.12" value="1" />
+          <entry key="project.open.time.7" value="1" />
+          <entry key="project.opened" value="2" />
+>>>>>>> b8583ae426af74e516605298f179746e89e1f6ed
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+<<<<<<< HEAD
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/draftjs/src/index.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="323">
               <caret line="17" column="42" selection-start-line="17" selection-start-column="42" selection-end-line="17" selection-end-column="42" />
+=======
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/draftjs/src/components/Dashboard.js">
+          <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
+            <state relative-caret-position="141">
+              <caret line="61" column="10" selection-start-line="61" selection-start-column="10" selection-end-line="61" selection-end-column="10" />
+=======
+            <state relative-caret-position="60">
+              <caret line="4" column="48" selection-start-line="4" selection-start-column="48" selection-end-line="4" selection-end-column="53" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/draftjs/src/components/Dashboard.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="244" column="20" selection-start-line="244" selection-start-column="20" selection-end-line="246" selection-end-column="37" />
+>>>>>>> b8583ae426af74e516605298f179746e89e1f6ed
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+<<<<<<< HEAD
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/draftjs/src/components/DefaultSettings.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="76">
+              <caret line="4" column="9" selection-start-line="4" selection-start-column="9" selection-end-line="4" selection-end-column="9" />
+=======
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/draftjs/src/components/Walkthrough.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="391">
+              <caret line="120" column="83" selection-start-line="120" selection-start-column="83" selection-end-line="120" selection-end-column="83" />
+>>>>>>> Stashed changes
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+                <element signature="e#264#300#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+<<<<<<< Updated upstream
+        <entry file="file://$PROJECT_DIR$/draftjs/src/components/CreateAccount.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="495">
+              <caret line="37" column="24" selection-start-line="37" selection-start-column="24" selection-end-line="37" selection-end-column="24" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
+=======
+        <entry file="file://$PROJECT_DIR$/draftjs/src/components/Note.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1725">
+              <caret line="127" column="48" selection-start-line="127" selection-start-column="48" selection-end-line="127" selection-end-column="48" />
+>>>>>>> Stashed changes
+>>>>>>> b8583ae426af74e516605298f179746e89e1f6ed
+            </state>
+          </provider>
+        </entry>
+      </file>
+<<<<<<< HEAD
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/draftjs/src/components/Dashboard.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="344">
+              <caret line="137" column="29" selection-start-line="137" selection-start-column="29" selection-end-line="137" selection-end-column="29" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
+=======
+      <file pinned="false" current-in-tab="false">
+<<<<<<< Updated upstream
+        <entry file="file://$PROJECT_DIR$/draftjs/src/components/Note.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1200">
+              <caret line="84" column="79" selection-start-line="84" selection-start-column="79" selection-end-line="84" selection-end-column="79" />
+=======
+        <entry file="file://$PROJECT_DIR$/draftjs/src/components/CreateAccount.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="765">
+              <caret line="56" column="20" selection-start-line="56" selection-start-column="20" selection-end-line="56" selection-end-column="81" />
+>>>>>>> Stashed changes
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+<<<<<<< Updated upstream
+        <entry file="file://$PROJECT_DIR$/draftjs/src/components/Login.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="390">
+              <caret line="30" column="16" selection-start-line="30" selection-start-column="16" selection-end-line="30" selection-end-column="16" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
+=======
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="165">
+              <caret line="11" column="12" selection-start-line="11" selection-start-column="12" selection-end-line="11" selection-end-column="12" />
+>>>>>>> b8583ae426af74e516605298f179746e89e1f6ed
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/draftjs/src/components/GoToDashboardButton.js">
+          <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+            <state relative-caret-position="19">
+              <caret line="1" column="15" selection-start-line="1" selection-start-column="15" selection-end-line="1" selection-end-column="15" />
+=======
+            <state relative-caret-position="15">
+              <caret line="1" column="15" selection-start-line="1" selection-start-column="15" selection-end-line="1" selection-end-column="15" />
+>>>>>>> Stashed changes
+>>>>>>> b8583ae426af74e516605298f179746e89e1f6ed
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+<<<<<<< HEAD
+        <entry file="file://$PROJECT_DIR$/draftjs/src/components/Note.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1368">
+              <caret line="112" column="52" selection-start-line="112" selection-start-column="44" selection-end-line="112" selection-end-column="52" />
+=======
+<<<<<<< Updated upstream
+        <entry file="file://$PROJECT_DIR$/draftjs/src/index.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="16" column="54" selection-start-line="16" selection-start-column="54" selection-end-line="16" selection-end-column="54" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
+=======
+        <entry file="file://$PROJECT_DIR$/draftjs/src/components/Login.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="184">
+              <caret line="23" column="34" lean-forward="true" selection-start-line="23" selection-start-column="34" selection-end-line="23" selection-end-column="34" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -82,44 +378,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/draftjs/src/components/DefaultSettings.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="76">
+            <state relative-caret-position="60">
               <caret line="4" column="9" selection-start-line="4" selection-start-column="9" selection-end-line="4" selection-end-column="9" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/draftjs/src/components/Dashboard.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="344">
-              <caret line="137" column="29" selection-start-line="137" selection-start-column="29" selection-end-line="137" selection-end-column="29" />
-              <folding>
-                <element signature="e#0#26#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/draftjs/src/components/GoToDashboardButton.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19">
-              <caret line="1" column="15" selection-start-line="1" selection-start-column="15" selection-end-line="1" selection-end-column="15" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/draftjs/src/components/Note.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1368">
-              <caret line="112" column="52" selection-start-line="112" selection-start-column="44" selection-end-line="112" selection-end-column="52" />
+>>>>>>> Stashed changes
+>>>>>>> b8583ae426af74e516605298f179746e89e1f6ed
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
   </component>
+<<<<<<< HEAD
   <component name="FindInProjectRecents">
     <findStrings>
       <find>delete</find>
@@ -131,6 +400,53 @@
       <find>console.log</find>
       <find>console</find>
       <find>new</find>
+=======
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+<<<<<<< Updated upstream
+      <find>css</find>
+      <find>App</find>
+      <find>NormalLogin</find>
+      <find>NormalLoginForm</find>
+      <find>location</find>
+      <find>export</find>
+      <find>tell</find>
+      <find>createWith</find>
+      <find>Note heade</find>
+      <find>with</find>
+      <find>Button</find>
+      <find>history</find>
+      <find>new</find>
+      <find>JSON</find>
+      <find>StyleButton</find>
+      <find>saveOrUpdateNote</find>
+      <find>import { Input, Button, Card } from 'antd';on</find>
+      <find>createTable</find>
+      <find>console</find>
+      <find>Date Mo</find>
+      <find>generateNewNote</find>
+      <find>create</find>
+      <find>userData</find>
+      <find>noteData</find>
+      <find>new note</find>
+      <find>edit</find>
+      <find>lo</find>
+      <find>noteHeader</find>
+      <find>console.</find>
+      <find>delete</find>
+=======
+      <find>noteData</find>
+      <find>/new-note</find>
+      <find>console.log</find>
+      <find>console</find>
+>>>>>>> b8583ae426af74e516605298f179746e89e1f6ed
       <find>new-</find>
       <find>createAnAccount</find>
       <find>render</find>
@@ -142,6 +458,25 @@
       <find>saveNote</find>
       <find>this.props.location.state.notes</find>
       <find>notes</find>
+<<<<<<< HEAD
+=======
+      <find>validate</find>
+      <find>state</find>
+      <find>HERE</find>
+      <find>valid</find>
+      <find>vali</find>
+      <find>get</find>
+      <find>bind</find>
+      <find>axios</find>
+      <find>prop</find>
+      <find>props.</find>
+      <find>history</find>
+      <find>props</find>
+      <find>generateNewNote</find>
+      <find>login</find>
+      <find>new</find>
+>>>>>>> Stashed changes
+>>>>>>> b8583ae426af74e516605298f179746e89e1f6ed
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -150,6 +485,7 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+<<<<<<< HEAD
         <option value="$PROJECT_DIR$/draftjs/src/components/Note.js" />
         <option value="$PROJECT_DIR$/draftjs/src/components/Login.js" />
         <option value="$PROJECT_DIR$/draftjs/src/components/CreateAccount.js" />
@@ -157,6 +493,35 @@
         <option value="$PROJECT_DIR$/draftjs/src/components/DefaultSettings.js" />
         <option value="$PROJECT_DIR$/draftjs/src/components/GoToDashboardButton.js" />
         <option value="$PROJECT_DIR$/draftjs/src/components/Dashboard.js" />
+=======
+<<<<<<< Updated upstream
+        <option value="$PROJECT_DIR$/react-mindspace/src/index.js" />
+        <option value="$PROJECT_DIR$/react-mindspace/src/App.js" />
+        <option value="$PROJECT_DIR$/draftjs/src/App.js" />
+        <option value="$PROJECT_DIR$/draftjs/src/Editor.js" />
+        <option value="$PROJECT_DIR$/draftjs/test/App.test.js" />
+        <option value="$PROJECT_DIR$/draftjs/src/components/App.js" />
+        <option value="$PROJECT_DIR$/draftjs/src/components/LoginPage.js" />
+        <option value="$PROJECT_DIR$/draftjs/src/components/Editor.js" />
+        <option value="$PROJECT_DIR$/draftjs/src/index.js" />
+        <option value="$PROJECT_DIR$/draftjs/src/components/Login.js" />
+        <option value="$PROJECT_DIR$/draftjs/src/components/NewNote.js" />
+        <option value="$PROJECT_DIR$/draftjs/src/components/Note.js" />
+        <option value="$PROJECT_DIR$/draftjs/src/components/CreateAccount.js" />
+        <option value="$PROJECT_DIR$/draftjs/src/components/Dashboard.js" />
+        <option value="$PROJECT_DIR$/README.md" />
+=======
+        <option value="$PROJECT_DIR$/draftjs/src/components/Note.js" />
+        <option value="$PROJECT_DIR$/draftjs/src/index.js" />
+        <option value="$PROJECT_DIR$/draftjs/src/components/DefaultSettings.js" />
+        <option value="$PROJECT_DIR$/draftjs/src/components/GoToDashboardButton.js" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/draftjs/src/components/CreateAccount.js" />
+        <option value="$PROJECT_DIR$/draftjs/src/components/Login.js" />
+        <option value="$PROJECT_DIR$/draftjs/src/components/Dashboard.js" />
+        <option value="$PROJECT_DIR$/draftjs/src/components/Walkthrough.js" />
+>>>>>>> Stashed changes
+>>>>>>> b8583ae426af74e516605298f179746e89e1f6ed
       </list>
     </option>
   </component>
@@ -172,6 +537,7 @@
   <component name="NodePackageJsonFileManager">
     <packageJsonPaths>
       <path value="$PROJECT_DIR$/draftjs/package.json" />
+<<<<<<< HEAD
       <path value="$PROJECT_DIR$/node_modules/npm/node_modules/JSONStream/package.json" />
       <path value="$PROJECT_DIR$/node_modules/npm/node_modules/abbrev/package.json" />
       <path value="$PROJECT_DIR$/node_modules/npm/node_modules/agent-base/package.json" />
@@ -575,12 +941,30 @@
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
+=======
+    </packageJsonPaths>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="y" value="23" />
+<<<<<<< Updated upstream
+    <option name="width" value="1280" />
+    <option name="height" value="731" />
+=======
+    <option name="width" value="1440" />
+    <option name="height" value="825" />
+>>>>>>> Stashed changes
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+>>>>>>> b8583ae426af74e516605298f179746e89e1f6ed
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+<<<<<<< HEAD
       <pane id="Scope" />
+=======
+>>>>>>> b8583ae426af74e516605298f179746e89e1f6ed
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -599,6 +983,7 @@
               <item name="draftjs" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
+<<<<<<< HEAD
             <path>
               <item name="WriteFree-frontend" type="b2602c69:ProjectViewProjectNode" />
               <item name="WriteFree-frontend" type="462c0819:PsiDirectoryNode" />
@@ -606,15 +991,43 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="components" type="462c0819:PsiDirectoryNode" />
             </path>
+=======
+>>>>>>> b8583ae426af74e516605298f179746e89e1f6ed
           </expand>
           <select />
         </subPane>
       </pane>
+<<<<<<< HEAD
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="nodejs_package_manager_path" value="npm" />
+=======
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="HbShouldOpenHtmlAsHb" value="" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+<<<<<<< Updated upstream
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.editor" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/draftjs/src/components" />
+      <recent name="$PROJECT_DIR$/draftjs/src/css" />
+      <recent name="$PROJECT_DIR$/draftjs/test" />
+    </key>
+=======
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.General" />
+>>>>>>> Stashed changes
+>>>>>>> b8583ae426af74e516605298f179746e89e1f6ed
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -633,20 +1046,46 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
+<<<<<<< HEAD
       <changelist id="277c3bf4-190c-4fc0-8628-b299b7861d4d" name="Default Changelist" comment="" />
       <created>1540319215938</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
+=======
+      <changelist id="5ecf815d-be9f-4615-9125-23631889070a" name="Default Changelist" comment="" />
+      <created>1538332975929</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+<<<<<<< Updated upstream
+      <updated>1538332975929</updated>
+      <workItem from="1538332978160" duration="134000" />
+      <workItem from="1538333113568" duration="13000" />
+      <workItem from="1538335467707" duration="1243000" />
+      <workItem from="1538937507063" duration="1466000" />
+      <workItem from="1538939216402" duration="129000" />
+      <workItem from="1539009721487" duration="3512000" />
+      <workItem from="1539547774521" duration="895000" />
+      <workItem from="1539826802434" duration="18679000" />
+      <workItem from="1540145282152" duration="534000" />
+=======
+>>>>>>> b8583ae426af74e516605298f179746e89e1f6ed
       <updated>1540319215938</updated>
       <workItem from="1540319219794" duration="2499000" />
       <workItem from="1540406142729" duration="10193000" />
       <workItem from="1540586412220" duration="886000" />
       <workItem from="1540764961820" duration="237000" />
       <workItem from="1540765249920" duration="11318000" />
+<<<<<<< HEAD
+=======
+      <workItem from="1541163617706" duration="2572000" />
+      <workItem from="1541534133881" duration="1019000" />
+>>>>>>> Stashed changes
+>>>>>>> b8583ae426af74e516605298f179746e89e1f6ed
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< HEAD
     <option name="totallyTimeSpent" value="25133000" />
   </component>
   <component name="ToolWindowManager">
@@ -654,6 +1093,48 @@
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16259088" />
+=======
+<<<<<<< Updated upstream
+    <option name="totallyTimeSpent" value="27264000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="23" width="1280" height="731" extended-state="0" />
+    <layout>
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2867355" />
+=======
+    <option name="totallyTimeSpent" value="43221000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="23" width="1440" height="825" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15715292" />
+>>>>>>> Stashed changes
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32840723" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+<<<<<<< Updated upstream
+      <window_info active="true" anchor="bottom" id="Terminal" order="9" visible="true" weight="0.3114241" />
+      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
+=======
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5017618" side_tool="true" visible="true" weight="0.2701228" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" sideWeight="0.4982382" visible="true" weight="0.2701228" />
+>>>>>>> Stashed changes
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+    <layout-to-restore>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15715292" />
+>>>>>>> b8583ae426af74e516605298f179746e89e1f6ed
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -667,11 +1148,19 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+<<<<<<< HEAD
       <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.25106382" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
+=======
+      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.27148703" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout-to-restore>
+>>>>>>> b8583ae426af74e516605298f179746e89e1f6ed
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -680,10 +1169,37 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/draftjs/src/components/CreateAccount.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="208">
           <caret line="47" column="10" selection-start-line="47" selection-start-column="4" selection-end-line="47" selection-end-column="10" />
+=======
+<<<<<<< Updated upstream
+    <entry file="file://$PROJECT_DIR$/react-mindspace/src/index.js" />
+    <entry file="file://$PROJECT_DIR$/react-mindspace/src/App.js" />
+    <entry file="file://$PROJECT_DIR$/draftjs/src/App.css" />
+    <entry file="file://$PROJECT_DIR$/draftjs/src/logo.svg" />
+    <entry file="file://$PROJECT_DIR$/draftjs/src/css/index.css">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/draftjs/src/serviceWorker.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="20" lean-forward="true" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/draftjs/test/App.test.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/draftjs/src/components/LoginPage.js" />
+    <entry file="file://$PROJECT_DIR$/draftjs/src/components/Editor.js" />
+    <entry file="file://$PROJECT_DIR$/draftjs/src/components/CreateAccount.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="37" column="24" selection-start-line="37" selection-start-column="24" selection-end-line="37" selection-end-column="24" />
+>>>>>>> b8583ae426af74e516605298f179746e89e1f6ed
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
@@ -692,6 +1208,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/draftjs/src/components/Note.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="1368">
           <caret line="112" column="52" selection-start-line="112" selection-start-column="44" selection-end-line="112" selection-end-column="52" />
         </state>
@@ -701,45 +1218,147 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="76">
           <caret line="4" column="9" selection-start-line="4" selection-start-column="9" selection-end-line="4" selection-end-column="9" />
+=======
+        <state relative-caret-position="1200">
+          <caret line="84" column="79" selection-start-line="84" selection-start-column="79" selection-end-line="84" selection-end-column="79" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+=======
+    <entry file="file://$PROJECT_DIR$/draftjs/src/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="48" selection-start-line="4" selection-start-column="48" selection-end-line="4" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/draftjs/src/components/Note.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1725">
+          <caret line="127" column="48" selection-start-line="127" selection-start-column="48" selection-end-line="127" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/draftjs/src/components/CreateAccount.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="765">
+          <caret line="56" column="20" selection-start-line="56" selection-start-column="20" selection-end-line="56" selection-end-column="81" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="12" selection-start-line="11" selection-start-column="12" selection-end-line="11" selection-end-column="12" />
+>>>>>>> b8583ae426af74e516605298f179746e89e1f6ed
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/draftjs/src/components/GoToDashboardButton.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="19">
+=======
+        <state relative-caret-position="15">
+>>>>>>> b8583ae426af74e516605298f179746e89e1f6ed
           <caret line="1" column="15" selection-start-line="1" selection-start-column="15" selection-end-line="1" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+<<<<<<< HEAD
+    <entry file="file://$PROJECT_DIR$/draftjs/src/components/Login.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="149">
+          <caret line="38" column="33" selection-start-line="38" selection-start-column="28" selection-end-line="38" selection-end-column="33" />
+=======
+    <entry file="file://$PROJECT_DIR$/draftjs/src/components/DefaultSettings.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="9" selection-start-line="4" selection-start-column="9" selection-end-line="4" selection-end-column="9" />
+>>>>>>> Stashed changes
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/draftjs/src/components/Login.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="38" column="33" selection-start-line="38" selection-start-column="28" selection-end-line="38" selection-end-column="33" />
+<<<<<<< Updated upstream
+        <state relative-caret-position="390">
+          <caret line="30" column="16" selection-start-line="30" selection-start-column="16" selection-end-line="30" selection-end-column="16" />
+=======
+        <state relative-caret-position="184">
+          <caret line="23" column="34" lean-forward="true" selection-start-line="23" selection-start-column="34" selection-end-line="23" selection-end-column="34" />
+>>>>>>> Stashed changes
+>>>>>>> b8583ae426af74e516605298f179746e89e1f6ed
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/draftjs/src/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
           <caret line="17" column="42" selection-start-line="17" selection-start-column="42" selection-end-line="17" selection-end-column="42" />
+=======
+    <entry file="file://$PROJECT_DIR$/draftjs/src/components/Dashboard.js">
+      <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
+        <state relative-caret-position="120">
+          <caret line="16" column="54" selection-start-line="16" selection-start-column="54" selection-end-line="16" selection-end-column="54" />
+=======
+        <state relative-caret-position="210">
+          <caret line="244" column="20" selection-start-line="244" selection-start-column="20" selection-end-line="246" selection-end-column="37" />
+>>>>>>> Stashed changes
+>>>>>>> b8583ae426af74e516605298f179746e89e1f6ed
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/draftjs/src/components/Dashboard.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="344">
           <caret line="137" column="29" selection-start-line="137" selection-start-column="29" selection-end-line="137" selection-end-column="29" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
+=======
+    <entry file="file://$PROJECT_DIR$/draftjs/src/components/Walkthrough.js">
+      <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
+        <state relative-caret-position="141">
+          <caret line="61" column="10" selection-start-line="61" selection-start-column="10" selection-end-line="61" selection-end-column="10" />
+=======
+        <state relative-caret-position="391">
+          <caret line="120" column="83" selection-start-line="120" selection-start-column="83" selection-end-line="120" selection-end-column="83" />
+>>>>>>> Stashed changes
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+            <element signature="e#264#300#0" expanded="true" />
+>>>>>>> b8583ae426af74e516605298f179746e89e1f6ed
           </folding>
+        </state>
+      </provider>
+    </entry>
+<<<<<<< HEAD
+  </component>
+</project>
+=======
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="90">
+            <caret line="6" column="14" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
   </component>
 </project>
+>>>>>>> b8583ae426af74e516605298f179746e89e1f6ed

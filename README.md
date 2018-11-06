@@ -7,3 +7,6 @@
 ### Important!
 Before you run, configure the steps from the README in [WriteFree-backend](https://github.com/ChiragAswani/WriteFree-backend)
 
+Login updates:
+Adding cookies -> npm install universal-cookie
+added axious

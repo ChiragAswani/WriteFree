@@ -3,6 +3,7 @@ import request from 'request';
 import { Input, Button, Card } from 'antd';
 import 'antd/dist/antd.css';
 import {withRouter} from "react-router-dom";
+import Cookies from 'universal-cookie';
 //import createHistory from "history/createBrowserHistory";
 
 //const history = createHistory()
@@ -28,12 +29,12 @@ class Login extends React.Component {
             if (response.statusCode === 401){
                 this.setState({errors: body})
             } else {
-                sessionStorage.clear();
-                let key = 'email'
-                sessionStorage.setItem(key, email)
-
                 const parsedData = JSON.parse(body)
-                console.log("PARSED DATA", parsedData)
+
+                const cookies = new Cookies();
+                cookies.set('email', email, { path: '/', maxAge: 1800 });
+                cookies.set('id',parsedData.credentials._id,{path:'/', maxAge: 1800});
+
                 this.props.history.push({
                     pathname: "/dashboard",
                     state: {notes: parsedData.notes, credentials: parsedData.credentials}
@@ -52,7 +53,7 @@ class Login extends React.Component {
                     style={{ width: 400 }}
                 >
                     <Input placeholder="Email" onChange={email => this.setState({email: email.target.value, errors: []})}/> <br/>
-                    <Input placeholder="Password" onChange={password => this.setState({password: password.target.value, errors: []})}/> <br/>
+                    <Input placeholder="Password" type="password" onChange={password => this.setState({password: password.target.value, errors: []})}/> <br/>
                     <Button type="primary" onClick={() => this.login(this.state.email, this.state.password)}>Login</Button>
                     {this.state.errors}
                     <Card>

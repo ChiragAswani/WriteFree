@@ -3,12 +3,20 @@ import { Table, Button } from 'antd';
 import 'antd/dist/antd.css';
 import {withRouter} from "react-router-dom";
 import request from 'request';
+
+//import createHistory from "history/createBrowserHistory";
+//const history = createHistory()
+
 import Joyride from "react-joyride";
 import PropTypes from "prop-types";
 import Walkthrough from './Walkthrough';
+import Cookies from 'universal-cookie';
+import axios from 'axios';
+
 
 class Dashboard extends React.Component {
     constructor(props) {
+
         super(props);
         this.state = {
             columns: [{
@@ -34,10 +42,19 @@ class Dashboard extends React.Component {
                     <div>
                         <a className={"editNote"} onClick={() => this.editNote(this.props.location.state.credentials.email, record._id)}>Edit | </a>
                         <a className={"deleteNote"} onClick={() => this.deleteNote(this.props.location.state.credentials.email, record._id)}>Delete</a>
+
                     </div>,
-            }]
+            }],
+            notes : null,
+            credentials: null
+
         }
+
+
+
     }
+
+
 
     editNote(email, noteID){
         var editNote = {
@@ -58,6 +75,8 @@ class Dashboard extends React.Component {
         }.bind(this));
     }
 
+
+
     deleteNote(email, noteID){
         //console.log(this.props.location.state.notes);
         var deleteNote = {
@@ -69,13 +88,16 @@ class Dashboard extends React.Component {
         request(deleteNote, function (error, response, body) {
             if (error) throw new Error(error);
             const parsedData = JSON.parse(body);
-            this.props.history.push({
-                pathname: "/dashboard",
-                state: {
-                    credentials: this.props.location.state.credentials,
-                    notes: parsedData.notes
-                }
-            });
+
+            // TODO: FIX THIS SO IT DOESNT HAVE TO RELOAD THE PAGE
+            // this.props.history.push({
+            //     pathname: "/dashboard",
+            //     state: {
+            //         credentials: this.state.credentials,
+            //         notes: parsedData.notes
+            //     }
+            // });
+            window.location.reload();
         }.bind(this));
     }
 
@@ -92,7 +114,8 @@ class Dashboard extends React.Component {
         return rowSelection;
     }
 
-    generateNewNote(email){
+    generateNewNote(credentials){
+        var email = credentials.email
         var postNewNote = {
             method: 'POST',
             url: 'http://127.0.0.1:5000/new-note',
@@ -129,44 +152,144 @@ class Dashboard extends React.Component {
         })
     }
 
+    logout(credentials){
+        const cookies = new Cookies();
+        cookies.remove('email');
+        cookies.remove('password');
+        this.props.history.push({
+            pathname: "/login"
+        })
+    }
+
+
     validate() {
-        let key = 'email';
-        if (!sessionStorage.getItem(key)) {
+        const cookies = new Cookies();
+        if (cookies.get('email') == null) {
             return false
         }
         return true
     }
+    // Depreciated
+    // getData(email, password) {
+    //
+    //     var postLoginInformation = {
+    //         method: 'GET',
+    //         url: 'http://127.0.0.1:5000/login',
+    //         qs:{email, password },
+    //         headers: {'Content-Type': 'application/x-www-form-urlencoded' }
+    //     };
+    //
+    //     request(postLoginInformation, function (error, response, body) {
+    //         if (error) throw new Error(error);
+    //         if (response.statusCode === 401){
+    //             this.setState({errors: body})
+    //         } else {
+    //
+    //             const parsedData = JSON.parse(body)
+    //
+    //             return parsedData.notes, parsedData.credentials
+    //             //this.setState = ({ notes: parsedData.notes, credentials: parsedData.credentials});
+    //             // this.setState({
+    //             //     notes: parsedData.notes,
+    //             //     credentials: parsedData.credentials
+    //             // }, () => {
+    //             //     console.log("doneeeeee~~~")
+    //             // });
+    //
+    //
+    //         }
+    //     }.bind(this));
+    //
+    //
+    // }
+
+
+    componentDidMount() {
+
+        const cookies2 = new Cookies()
+        var id = cookies2.get('id')
+        var email = cookies2.get('email')
+
+
+        axios.get('http://127.0.0.1:5000/get-data', {
+            params: {
+                email: email,
+                id: id
+            }
+        }).then((response) => {
+
+            //console.log(this.props.history.location.state)
+            this.setState({
+                notes : response.data.notes,
+                credentials : response.data.credentials
+            })
+
+
+        }).catch((error) => {
+            // Set cookie to null
+            cookies2.remove('email');
+            cookies2.remove('id');
+            console.log("ERROR - INVALID or NO COOKIES");
+
+        })
+
+
+
+            //email,password).then((notes, credentials) => this.setState({ notes, credentials }))
+
+    }
+
 
     render() {
-        //console.log("STATE", this.state)
-        //console.log("HISTORY", this.props.location.state)
+        const cookies1 = new Cookies();
+        console.log("render email:", cookies1.get('email'))
+
+
         if(this.validate()) {
-            //convert the userDate from the login page to the dateSource so that it can be used in Table opeartions
-            for (var i = 0; i < this.props.location.state.notes.length; i++){
-
-                this.props.location.state.notes[i]["key"] = this.props.location.state.notes[i]["_id"];
+            const {notes, credentials} = this.state
+            if (notes, credentials === null) {
+                return null
             }
-            return (
 
+            //console.log("HISTORY", this.props.location.state)
+
+            const cookies = new Cookies();
+            cookies.set('email', cookies.get('email'), {path: '/', maxAge: 1800});
+            cookies.set('id', cookies.get('id'), {path: '/', maxAge: 1800});
+
+
+
+
+            //convert the userDate from the login page to the dateSource so that it can be used in Table opeartions
+
+            for (var i = 0; i < this.state.notes.length; i++) {
+
+                this.state.notes[i]["key"] = this.state.notes[i]["_id"];
+            }
+
+            return (
                 <div>
                     <Walkthrough/>
                     <Button type="primary" className="generateNewNote"
-                            onClick={() => this.generateNewNote(this.props.location.state.credentials.email)}>New
+                            onClick={() => this.generateNewNote(this.state.credentials)}>New
                         Note</Button>
-                    <Button type="danger" className={"defaultSettings"} onClick={() => this.goToDefaultSettings()}>Default Settings</Button>
-                    <Table rowSelection={this.rowSelection()} dataSource={this.props.location.state.notes} className={"notesTable"}
+                    <Button type="danger" className={"defaultSettings"} onClick={() => this.goToDefaultSettings()}>Default
+                        Settings</Button>
+                    <Button type="primary" className="generateNewNote"
+                            onClick={() => this.logout(this.state.credentials)}>Log Out</Button>
+                    <Table rowSelection={this.rowSelection()} dataSource={this.state.notes} className={"notesTable"}
                            columns={this.state.columns}/>
-
                 </div>
             )
         } else {
-            return (
+            return(
                 <div>
                     <p>You are not logged in</p>
-                </div>
-            )
+                </div>)
+            }
         }
-    }
+
+
 }
 
 export default withRouter(Dashboard);
