@@ -3,6 +3,7 @@ import request from 'request';
 import { Input, Button, Card } from 'antd';
 import 'antd/dist/antd.css';
 import {withRouter} from "react-router-dom";
+import Cookies from 'universal-cookie';
 //import createHistory from "history/createBrowserHistory";
 
 //const history = createHistory()
@@ -28,7 +29,22 @@ class Login extends React.Component {
             if (response.statusCode === 401){
                 this.setState({errors: body})
             } else {
+<<<<<<< Updated upstream
                 const parsedData = (JSON.parse(body))
+=======
+
+
+                const cookies = new Cookies();
+                cookies.set('email', email, { path: '/', maxAge: 1800 });
+                cookies.set('password',password,{path:'/', maxAge: 1800});
+
+
+
+                const parsedData = JSON.parse(body)
+
+
+                //console.log("PARSED DATA", parsedData.credentials._id)
+>>>>>>> Stashed changes
                 this.props.history.push({
                     pathname: "/dashboard",
                     state: {userData: parsedData.noteData, credentials: parsedData.credentials}
