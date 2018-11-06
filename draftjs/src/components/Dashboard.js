@@ -3,16 +3,16 @@ import { Table, Button } from 'antd';
 import 'antd/dist/antd.css';
 import {withRouter} from "react-router-dom";
 import request from 'request';
-<<<<<<< Updated upstream
+
 //import createHistory from "history/createBrowserHistory";
 //const history = createHistory()
-=======
+
 import Joyride from "react-joyride";
 import PropTypes from "prop-types";
 import Walkthrough from './Walkthrough';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
->>>>>>> Stashed changes
+
 
 class Dashboard extends React.Component {
     constructor(props) {
@@ -36,13 +36,8 @@ class Dashboard extends React.Component {
                 key: 'action',
                 render: (text,record) =>
                     <div>
-<<<<<<< Updated upstream
-                        <a onClick={() => this.editNote(this.props.location.state.credentials.email, record._id)}>Edit | </a>
-                        <a onClick={() => this.deleteNote(this.props.location.state.credentials.email, record._id)}>Delete</a>
-=======
                         <a className={"editNote"} onClick={() => this.editNote(this.state.credentials.email, record._id)}>Edit | </a>
                         <a className={"deleteNote"} onClick={() => this.deleteNote(this.state.credentials.email, record._id)}>Delete</a>
->>>>>>> Stashed changes
                     </div>,
             }],
             notes : null,
@@ -121,15 +116,6 @@ class Dashboard extends React.Component {
             if (error) throw new Error(error);
             if (response.statusCode === 401){
                 this.setState({errors: body})
-<<<<<<< Updated upstream
-            } else {
-                console.log(body)
-                this.props.history.push({
-                    pathname: "/new-note",
-                    state: {
-                        credentials: this.props.location.state.credentials,
-                        noteData: JSON.parse(body)
-=======
             } else
             {
                 //convert body to json format
@@ -140,24 +126,12 @@ class Dashboard extends React.Component {
                         credentials: this.state.credentials,
                         notes: this.state.notes,
                         noteData: js_body
->>>>>>> Stashed changes
                     }
                 })
             }
         }.bind(this));
     }
 
-<<<<<<< Updated upstream
-    render() {
-        console.log(this.state)
-        console.log(this.props)
-        return (
-            <div>
-            <Button type="primary" onClick={() => this.generateNewNote(this.props.location.state.credentials.email)}>New Note</Button>
-                <Table  rowSelection={this.rowSelection} dataSource={this.props.location.state.userData} columns={this.state.columns} />
-            </div>
-        )
-=======
     goToDefaultSettings(){
         this.props.history.push({
             pathname: "/default-settings",
@@ -279,7 +253,7 @@ class Dashboard extends React.Component {
 
 
 
->>>>>>> Stashed changes
+
     }
 }
 

@@ -29,9 +29,6 @@ class Login extends React.Component {
             if (response.statusCode === 401){
                 this.setState({errors: body})
             } else {
-<<<<<<< Updated upstream
-                const parsedData = (JSON.parse(body))
-=======
 
 
                 const cookies = new Cookies();
@@ -44,7 +41,6 @@ class Login extends React.Component {
 
 
                 //console.log("PARSED DATA", parsedData.credentials._id)
->>>>>>> Stashed changes
                 this.props.history.push({
                     pathname: "/dashboard",
                     state: {userData: parsedData.noteData, credentials: parsedData.credentials}

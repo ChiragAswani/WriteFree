@@ -37,8 +37,7 @@ class CreateAccount extends React.Component {
                 if (response.statusCode === 401){
                     this.setState({errors: body})
                 } else {
-<<<<<<< Updated upstream
-=======
+
 
                     const cookies = new Cookies();
                     cookies.set('email', email, { path: '/', maxAge: 1800 });
@@ -48,7 +47,7 @@ class CreateAccount extends React.Component {
                     cookies.set('password',password,{ path: '/', maxAge: 1800 });
 
                     const parsedBody = JSON.parse(body)
->>>>>>> Stashed changes
+
                     this.props.history.push({
                         pathname: "/dashboard",
                         state: {userData: [], credentials: (JSON.parse(body))}
