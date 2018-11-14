@@ -10,8 +10,6 @@ import datetime
 from draftjs_exporter.dom import DOM
 from draftjs_exporter.html import HTML
 
-
-
 # initializations
 app = Flask(__name__)
 CORS(app)
@@ -27,6 +25,7 @@ app.config['MONGODB_SETTINGS'] = {
 
 client = MongoClient('mongodb://localhost:27017/')
 db = client['WriteFreeDB']
+
 credentials_collection = db['credentials']
 notes_collection = db['notes']
 
