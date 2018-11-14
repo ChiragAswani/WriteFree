@@ -37,8 +37,12 @@ class CreateAccount extends React.Component {
                     this.setState({errors: body})
                 } else {
                     const parsedBody = JSON.parse(body)
+                    // this.props.history.push({
+                    //     pathname: "/dashboard",
+                    //     state: {notes: parsedBody.notes, credentials: parsedBody.credentials}
+                    // });
                     this.props.history.push({
-                        pathname: "/dashboard",
+                        pathname: "/default-settings",
                         state: {notes: parsedBody.notes, credentials: parsedBody.credentials}
                     });
                 }
