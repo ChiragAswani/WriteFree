@@ -7,6 +7,9 @@ from bson.objectid import ObjectId
 from flask_bcrypt import Bcrypt
 import pdfkit
 import datetime
+from draftjs_exporter.dom import DOM
+from draftjs_exporter.html import HTML
+
 
 
 # initializations
@@ -75,10 +78,17 @@ def login():
         return "Invalid Email or Password", 401;
     return "Email Does Not Exist", 401
 
-#TODO: Add logout feature
-#@app.route ('/logout....
-#   ensure that the user is out of the session too
-#   session.pop('email', None)
+
+@app.route('/get-default-settings', methods= ['GET', 'OPTIONS'])
+def getDefaultSettings():
+    email = request.args['email']
+    credentials = credentials_collection.find_one({'email': email})
+    credentials["_id"] = str(credentials["_id"])
+    del credentials['password']
+    return jsonify({"credentials": credentials}), 200;
+
+
+
 
 @app.route('/get-notes', methods= ['GET', 'OPTIONS'])
 def getNotes():
@@ -99,12 +109,15 @@ def deleteNote():
 @app.route ('/new-note', methods= ['POST', 'OPTIONS'])
 def addNote():
     email = request.args['email']
+    userData = credentials_collection.find_one({"email": email})
+    defaultNoteSettings = userData['defaultNoteSettings']['draftjsObj']
+
     baseNewNote = {
         "email": email,
         "title": None,
         "createdAt": datetime.datetime.fromtimestamp(time.time()).strftime('%c'),
         "content": None,
-        "noteSettings": {},
+        "noteSettings": defaultNoteSettings,
         "lastUpdated": datetime.datetime.fromtimestamp(time.time()).strftime('%c'),
         "category": None,
 
@@ -125,12 +138,15 @@ def saveNote():
 @app.route ('/update-default-settings', methods= ['POST', 'OPTIONS'])
 def updateDefaultSettings():
     form_data = json.loads(request.get_data())
-    email = form_data['email']
+
+    _id = ObjectId(form_data["_id"])
     noteColor = form_data['noteColor']
     applicationColor = form_data['applicationColor']
-    font = form_data['font']
-    query = {'$set': {'defaultNoteSettings': {'noteColor': noteColor, 'applicationColor': applicationColor, 'font': font}}}
-    credentials_collection.find_one_and_update({'email': email}, query)
+    fontName = form_data['fontName']
+    fontSize = form_data['fontSize']
+    draftjs = {"blocks":[{"key":"9043t","text":" ","type":"unstyled","depth":0,"inlineStyleRanges":[{"offset":0,"length":1,"style":"fontsize-" + str(fontSize)},{"offset":0,"length":1,"style":"fontfamily-" + fontName}],"entityRanges":[],"data":{}}],"entityMap":{}}
+    query = {'$set': {'defaultNoteSettings': {'noteColor': noteColor, 'applicationColor': applicationColor, 'fontName': fontName, 'fontSize': fontSize, 'draftjsObj': draftjs}}}
+    credentials_collection.find_one_and_update({'_id': _id}, query)
     return "HI", 200
 
 @app.route ('/remove-tutorial', methods= ['POST', 'OPTIONS'])
@@ -150,16 +166,20 @@ def fetchNote(note_id):
     data["_id"] = str(data["_id"])
     return jsonify(data), 200
 
-@app.route ('/renderPDF', methods= ['GET'])
+@app.route ('/renderPDF', methods= ['GET', 'OPTIONS'])
 def renderPDF():
-    form_data = json.loads(request.get_data())
-    noteHTML = form_data['noteHTML']
-    print(noteHTML)
+    noteID = request.args['noteID']
+    noteData = notes_collection.find_one({'_id': ObjectId(noteID)})
+    noteContent = noteData['content']
+    config = {}
+    exporter = HTML(config)
+    noteHTML = exporter.render(noteContent)
+
     pdf = pdfkit.from_string(noteHTML, False)
+
     response = make_response(pdf)
-    response.headers['Content-Type'] ='application/pdf'
+    response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = 'inline; filename=output.pdf'
-    #return send_file(response, attachment_filename='file.pdf')
     return response
 
 
