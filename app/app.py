@@ -9,6 +9,10 @@ import pdfkit
 import datetime
 
 
+
+
+
+
 # initializations
 app = Flask(__name__)
 CORS(app)
@@ -58,6 +62,31 @@ def create():
         document = jsonify({"notes": [], "credentials": savedDocument})
         return (document, 200)
 
+@app.route('/create-account_google', methods= ['POST', 'OPTIONS'])
+def create_google():
+    email = request.args['email']
+    google_id = request.args['google_id']
+    name = request.args['name']
+    createdAt = datetime.datetime.fromtimestamp(time.time()).strftime('%c')
+    # hash the googleID and save it in pw_hash
+    pw_hash = bcrypt.generate_password_hash(google_id.encode('utf-8'))
+    if (credentials_collection.find_one({'email': email})):
+         return "An account already exists with " + email, 401
+    else:
+        savedDocument = {
+            "createdAt": createdAt,
+            "email": email,
+            "fullName": name,
+            "password": pw_hash,
+            "runTutorial": True,
+            "defaultNoteSettings": {},
+        }
+        credentials_collection.insert_one(savedDocument)
+        savedDocument["_id"] = str(savedDocument["_id"])
+        del savedDocument['password']
+    document = jsonify({"notes": [], "credentials": savedDocument})
+    return (document, 200)
+
 # verify username and password, returns account details and notes
 @app.route('/login', methods= ['GET', 'OPTIONS'])
 def login():
@@ -66,6 +95,23 @@ def login():
     credentials = credentials_collection.find_one({'email': email})
     if (credentials):
         if (bcrypt.check_password_hash(credentials['password'], password.encode('utf-8'))):
+            arrayOfNotes = getArrayOfNotes(email)
+            # print(arrayOfNotes)
+            credentials["_id"] = str(credentials["_id"])
+            del credentials["password"]
+            return jsonify({"notes": arrayOfNotes, "credentials": credentials}), 200;
+        return "Invalid Email or Password", 401;
+    return "Email Does Not Exist", 401
+
+
+@app.route('/login_google', methods= ['GET', 'OPTIONS'])
+def login_google():
+    email = request.args['email']
+    google_id = request.args['google_id']
+    credentials = credentials_collection.find_one({'email': email})
+    if (credentials):
+        if (bcrypt.check_password_hash(credentials['password'], google_id.encode('utf-8'))):
+            print("HERE!")
             arrayOfNotes = getArrayOfNotes(email)
             # print(arrayOfNotes)
             credentials["_id"] = str(credentials["_id"])
@@ -108,7 +154,8 @@ def getNotes():
 @app.route ('/delete-note', methods= ['DELETE', 'OPTIONS'])
 def deleteNote():
     email = request.args['email']
-    noteID = request.args['noteID']
+    noteID = r
+    equest.args['noteID']
     notes_collection.delete_one({'email': email, "_id": ObjectId(noteID)})
     arrayOfNotes = getArrayOfNotes(email)
     return jsonify({"notes": arrayOfNotes}), 200
