@@ -200,11 +200,10 @@ def updateDefaultSettings():
 
     _id = ObjectId(form_data["_id"])
     noteColor = form_data['noteColor']
-    applicationColor = form_data['applicationColor']
     fontName = form_data['fontName']
     fontSize = form_data['fontSize']
     draftjs = {"blocks":[{"key":"9043t","text":" ","type":"unstyled","depth":0,"inlineStyleRanges":[{"offset":0,"length":1,"style":"fontsize-" + str(fontSize)},{"offset":0,"length":1,"style":"fontfamily-" + fontName}],"entityRanges":[],"data":{}}],"entityMap":{}}
-    query = {'$set': {'defaultNoteSettings': {'noteColor': noteColor, 'applicationColor': applicationColor, 'fontName': fontName, 'fontSize': fontSize, 'draftjsObj': draftjs}}}
+    query = {'$set': {'defaultNoteSettings': {'noteColor': noteColor, 'fontName': fontName, 'fontSize': fontSize, 'draftjsObj': draftjs}}}
     credentials_collection.find_one_and_update({'_id': _id}, query)
     return "HI", 200
 
