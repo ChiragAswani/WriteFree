@@ -7,6 +7,8 @@ from bson.objectid import ObjectId
 from flask_bcrypt import Bcrypt
 import pdfkit
 import datetime
+from draftjs_exporter.constants import BLOCK_TYPES, ENTITY_TYPES
+from draftjs_exporter.defaults import BLOCK_MAP, STYLE_MAP
 from draftjs_exporter.dom import DOM
 from draftjs_exporter.html import HTML
 
@@ -229,7 +231,9 @@ def renderPDF():
     noteID = request.args['noteID']
     noteData = notes_collection.find_one({'_id': ObjectId(noteID)})
     noteContent = noteData['content']
-    config = {}
+    config = {
+
+    }
     exporter = HTML(config)
     noteHTML = exporter.render(noteContent)
 
