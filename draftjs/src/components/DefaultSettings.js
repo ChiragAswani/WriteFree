@@ -12,7 +12,6 @@ class DefaultSettings extends React.Component {
         super(props);
         this.state = {
             noteColor: this.props.history.location.state.credentials.defaultNoteSettings.noteColor,
-            applicationColor: this.props.history.location.state.credentials.defaultNoteSettings.applicationColor,
             defaultfontName: [this.props.history.location.state.credentials.defaultNoteSettings.fontName],
             defaultfontSize: [this.props.history.location.state.credentials.defaultNoteSettings.fontSize]
         }
@@ -38,14 +37,10 @@ class DefaultSettings extends React.Component {
     changeNoteColor = (color) => {
         this.setState({ noteColor: color.hex });
     };
-    changeApplicationColor = (color) => {
-        this.setState({ applicationColor: color.hex });
-    };
 
-    saveDefaultSettings(noteColor, applicationColor, fontName, fontSize){
-        const obj = {_id: this.props.location.state.credentials._id, noteColor, applicationColor, fontName, fontSize}
+    saveDefaultSettings(noteColor, fontName, fontSize){
+        const obj = {_id: this.props.location.state.credentials._id, noteColor, fontName, fontSize}
         if (!obj.noteColor){obj.noteColor = "#8bc34a"}
-        if (!obj.applicationColor){obj.applicationColor = "3f51b5"}
         if (!obj.fontName){obj.fontName = "Georgia"}
         if (!obj.fontSize){obj.fontSize = 11}
         var postNewNote = {
@@ -137,12 +132,6 @@ class DefaultSettings extends React.Component {
                     color={ this.state.noteColor }
                     onChangeComplete={ this.changeNoteColor }
                 />
-                <p>Application Color</p>
-                <CirclePicker
-                    color={ this.state.applicationColor }
-                    onChangeComplete={ this.changeApplicationColor }
-                />
-
                 <p>Font Name</p>
                 <Cascader
                     options={fontName}
@@ -161,7 +150,7 @@ class DefaultSettings extends React.Component {
                 />
                 <br/>
                 <a onClick={() => this.saveDefaultSettings("#8bc34a", "#3f51b5", "Georgia", 11)}> Or Use Reccomended Settings</a><br/>
-                <Button onClick={() => this.saveDefaultSettings(this.state.noteColor, this.state.applicationColor, this.state.fontName, this.state.fontSize)}>Save Default Settings</Button>
+                <Button onClick={() => this.saveDefaultSettings(this.state.noteColor, this.state.fontName, this.state.fontSize)}>Save Default Settings</Button>
                 <br/>
             </div>
         )
