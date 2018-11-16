@@ -23,6 +23,7 @@ app.config['MONGODB_SETTINGS'] = {
     'port': 27017
 }
 
+
 client = MongoClient('mongodb://localhost:27017/')
 db = client['WriteFreeDB']
 
@@ -34,6 +35,31 @@ def session_management():
     # make the session last indefinitely until it is cleared
     session.permanent = True
 
+@app.route('/create-account_google', methods= ['POST', 'OPTIONS'])
+def create_google():
+    email = request.args['email']
+    google_id = request.args['google_id']
+    name = request.args['name']
+    createdAt = datetime.datetime.fromtimestamp(time.time()).strftime('%c')
+    # hash the googleID and save it in pw_hash
+    pw_hash = bcrypt.generate_password_hash(google_id.encode('utf-8'))
+    if (credentials_collection.find_one({'email': email})):
+        return "An account already exists with " + email, 401
+    else:
+        savedDocument = {
+         "createdAt": createdAt,
+         "email": email,
+         "fullName": name,
+         "password": pw_hash,
+         "runTutorial": True,
+         "defaultNoteSettings": {},
+        }
+        credentials_collection.insert_one(savedDocument)
+        savedDocument["_id"] = str(savedDocument["_id"])
+        del savedDocument['password']
+    document = jsonify({"notes": [], "credentials": savedDocument})
+    return (document, 200)
+
 # create account and store info into DB
 @app.route('/create-account', methods= ['POST', 'OPTIONS'])
 def create():
@@ -42,7 +68,7 @@ def create():
     password = request.args['password']
     createdAt = datetime.datetime.fromtimestamp(time.time()).strftime('%c')
     # hash the password and save it in pw_hash
-    pw_hash = bcrypt.generate_password_hash(password)
+    pw_hash = bcrypt.generate_password_hash(password.encode('utf-8'))
     if(credentials_collection.find_one({'email': email})):
         return "An account already exists with " + email, 401
     else:
@@ -68,9 +94,22 @@ def login():
     credentials = credentials_collection.find_one({'email': email})
     if (credentials):
         hashed_password = bcrypt.generate_password_hash(password)
-        if (bcrypt.check_password_hash(hashed_password, password)):
+        if (bcrypt.check_password_hash(hashed_password, password.encode('utf-8'))):
             arrayOfNotes = getArrayOfNotes(email)
-            print(arrayOfNotes)
+            credentials["_id"] = str(credentials["_id"])
+            del credentials["password"]
+            return jsonify({"notes": arrayOfNotes, "credentials": credentials}), 200;
+        return "Invalid Email or Password", 401;
+    return "Email Does Not Exist", 401
+
+@app.route('/login_google', methods= ['GET', 'OPTIONS'])
+def login_google():
+    email = request.args['email']
+    google_id = request.args['google_id']
+    credentials = credentials_collection.find_one({'email': email})
+    if (credentials):
+        if (bcrypt.check_password_hash(credentials['password'], google_id.encode('utf-8'))):
+            arrayOfNotes = getArrayOfNotes(email)
             credentials["_id"] = str(credentials["_id"])
             del credentials["password"]
             return jsonify({"notes": arrayOfNotes, "credentials": credentials}), 200;
@@ -86,7 +125,21 @@ def getDefaultSettings():
     del credentials['password']
     return jsonify({"credentials": credentials}), 200;
 
-
+# verify username and password, returns account details and notes
+@app.route('/get-data', methods= ['GET', 'OPTIONS'])
+def getData():
+    email = request.args['email']
+    id = request.args['id']
+    credentials = credentials_collection.find_one({'email': email})
+    db_id = credentials['_id']
+    if (credentials):
+        if (id == str(db_id)):
+            arrayOfNotes = getArrayOfNotes(email)
+            credentials["_id"] = str(credentials["_id"])
+            del credentials["password"]
+            return jsonify({"notes": arrayOfNotes, "credentials": credentials}), 200;
+        return "Invalid Email or Password", 401;
+    return "Email Does Not Exist", 401
 
 
 @app.route('/get-notes', methods= ['GET', 'OPTIONS'])
@@ -180,7 +233,6 @@ def renderPDF():
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = 'inline; filename=output.pdf'
     return response
-
 
 
 def getArrayOfNotes(email):
