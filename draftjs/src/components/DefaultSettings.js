@@ -149,7 +149,7 @@ class DefaultSettings extends React.Component {
                     showSearch={this.filter}
                 />
                 <br/>
-                <a onClick={() => this.saveDefaultSettings("#8bc34a", "#3f51b5", "Georgia", 11)}> Or Use Reccomended Settings</a><br/>
+                <a onClick={() => this.saveDefaultSettings("#8bc34a", "Georgia", 11)}> Or Use Reccomended Settings</a><br/>
                 <Button onClick={() => this.saveDefaultSettings(this.state.noteColor, this.state.fontName, this.state.fontSize)}>Save Default Settings</Button>
                 <br/>
             </div>
