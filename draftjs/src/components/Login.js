@@ -54,9 +54,6 @@ class Login extends React.Component {
 
 
     render() {
-        //console.log("STATE", this.state)
-        //console.log("HISTORY", this.props.location.state)
-
         this.responseGoogle = (response) => {
             var email = response.profileObj.email
             var google_id = response.profileObj.googleId

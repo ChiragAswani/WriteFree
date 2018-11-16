@@ -85,7 +85,7 @@ class CreateAccount extends React.Component {
                     cookies.set('id',parsedData.credentials._id,{path:'/', maxAge: 1800});
 
                     this.props.history.push({
-                        pathname: "/dashboard",
+                        pathname: "/default-settings",
                         state: {notes: parsedData.notes, credentials: parsedData.credentials}
                     });
                 }
