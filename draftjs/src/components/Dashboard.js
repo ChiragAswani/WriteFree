@@ -1,11 +1,12 @@
 import React from 'react';
-import { Table, Button } from 'antd';
+import { Table, Button, Switch, Card } from 'antd';
 import 'antd/dist/antd.css';
 import {withRouter} from "react-router-dom";
 import request from 'request';
 import Joyride from "react-joyride";
 import PropTypes from "prop-types";
 import Walkthrough from './Walkthrough';
+import '../css/dashboard.css';
 
 class Dashboard extends React.Component {
     constructor(props) {
@@ -119,22 +120,38 @@ class Dashboard extends React.Component {
         }.bind(this));
     }
 
-    goToDefaultSettings(){
-        this.props.history.push({
-            pathname: "/default-settings",
-            state: {
-                credentials: this.props.location.state.credentials,
-                notes: this.props.location.state.notes
+    goToDefaultSettings(email){
+        var getDefaultSettings = {
+            method: 'GET',
+            url: 'http://127.0.0.1:5000/get-default-settings',
+            qs:{email},
+            headers: {'Content-Type': 'application/x-www-form-urlencoded' }
+        };
+        request(getDefaultSettings, function (error, response, body) {
+            if (error) throw new Error(error);
+            if (response.statusCode === 401){
+                this.setState({errors: body})
+            } else {
+                const parsedData = JSON.parse(body)
+                this.props.history.push({
+                    pathname: "/default-settings",
+                    state: {
+                        credentials: parsedData.credentials,
+                    }
+                })
             }
-        })
+        }.bind(this));
     }
 
     validate() {
-        let key = 'email';
-        if (!sessionStorage.getItem(key)) {
-            return false
-        }
+        // let key = 'email';
+        // if (!sessionStorage.getItem(key)) {
+        //     return false
+        // }
         return true
+    }
+    switchView(){
+
     }
 
     render() {
@@ -153,9 +170,20 @@ class Dashboard extends React.Component {
                     <Button type="primary" className="generateNewNote"
                             onClick={() => this.generateNewNote(this.props.location.state.credentials.email)}>New
                         Note</Button>
-                    <Button type="danger" className={"defaultSettings"} onClick={() => this.goToDefaultSettings()}>Default Settings</Button>
+                    <Button type="danger" className={"defaultSettings"} onClick={() => this.goToDefaultSettings(this.props.location.state.credentials.email)}>Default Settings</Button>
+                    <Switch checkedChildren="table" unCheckedChildren="card" defaultChecked onChange={() => this.switchView()}/>
                     <Table rowSelection={this.rowSelection()} dataSource={this.props.location.state.notes} className={"notesTable"}
                            columns={this.state.columns}/>
+
+                    <div className="cont">
+                        <Card className="item">Card content</Card>
+                        <Card className="item">Card content</Card>
+                        <Card className="item">Card content</Card>
+                        <Card className="item">Card content</Card>
+                        <Card className="item">Card content</Card>
+                        <Card className="item">Card content</Card>
+
+                    </div>
 
                 </div>
             )

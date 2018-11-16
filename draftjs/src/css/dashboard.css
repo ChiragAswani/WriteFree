@@ -1,0 +1,8 @@
+.cont {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+.item {
+    margin: 6px;
+}

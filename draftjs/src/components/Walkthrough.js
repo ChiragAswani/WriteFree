@@ -73,8 +73,6 @@ class Walkthrough extends React.Component {
                 showProgress
                 showSkipButton
                 run={this.props.history.location.state.credentials.runTutorial}
-                spotlightPadding={false}
-
                 steps={[
                     {
                         content: <h2>Write Free Tutorial</h2>,

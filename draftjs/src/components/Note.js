@@ -9,8 +9,9 @@ import Speech from "react-speech";
 
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-
-import {stateToHTML} from 'draft-js-export-html';
+import Alert from 'react-s-alert';
+import 'react-s-alert/dist/s-alert-default.css';
+import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
 
 
 class Note extends React.Component {
@@ -54,31 +55,39 @@ class Note extends React.Component {
         );
     }
     componentDidMount(){
+        if (this.props.history.location.state.noteData.noteSettings){
+
+            let contentState = this.props.history.location.state.noteData.noteSettings
+            console.log("draft obj", contentState)
+            this.setState({editorState: EditorState.createWithContent(convertFromRaw((contentState)))});
+        }
         if (this.props.location.state.noteData.title){
-            console.log("HERE")
             let contentState = this.props.location.state.noteData.content
+            console.log('got title', contentState)
             this.setState({editorState: EditorState.createWithContent(convertFromRaw((contentState)))});
         }
     }
     saveNote(title, category, noteID, noteContent){
-        const convertedNoteContent = convertToRaw(noteContent)
-        const obj = {title, category, noteID, noteContent: convertedNoteContent}
-        var saveNote = {
-            method: 'POST',
-            url: 'http://127.0.0.1:5000/save-note',
-            body: JSON.stringify(obj),
-            //qs: { title: title, category: category, noteID: noteID, content: convertedNoteContent},
-            headers: {'Content-Type': 'application/x-www-form-urlencoded' }
-        };
-        request(saveNote, function (error, response, body) {
-            if (error) throw new Error(error);
-            if (response.statusCode === 401){
-                this.setState({errors: body})
-            } else {
-                //console.log(body)
-            }
-        }.bind(this));
-
+        if(!title){
+            this.handleJelly()
+        } else {
+            const convertedNoteContent = convertToRaw(noteContent)
+            const obj = {title, category, noteID, noteContent: convertedNoteContent}
+            var saveNote = {
+                method: 'POST',
+                url: 'http://127.0.0.1:5000/save-note',
+                body: JSON.stringify(obj),
+                //qs: { title: title, category: category, noteID: noteID, content: convertedNoteContent},
+                headers: {'Content-Type': 'application/x-www-form-urlencoded' }
+            };
+            request(saveNote, function (error, response, body) {
+                if (error) throw new Error(error);
+                if (response.statusCode === 401){
+                    this.setState({errors: body})
+                } else {
+                }
+            }.bind(this));
+        }
     }
 
     speechNote(noteContent){
@@ -89,35 +98,29 @@ class Note extends React.Component {
         return text
     }
 
-    renderPDF(state){
-        const stringState = state.toString()
-        var options = { method: 'POST',
-            url: 'http://localhost:5000/renderPDF',
-            headers:
-                { 'Postman-Token': 'd9553fdb-b451-4dee-bcac-fd2a2bfde76a',
-                    'cache-control': 'no-cache',
-                    'Content-Type': 'application/json' },
-            body: { noteHTML: stringState },
-            json: true };
-
-        request(options, function (error, response, body) {
-            if (error) throw new Error(error);
-
-            console.log(body);
+    renderPDF(noteID){
+        window.open("http://www.localhost:5000/renderPDF?noteID="+noteID);
+    }
+    handleJelly() {
+        Alert.error('Please Enter a Note Header!', {
+            position: 'top-right',
+            effect: 'jelly'
         });
     }
 
     render() {
         const {editorState} = this.state;
-        let className = 'RichEditor-editor';
-        var contentState = editorState.getCurrentContent();
-        if (!contentState.hasText()) {
-            if (contentState.getBlockMap().first().getType() !== 'unstyled') {
-                className += ' RichEditor-hidePlaceholder';
-            }
-        }
+        // let className = 'RichEditor-editor';
+        // var contentState = editorState.getCurrentContent();
+        // if (!contentState.hasText()) {
+        //     if (contentState.getBlockMap().first().getType() !== 'unstyled') {
+        //         className += ' RichEditor-hidePlaceholder';
+        //     }
+        // }
+        console.log(convertToRaw(this.state.editorState.getCurrentContent()))
         return (
             <div>
+                <Alert stack={true} timeout={3000} />
             <div className="RichEditor-root">
                 <Input placeholder={"Note Header"} value={this.state.noteHeader} onChange={noteHeader => this.setState({noteHeader: noteHeader.target.value})}></Input>
                 <Input placeholder={"Note Category"} value={this.state.noteCategory} onChange={noteCategory => {this.setState({noteCategory: noteCategory.target.value})}}></Input>
@@ -142,7 +145,7 @@ class Note extends React.Component {
                 <div>{JSON.stringify(convertToRaw(editorState.getCurrentContent()))}</div>
                 <Button onClick={() => this.saveNote(this.state.noteHeader, this.state.noteCategory, this.props.location.state.noteData._id, editorState.getCurrentContent())}>Save Note</Button>
                 <GoToDashboardButton/>
-                <Button onClick={() => this.renderPDF(stateToHTML(editorState.getCurrentContent()))}>Convert to PDF</Button>
+                <Button onClick={() => this.renderPDF(this.props.location.state.noteData._id)}>Convert to PDF</Button>
 
             </div>
 
