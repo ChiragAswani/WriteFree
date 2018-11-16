@@ -238,8 +238,6 @@ class Dashboard extends React.Component {
     render() {
         const cookies1 = new Cookies();
         console.log("render email:", cookies1.get('email'))
-
-
         if(this.validate()) {
             const {notes, credentials} = this.state
             if (notes, credentials === null) {
@@ -265,7 +263,7 @@ class Dashboard extends React.Component {
                             onClick={() => this.generateNewNote(this.state.credentials)}>New
                         Note</Button>
 
-                    <Button type="danger" className={"defaultSettings"} onClick={() => this.goToDefaultSettings()}>Default
+                    <Button type="danger" className={"defaultSettings"} onClick={() => this.goToDefaultSettings(cookies1.get('email'))}>Default
                         Settings</Button>
                     <Button type="primary" className="generateNewNote"
                             onClick={() => this.logout(this.state.credentials)}>Log Out</Button>

@@ -41,22 +41,12 @@ class CreateAccount extends React.Component {
                     this.setState({errors: body})
                 } else {
                     const parsedBody = JSON.parse(body)
-<<<<<<< loginupdates
-
                     var ident = parsedBody.credentials._id
-
 
                     const cookies = new Cookies();
                     cookies.set('email', email, { path: '/', maxAge: 1800 });
                     const parsedData = JSON.parse(body)
                     cookies.set('id',ident,{ path: '/', maxAge: 1800 });
-
-=======
-                    // this.props.history.push({
-                    //     pathname: "/dashboard",
-                    //     state: {notes: parsedBody.notes, credentials: parsedBody.credentials}
-                    // });
->>>>>>> master
                     this.props.history.push({
                         pathname: "/default-settings",
                         state: {notes: parsedBody.notes, credentials: parsedBody.credentials}
