@@ -1,7 +1,7 @@
 import React from 'react';
 import {Editor as DraftEditor, EditorState, RichUtils, convertToRaw, convertFromRaw, } from "draft-js";
 import {withRouter} from "react-router-dom";
-import { Input, Button} from 'antd';
+import { Input, Button, Select} from 'antd';
 import request from 'request';
 import '../css/note.css';
 import GoToDashboardButton from './GoToDashboardButton';
@@ -13,6 +13,7 @@ import Alert from 'react-s-alert';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
 
+const Option = Select.Option;
 
 class Note extends React.Component {
 
@@ -121,12 +122,11 @@ class Note extends React.Component {
         return (
             <div>
                 <Alert stack={true} timeout={3000} />
-            <div className="RichEditor-root">
+            <div className="RichEditor-root" id={"textEdiotr"}>
                 <Input placeholder={"Note Header"} value={this.state.noteHeader} onChange={noteHeader => this.setState({noteHeader: noteHeader.target.value})}></Input>
                 <Input placeholder={"Note Category"} value={this.state.noteCategory} onChange={noteCategory => {this.setState({noteCategory: noteCategory.target.value})}}></Input>
-
-
                 <Editor
+                    spellCheck={true}
                     editorState={editorState}
                     toolbarClassName="rdw-storybook-toolbar"
                     wrapperClassName="rdw-storybook-wrapper"
@@ -147,10 +147,29 @@ class Note extends React.Component {
                 <GoToDashboardButton/>
                 <Button onClick={() => this.renderPDF(this.props.location.state.noteData._id)}>Convert to PDF</Button>
 
+                <div>
+                    <Select defaultValue="0.5px" style={{ width: 150 }} onChange={changeWordSpacing}>
+                        <Option value="0.5px" disabled>Word Spacing</Option>
+                        <Option value="1px">Default</Option>
+                        <Option value="10px">10px</Option>
+                        <Option value="20px">20px</Option>
+                        <Option value="50px">50px</Option>
+                    </Select>
+                </div>
             </div>
-
         );
     }
+}
+
+// spacing methods
+function changeWordSpacing(value) {
+    console.log(`selected ${value}`);
+    document.getElementById("textEdiotr").style.wordSpacing = value;
+}
+// value for selection
+function changeLineSpacing(value) {
+    console.log(`selected ${value}`);
+    document.getElementById("textEdiotr").style.lineHeight = value;
 }
 
 // Custom overrides for "code" style.
