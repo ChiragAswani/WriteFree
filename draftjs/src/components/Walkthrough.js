@@ -118,7 +118,6 @@ class Walkthrough extends React.Component {
                 scrollToFirstStep
                 showProgress
                 showSkipButton
-
                 run={this.state.credentials.runTutorial}
                 spotlightPadding={false}
 

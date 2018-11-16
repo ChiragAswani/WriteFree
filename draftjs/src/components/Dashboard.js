@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Button } from 'antd';
+import { Table, Button, Switch, Card } from 'antd';
 import 'antd/dist/antd.css';
 import {withRouter} from "react-router-dom";
 import request from 'request';
@@ -10,13 +10,14 @@ import request from 'request';
 import Joyride from "react-joyride";
 import PropTypes from "prop-types";
 import Walkthrough from './Walkthrough';
+
 import Cookies from 'universal-cookie';
 import axios from 'axios';
 
+import '../css/dashboard.css';
 
 class Dashboard extends React.Component {
     constructor(props) {
-
         super(props);
         this.state = {
             columns: [{
@@ -42,19 +43,12 @@ class Dashboard extends React.Component {
                     <div>
                         <a className={"editNote"} onClick={() => this.editNote(this.props.location.state.credentials.email, record._id)}>Edit | </a>
                         <a className={"deleteNote"} onClick={() => this.deleteNote(this.props.location.state.credentials.email, record._id)}>Delete</a>
-
                     </div>,
             }],
             notes : null,
             credentials: null
-
         }
-
-
-
     }
-
-
 
     editNote(email, noteID){
         var editNote = {
@@ -74,8 +68,6 @@ class Dashboard extends React.Component {
             });
         }.bind(this));
     }
-
-
 
     deleteNote(email, noteID){
         //console.log(this.props.location.state.notes);
@@ -142,14 +134,27 @@ class Dashboard extends React.Component {
         }.bind(this));
     }
 
-    goToDefaultSettings(){
-        this.props.history.push({
-            pathname: "/default-settings",
-            state: {
-                credentials: this.props.location.state.credentials,
-                notes: this.props.location.state.notes
+    goToDefaultSettings(email){
+        var getDefaultSettings = {
+            method: 'GET',
+            url: 'http://127.0.0.1:5000/get-default-settings',
+            qs:{email},
+            headers: {'Content-Type': 'application/x-www-form-urlencoded' }
+        };
+        request(getDefaultSettings, function (error, response, body) {
+            if (error) throw new Error(error);
+            if (response.statusCode === 401){
+                this.setState({errors: body})
+            } else {
+                const parsedData = JSON.parse(body)
+                this.props.history.push({
+                    pathname: "/default-settings",
+                    state: {
+                        credentials: parsedData.credentials,
+                    }
+                })
             }
-        })
+        }.bind(this));
     }
 
     logout(credentials){
@@ -160,7 +165,6 @@ class Dashboard extends React.Component {
             pathname: "/login"
         })
     }
-
 
     validate() {
         const cookies = new Cookies();
@@ -202,14 +206,10 @@ class Dashboard extends React.Component {
     //
     //
     // }
-
-
     componentDidMount() {
-
         const cookies2 = new Cookies()
         var id = cookies2.get('id')
         var email = cookies2.get('email')
-
 
         axios.get('http://127.0.0.1:5000/get-data', {
             params: {
@@ -232,13 +232,8 @@ class Dashboard extends React.Component {
             console.log("ERROR - INVALID or NO COOKIES");
 
         })
-
-
-
             //email,password).then((notes, credentials) => this.setState({ notes, credentials }))
-
     }
-
 
     render() {
         const cookies1 = new Cookies();
@@ -250,15 +245,11 @@ class Dashboard extends React.Component {
             if (notes, credentials === null) {
                 return null
             }
-
             //console.log("HISTORY", this.props.location.state)
 
             const cookies = new Cookies();
             cookies.set('email', cookies.get('email'), {path: '/', maxAge: 1800});
             cookies.set('id', cookies.get('id'), {path: '/', maxAge: 1800});
-
-
-
 
             //convert the userDate from the login page to the dateSource so that it can be used in Table opeartions
 
@@ -273,12 +264,23 @@ class Dashboard extends React.Component {
                     <Button type="primary" className="generateNewNote"
                             onClick={() => this.generateNewNote(this.state.credentials)}>New
                         Note</Button>
+
                     <Button type="danger" className={"defaultSettings"} onClick={() => this.goToDefaultSettings()}>Default
                         Settings</Button>
                     <Button type="primary" className="generateNewNote"
                             onClick={() => this.logout(this.state.credentials)}>Log Out</Button>
                     <Table rowSelection={this.rowSelection()} dataSource={this.state.notes} className={"notesTable"}
                            columns={this.state.columns}/>
+                    <Switch checkedChildren="table" unCheckedChildren="card" defaultChecked onChange={() => this.switchView()}/>
+
+                    <div className="cont">
+                        <Card className="item">Card content</Card>
+                        <Card className="item">Card content</Card>
+                        <Card className="item">Card content</Card>
+                        <Card className="item">Card content</Card>
+                        <Card className="item">Card content</Card>
+                        <Card className="item">Card content</Card>
+                    </div>
                 </div>
             )
         } else {
