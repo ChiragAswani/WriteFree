@@ -8,10 +8,15 @@ import request from 'request';
 import Joyride from "react-joyride";
 import PropTypes from "prop-types";
 
+import Cookies from 'universal-cookie';
+import axios from 'axios';
+
 class Walkthrough extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            notes : null,
+            credentials: null
         }
     }
 
@@ -65,14 +70,57 @@ class Walkthrough extends React.Component {
         }.bind(this));
     }
 
+
+
+
+    componentDidMount() {
+        const cookies2 = new Cookies()
+        var email = cookies2.get('email')
+        var id = cookies2.get('id')
+        // var _this = this
+        axios.get('http://127.0.0.1:5000/get-data', {
+            params: {
+                email: email,
+                id: id
+            }
+        }).then((response) => {
+
+
+            this.setState({
+                notes : response.data.notes,
+                credentials : response.data.credentials
+            })
+
+
+        }).catch((error) => {
+            // Set cookie to null
+            cookies2.remove('email');
+            cookies2.remove('id');
+            console.log("ERROR - INVALID or NO COOKIES");
+        })
+
+
+
+        //email,password).then((notes, credentials) => this.setState({ notes, credentials }))
+
+    }
+
     render() {
+        const {notes, credentials} = this.state
+        if (notes, credentials === null) {
+            return null
+        }
+        // console.log("STATE", this.state)
+
         return(
             <Joyride
                 continuous
                 scrollToFirstStep
                 showProgress
                 showSkipButton
-                run={this.props.history.location.state.credentials.runTutorial}
+                run={this.state.credentials.runTutorial}
+                spotlightPadding={false}
+
                 steps={[
                     {
                         content: <h2>Write Free Tutorial</h2>,
@@ -83,7 +131,9 @@ class Walkthrough extends React.Component {
                                 zIndex: 10000
                             }
                         },
-                        locale: { skip: <a onClick={() => this.removeTutorial(this.props.history.location.state.credentials._id)}>Don't Show This Again</a> },
+
+                        locale: { skip: <a onClick={() => this.removeTutorial(this.state.credentials._id)}>Don't Show This Again</a> },
+
                         target: "body"
                     },
                     {
