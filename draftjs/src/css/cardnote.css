@@ -1,0 +1,18 @@
+.ant-card-extra{
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+}
+
+.ant-card-head{
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    border-bottom: hidden;
+    min-height: 0px;
+}
+.ant-card-head-wrapper{
+    height: 0px;
+}

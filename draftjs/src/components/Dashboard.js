@@ -4,6 +4,7 @@ import 'antd/dist/antd.css';
 import {withRouter} from "react-router-dom";
 import request from 'request';
 
+
 //import createHistory from "history/createBrowserHistory";
 //const history = createHistory()
 
@@ -15,6 +16,7 @@ import Cookies from 'universal-cookie';
 import axios from 'axios';
 
 import '../css/dashboard.css';
+import CardNote from "./CardNote";
 
 class Dashboard extends React.Component {
     constructor(props) {
@@ -173,39 +175,7 @@ class Dashboard extends React.Component {
         }
         return true
     }
-    // Depreciated
-    // getData(email, password) {
-    //
-    //     var postLoginInformation = {
-    //         method: 'GET',
-    //         url: 'http://127.0.0.1:5000/login',
-    //         qs:{email, password },
-    //         headers: {'Content-Type': 'application/x-www-form-urlencoded' }
-    //     };
-    //
-    //     request(postLoginInformation, function (error, response, body) {
-    //         if (error) throw new Error(error);
-    //         if (response.statusCode === 401){
-    //             this.setState({errors: body})
-    //         } else {
-    //
-    //             const parsedData = JSON.parse(body)
-    //
-    //             return parsedData.notes, parsedData.credentials
-    //             //this.setState = ({ notes: parsedData.notes, credentials: parsedData.credentials});
-    //             // this.setState({
-    //             //     notes: parsedData.notes,
-    //             //     credentials: parsedData.credentials
-    //             // }, () => {
-    //             //     console.log("doneeeeee~~~")
-    //             // });
-    //
-    //
-    //         }
-    //     }.bind(this));
-    //
-    //
-    // }
+
     componentDidMount() {
         const cookies2 = new Cookies()
         var id = cookies2.get('id')
@@ -270,15 +240,7 @@ class Dashboard extends React.Component {
                     <Table rowSelection={this.rowSelection()} dataSource={this.state.notes} className={"notesTable"}
                            columns={this.state.columns}/>
                     <Switch checkedChildren="table" unCheckedChildren="card" defaultChecked onChange={() => this.switchView()}/>
-
-                    <div className="cont">
-                        <Card className="item">Card content</Card>
-                        <Card className="item">Card content</Card>
-                        <Card className="item">Card content</Card>
-                        <Card className="item">Card content</Card>
-                        <Card className="item">Card content</Card>
-                        <Card className="item">Card content</Card>
-                    </div>
+                    <CardNote notes={this.state.notes} history={this.props.history}/>
                 </div>
             )
         } else {
