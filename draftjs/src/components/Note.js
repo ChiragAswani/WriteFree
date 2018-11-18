@@ -1,12 +1,12 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {Editor as DraftEditor, EditorState, RichUtils, convertToRaw, convertFromRaw, } from "draft-js";
 import {withRouter} from "react-router-dom";
-import { Input, Button, Select} from 'antd';
+import { Input, Button, Select, Tabs } from 'antd';
 import request from 'request';
 import '../css/note.css';
 import GoToDashboardButton from './GoToDashboardButton';
 import Speech from "react-speech";
-
+import PropTypes from 'prop-types';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import Alert from 'react-s-alert';
@@ -14,6 +14,8 @@ import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
 
 const Option = Select.Option;
+
+const TabPane = Tabs.TabPane;
 
 class Note extends React.Component {
 
@@ -26,6 +28,7 @@ class Note extends React.Component {
         this.handleKeyCommand = (command) => this._handleKeyCommand(command);
         this.toggleBlockType = (type) => this._toggleBlockType(type);
         this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
+        this.changeToolBar = this.changeToolBar.bind(this)
     }
 
     _handleKeyCommand(command) {
@@ -108,23 +111,35 @@ class Note extends React.Component {
             effect: 'jelly'
         });
     }
+    changeToolBar(key){
+        console.log(key)
+        if (key === "basicFeatures"){
+            this.setState({'toolbar': {}, 'toolbarCustomButtons': []})
+        }
+        else if (key === "dyslexicFeatures"){
+            this.setState({'toolbar': {'options': []}, 'toolbarCustomButtons': [<WordSpacingOption/>,  <LineSpacingOption/>, <SpeechOption speechText={convertToRaw(this.state.editorState.getCurrentContent())}/>]})
+        }
+        else if (key === "otherFeatures"){
+            this.setState({'toolbar': {'options': []}, 'toolbarCustomButtons': []})
+        }
+
+    }
 
     render() {
         const {editorState} = this.state;
-        // let className = 'RichEditor-editor';
-        // var contentState = editorState.getCurrentContent();
-        // if (!contentState.hasText()) {
-        //     if (contentState.getBlockMap().first().getType() !== 'unstyled') {
-        //         className += ' RichEditor-hidePlaceholder';
-        //     }
-        // }
-        console.log(convertToRaw(this.state.editorState.getCurrentContent()))
+        console.log(this.state)
         return (
             <div>
-                <Alert stack={true} timeout={3000} />
-            <div className="RichEditor-root" id={"textEdiotr"}>
                 <Input placeholder={"Note Header"} value={this.state.noteHeader} onChange={noteHeader => this.setState({noteHeader: noteHeader.target.value})}></Input>
                 <Input placeholder={"Note Category"} value={this.state.noteCategory} onChange={noteCategory => {this.setState({noteCategory: noteCategory.target.value})}}></Input>
+                <Tabs onChange={this.changeToolBar} type="card">
+                    <TabPane tab="Basic" key="basicFeatures"/>
+                    <TabPane tab="Dyslexic" key="dyslexicFeatures"/>
+                    <TabPane tab="Other" key="otherFeatures"/>
+                </Tabs>
+
+                <Alert stack={true} timeout={3000} />
+            <div className="RichEditor-root" id={"textEdiotr"}>
                 <Editor
                     spellCheck={true}
                     editorState={editorState}
@@ -132,40 +147,20 @@ class Note extends React.Component {
                     wrapperClassName="rdw-storybook-wrapper"
                     editorClassName="rdw-storybook-editor"
                     onEditorStateChange={this.onChange}
-
+                    toolbarCustomButtons={this.state.toolbarCustomButtons}
+                    toolbar={this.state.toolbar}
                 />
-                <Speech
-                    text={this.speechNote(convertToRaw(editorState.getCurrentContent()))}
-                    displayText={"Text to Speech"}
-                    textAsButton={true}
-                    voice="Google UK English Female" />
-
             </div>
                 <p> State Representation of Note </p>
                 <div>{JSON.stringify(convertToRaw(editorState.getCurrentContent()))}</div>
                 <Button onClick={() => this.saveNote(this.state.noteHeader, this.state.noteCategory, this.props.location.state.noteData._id, editorState.getCurrentContent())}>Save Note</Button>
                 <GoToDashboardButton/>
                 <Button onClick={() => this.renderPDF(this.props.location.state.noteData._id)}>Convert to PDF</Button>
-
-                <div>
-                    <Select defaultValue="0.5px" style={{ width: 150 }} onChange={changeWordSpacing}>
-                        <Option value="0.5px" disabled>Word Spacing</Option>
-                        <Option value="1px">Default</Option>
-                        <Option value="10px">10px</Option>
-                        <Option value="20px">20px</Option>
-                        <Option value="50px">50px</Option>
-                    </Select>
-                </div>
             </div>
         );
     }
 }
 
-// spacing methods
-function changeWordSpacing(value) {
-    console.log(`selected ${value}`);
-    document.getElementById("textEdiotr").style.wordSpacing = value;
-}
 // value for selection
 function changeLineSpacing(value) {
     console.log(`selected ${value}`);
@@ -271,5 +266,75 @@ const InlineStyleControls = (props) => {
         </div>
     );
 };
+
+const SpeechOption = (props) => {
+    function speechNote(noteContent) {
+        var text = '';
+        for (var line in noteContent.blocks){
+            text = text + (noteContent.blocks[line].text) + ". "
+        }
+        return text
+    }
+    return (
+        <Speech
+            text={speechNote(props.speechText)}
+            displayText={"Text to Speech"}
+            textAsButton={true}
+            voice="Google UK English Female" />
+    );
+};
+
+class WordSpacingOption extends React.Component {
+    constructor(props){
+        super(props)
+    }
+    // spacing methods
+    changeWordSpacing(value) {
+        console.log(`selected ${value}`);
+        var textfiled = document.getElementsByClassName('DraftEditor-root');
+        textfiled[0].style.wordSpacing = value;
+    }
+
+    render() {
+        return (
+            <div>
+                <Select defaultValue="0.5px" style={{ width: 150 }} onChange={(value) => this.changeWordSpacing(value)}>
+                    <Option value="0.5px" disabled>Word Spacing</Option>
+                    <Option value="1px">Default</Option>
+                    <Option value="10px">10px</Option>
+                    <Option value="20px">20px</Option>
+                    <Option value="50px">50px</Option>
+                </Select>
+            </div>
+        );
+    }
+}
+
+class LineSpacingOption extends React.Component {
+    constructor(props){
+        super(props)
+    }
+
+    changeLineSpacing(value) {
+        console.log(`selected ${value}`);
+        var textfiled = document.getElementsByClassName('DraftEditor-root');
+        textfiled[0].style.lineHeight = value;
+    }
+
+    render() {
+        return (
+            <div>
+                <Select defaultValue="normal" style={{ width: 150 }} onChange={(value) => this.changeLineSpacing(value)}>
+                    <Option value="1px" disabled>Line Spacing</Option>
+                    <Option value="normal">Default</Option>
+                    <Option value="2px">2px</Option>
+                    <Option value="5px">5px</Option>
+                    <Option value="10px">10px</Option>
+                </Select>
+            </div>
+        );
+    }
+}
+
 
 export default withRouter(Note);
