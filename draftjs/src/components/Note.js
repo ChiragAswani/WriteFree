@@ -298,9 +298,9 @@ class WordSpacingOption extends React.Component {
     render() {
         return (
             <div>
-                <Select defaultValue="0.5px" style={{ width: 150 }} onChange={(value) => this.changeWordSpacing(value)}>
-                    <Option value="0.5px" disabled>Word Spacing</Option>
-                    <Option value="1px">Default</Option>
+                <Select defaultValue="0.9px" style={{ width: 150 }} onChange={(value) => this.changeWordSpacing(value)}>
+                    <Option value="0.9px" disabled>Word Spacing</Option>
+                    <Option value="normal">Default</Option>
                     <Option value="10px">10px</Option>
                     <Option value="20px">20px</Option>
                     <Option value="50px">50px</Option>
@@ -324,12 +324,12 @@ class LineSpacingOption extends React.Component {
     render() {
         return (
             <div>
-                <Select defaultValue="normal" style={{ width: 150 }} onChange={(value) => this.changeLineSpacing(value)}>
-                    <Option value="1px" disabled>Line Spacing</Option>
-                    <Option value="normal">Default</Option>
-                    <Option value="2px">2px</Option>
-                    <Option value="5px">5px</Option>
-                    <Option value="10px">10px</Option>
+                <Select defaultValue="0.05" style={{ width: 150 }} onChange={(value) => this.changeLineSpacing(value)}>
+                    <Option value="0.05" disabled>Line Spacing</Option>
+                    <Option value="0.06">Default</Option>
+                    <Option value="0.6">1.6</Option>
+                    <Option value="1">2</Option>
+                    <Option value="4">5</Option>
                 </Select>
             </div>
         );
