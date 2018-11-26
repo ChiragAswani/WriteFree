@@ -20,18 +20,10 @@ app.secret_key = 'super secret key'
 SESSION_TYPE = 'redis'
 bcrypt = Bcrypt(app)
 
-app.config['MONGODB_SETTINGS'] = {
-    'db': 'WriteFreeDB',
-    'host': '127.0.0.1',
-    'port': 27017
-}
-
-
 client = MongoClient('mongodb://localhost:27017/')
-db = client['WriteFreeDB']
 
-credentials_collection = db['credentials']
-notes_collection = db['notes']
+credentials_collection = client['WriteFreeDB']['credentials']
+notes_collection = client['WriteFreeDB']['notes']
 
 @app.before_request
 def session_management():
@@ -100,7 +92,6 @@ def login():
     if (credentials):
         if (bcrypt.check_password_hash(credentials['password'], password.encode('utf-8'))):
             arrayOfNotes = getArrayOfNotes(email)
-            # print(arrayOfNotes)
         hashed_password = bcrypt.generate_password_hash(password)
         if (bcrypt.check_password_hash(hashed_password, password.encode('utf-8'))):
             arrayOfNotes = getArrayOfNotes(email)
@@ -110,10 +101,10 @@ def login():
         return "Invalid Email or Password", 401;
     return "Email Does Not Exist", 401
 
-@app.route('/login_google', methods= ['GET', 'OPTIONS'])
+@app.route('/login-google', methods= ['GET', 'OPTIONS'])
 def login_google():
     email = request.args['email']
-    google_id = request.args['google_id']
+    google_id = request.args['googleID']
     credentials = credentials_collection.find_one({'email': email})
     if (credentials):
         if (bcrypt.check_password_hash(credentials['password'], google_id.encode('utf-8'))):
@@ -199,7 +190,6 @@ def saveNote():
 @app.route ('/update-default-settings', methods= ['POST', 'OPTIONS'])
 def updateDefaultSettings():
     form_data = json.loads(request.get_data())
-
     _id = ObjectId(form_data["_id"])
     noteColor = form_data['noteColor']
     fontName = form_data['fontName']
