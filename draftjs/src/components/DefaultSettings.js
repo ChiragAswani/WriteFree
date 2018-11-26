@@ -3,8 +3,8 @@ import { Button, Cascader} from 'antd';
 import 'antd/dist/antd.css';
 import {withRouter} from "react-router-dom";
 import { CirclePicker } from 'react-color';
-import GoToDashboardButton from './GoToDashboardButton';
 import request from 'request';
+import {getNotesByEmail} from "../constants";
 
 
 class DefaultSettings extends React.Component {
@@ -15,19 +15,6 @@ class DefaultSettings extends React.Component {
             defaultfontName: [this.props.history.location.state.credentials.defaultNoteSettings.fontName],
             defaultfontSize: [this.props.history.location.state.credentials.defaultNoteSettings.fontSize]
         }
-    }
-
-    goToDashBoard(){
-        this.props.history.push({
-            pathname: "/dashboard",
-            state: {
-                credentials: this.props.location.state.credentials,
-                notes: this.props.location.state.notes
-            }
-        })
-    }
-    onChange(value, selectedOptions) {
-        //console.log(value, selectedOptions);
     }
 
     filter(inputValue, path) {
@@ -43,87 +30,69 @@ class DefaultSettings extends React.Component {
         if (!obj.noteColor){obj.noteColor = "#8bc34a"}
         if (!obj.fontName){obj.fontName = "Georgia"}
         if (!obj.fontSize){obj.fontSize = 11}
-        var postNewNote = {
+        var updateDefaultSettings = {
             method: 'POST',
             url: 'http://127.0.0.1:5000/update-default-settings',
             body: JSON.stringify(obj),
             headers: {'Content-Type': 'application/x-www-form-urlencoded' }
         };
-        request(postNewNote, function (error, response, body) {
-            if (error) throw new Error(error);
-            if (response.statusCode === 401){
-                this.setState({errors: body})
-            } else {
-                this.goToDashBoard(this.props.location.state.credentials.email)
-            }
+        request(updateDefaultSettings, function (error, response, body) {
+            this.goToDashBoard(this.props.location.state.credentials.email)
         }.bind(this));
     }
 
-    goToDashBoard(email){
-        var getNotes = {
-            method: 'GET',
-            url: 'http://127.0.0.1:5000/get-notes',
-            qs:{email},
-            headers: {'Content-Type': 'application/x-www-form-urlencoded' }
-        };
-        request(getNotes, function (error, response, body) {
-            if (error) throw new Error(error);
-            if (response.statusCode === 401){
-                this.setState({errors: body})
-            } else {
-                const parsedData = JSON.parse(body)
-                this.props.history.push({
-                    pathname: "/dashboard",
-                    state: {
-                        credentials: this.props.location.state.credentials,
-                        notes: parsedData.notes
-                    }
-                })
+    async goToDashBoard(email){
+        let userData = await getNotesByEmail(email)
+        this.props.history.push({
+            pathname: "/dashboard",
+            state: {
+                credentials: this.props.location.state.credentials,
+                notes: userData.notes
             }
-        }.bind(this));
+        })
     }
+
+    fontName = [{
+        value: 'Arial',
+        label: 'Arial',
+    }, {
+        value: 'Georgia',
+        label: 'Georgia',
+    }, {
+        value: 'Impact',
+        label: 'Impact',
+    }, {
+        value: 'Tahoma',
+        label: 'Tahoma',
+    }, {
+        value: 'Times New Roman',
+        label: 'Times New Roman',
+    }, {
+        value: 'Verdana',
+        label: 'Verdana'
+    }];
+
+    fontSize = [{
+        value: 8,
+        label: 8,
+    }, {
+        value: 9,
+        label: 9,
+    }, {
+        value: 10,
+        label: 10,
+    }, {
+        value: 11,
+        label: 11,
+    }, {
+        value: 12,
+        label: 12,
+    }, {
+        value: 14,
+        label: 14
+    }];
 
     render() {
-        const fontName = [{
-            value: 'Arial',
-            label: 'Arial',
-        }, {
-            value: 'Georgia',
-            label: 'Georgia',
-        }, {
-            value: 'Impact',
-            label: 'Impact',
-        }, {
-            value: 'Tahoma',
-            label: 'Tahoma',
-        }, {
-            value: 'Times New Roman',
-            label: 'Times New Roman',
-        }, {
-            value: 'Verdana',
-            label: 'Verdana'
-        }];
-
-        const fontSize = [{
-            value: 8,
-            label: 8,
-        }, {
-            value: 9,
-            label: 9,
-        }, {
-            value: 10,
-            label: 10,
-        }, {
-            value: 11,
-            label: 11,
-        }, {
-            value: 12,
-            label: 12,
-        }, {
-            value: 14,
-            label: 14
-        }];
-
         return (
             <div>
                 <br/>
@@ -134,7 +103,7 @@ class DefaultSettings extends React.Component {
                 />
                 <p>Font Name</p>
                 <Cascader
-                    options={fontName}
+                    options={this.fontName}
                     onChange={(fontName) => this.setState({fontName: fontName[0]})}
                     defaultValue={this.state.defaultfontName}
                     placeholder="Please select"
@@ -142,7 +111,7 @@ class DefaultSettings extends React.Component {
                 />
                 <p>Font Size</p>
                 <Cascader
-                    options={fontSize}
+                    options={this.fontSize}
                     onChange={(fontSize) => this.setState({fontSize: fontSize[0]})}
                     defaultValue={this.state.defaultfontSize}
                     placeholder="Please select"
