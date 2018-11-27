@@ -3,7 +3,6 @@ import { Card } from 'antd';
 import 'antd/dist/antd.css';
 import {withRouter} from "react-router-dom";
 import request from 'request';
-
 import '../css/cardnote.css';
 
 class CardListItem extends React.Component {
@@ -68,12 +67,12 @@ class CardNote extends React.Component {
         super(props);
     }
     render() {
-            return (
-                <div className="cont">
-                    <CardList notes={this.props.notes} history={this.props.history}/>
-                </div>
-            )
-        }
+        return (
+            <div className="cont">
+                <CardList notes={this.props.notes} history={this.props.history}/>
+            </div>
+        )
+    }
 }
 
 export default withRouter(CardNote);

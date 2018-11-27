@@ -1,13 +1,12 @@
 import React from 'react';
-import {withRouter} from "react-router-dom";
-import Cookies from 'universal-cookie';
+import { withRouter } from 'react-router-dom';
 import GoogleLogin from 'react-google-login';
-import GoogleButton from "react-google-button";
+import GoogleButton from 'react-google-button';
 import axios from 'axios';
 import { Input, Button, Card } from 'antd';
 import 'antd/dist/antd.css';
 import Alert from 'react-s-alert';
-import {handleAccountError} from "../constants";
+import { handleAccountError } from '../constants';
 
 class Login extends React.Component {
     constructor(props) {

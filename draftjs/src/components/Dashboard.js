@@ -7,6 +7,7 @@ import Walkthrough from './Walkthrough';
 import axios from 'axios';
 import '../css/dashboard.css';
 import CardNote from "./CardNote";
+import {mergeSort} from "../constants";
 
 const Search = Input.Search;
 
@@ -40,19 +41,10 @@ class Dashboard extends React.Component {
     }]
 
     editNote(email, noteID){
-        var editNote = {
-            method: 'GET',
-            url: 'http://127.0.0.1:5000/fetch-note/'+ String(noteID),
-            qs: { email, noteID },
-            headers: {'Content-Type': 'application/x-www-form-urlencoded' }
-        };
-        request(editNote, function (error, response, body) {
-            var parsedData = JSON.parse(body)
-            this.props.history.push({
-                pathname: "/note/"+noteID,
-                state: {noteData: parsedData}
-            });
-        }.bind(this));
+        this.props.history.push({
+            pathname: "/note/"+noteID,
+            state: {noteID}
+        });
     }
 
     deleteNote(email, noteID){
@@ -69,24 +61,20 @@ class Dashboard extends React.Component {
     }
 
 
-    createNote(credentials){
+    createNote(email){
         var postNewNote = {
             method: 'POST',
             url: 'http://127.0.0.1:5000/new-note',
-            qs: { email: localStorage.getItem("email") },
+            qs: { email },
             headers: {'Content-Type': 'application/x-www-form-urlencoded' }
         };
         request(postNewNote, function (error, response, body) {
             var parsedData = JSON.parse(body);
             this.props.history.push({
                 pathname: "/new-note/" + parsedData["_id"],
-                state: {noteData: parsedData}
+                state: {noteID: parsedData["_id"]}
             })
         }.bind(this));
-    }
-
-    goToDefaultSettings(email){
-        this.props.history.push("/default-settings")
     }
 
     logout(){
@@ -134,16 +122,21 @@ class Dashboard extends React.Component {
         }
     }
 
+    sortNotes(option){
+        const sortedNotes = mergeSort(this.state.notes, option)
+        this.setState({notes: sortedNotes})
+    }
+
     menu = (
         <Menu>
             <Menu.Item>
-                <a>Document Category</a>
+                <a onClick={() => this.sortNotes('category')}>Document Category</a>
             </Menu.Item>
             <Menu.Item>
-                <a>Date Modified</a>
+                <a onClick={() => this.sortNotes('lastUpdated')}>Date Modified</a>
             </Menu.Item>
             <Menu.Item>
-                <a>Document Name</a>
+                <a onClick={() => this.sortNotes('title')}>Document Name</a>
             </Menu.Item>
         </Menu>
     );
@@ -153,10 +146,18 @@ class Dashboard extends React.Component {
             return (
                 <div>
                     <Walkthrough runTutorial={this.state.credentials.runTutorial}/>
-                    <Button type="primary" className="generateNewNote" onClick={() => this.createNote(this.state.credentials)}>New Document</Button>
-                    <Button type="danger" className={"defaultSettings"} onClick={() => this.goToDefaultSettings(localStorage.getItem("email"))}>Default Settings</Button>
+                    <Button type="primary" className="generateNewNote" onClick={() => this.createNote(localStorage.getItem("email"))}>New Document</Button>
+                    <Button type="danger" className={"defaultSettings"} onClick={() => this.props.history.push("/default-settings")}>Default Settings</Button>
                     <Button type="primary" className="generateNewNote" onClick={() => this.logout()}>Log Out</Button>
                     <Switch checkedChildren="table" unCheckedChildren="card" defaultChecked onChange={(child) => this.switchView(child)}/>
+                    <Search
+                        placeholder="input search text"
+                        onSearch={value => console.log(value)}
+                        style={{ width: 200 }}
+                    />
+                    <Dropdown overlay={this.menu}>
+                        <a className="ant-dropdown-link" href="#">Sort By<Icon type="down" /> </a>
+                    </Dropdown>
                     <CardNote notes={this.state.notes} history={this.props.history}/>
                 </div>
             )
@@ -164,8 +165,8 @@ class Dashboard extends React.Component {
             return (
                 <div>
                     <Walkthrough runTutorial={this.state.credentials.runTutorial}/>
-                    <Button type="primary" className="generateNewNote" onClick={() => this.createNote(this.state.credentials)}>New Document</Button>
-                    <Button type="danger" className={"defaultSettings"} onClick={() => this.goToDefaultSettings(localStorage.getItem("email"))}>Default Settings</Button>
+                    <Button type="primary" className="generateNewNote" onClick={() => this.createNote(localStorage.getItem("email"))}>New Document</Button>
+                    <Button type="danger" className={"defaultSettings"} onClick={() => this.props.history.push("/default-settings")}>Default Settings</Button>
                     <Button type="primary" className="generateNewNote" onClick={() => this.logout()}>Log Out</Button>
                     <Switch checkedChildren="table" unCheckedChildren="card" defaultChecked onChange={(child) => this.switchView(child)}/>
                     <Search

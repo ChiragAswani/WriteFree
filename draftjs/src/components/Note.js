@@ -6,7 +6,6 @@ import request from 'request';
 import '../css/note.css';
 import DashBoardButton from './DashBoardButton';
 import Speech from "react-speech";
-import PropTypes from 'prop-types';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import Alert from 'react-s-alert';
@@ -21,7 +20,7 @@ class Note extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {isButtonLoading: false, editorState: EditorState.createEmpty(), noteCategory: this.props.location.state.noteData.category, noteHeader: this.props.location.state.noteData.title};
+        this.state = {isButtonLoading: false, editorState: EditorState.createEmpty(), noteCategory: undefined, noteTitle: undefined};
         this.focus = () => this.refs.editor.focus();
         this.onChange = (editorState) => this.setState({editorState});
 
@@ -59,17 +58,42 @@ class Note extends React.Component {
         );
     }
     componentDidMount(){
-        if (this.props.history.location.state.noteData.noteSettings){
-            let contentState = this.props.history.location.state.noteData.noteSettings
-            console.log("draft obj", contentState)
-            this.setState({editorState: EditorState.createWithContent(convertFromRaw((contentState)))});
-        }
-        if (this.props.location.state.noteData.title){
-            let contentState = this.props.location.state.noteData.content
-            console.log('got title', contentState)
-            this.setState({editorState: EditorState.createWithContent(convertFromRaw((contentState)))});
-        }
+        // if (this.props.history.location.state.noteData.noteSettings){
+        //     let contentState = this.props.history.location.state.noteData.noteSettings
+        //     console.log("draft obj", contentState)
+        //     this.setState({editorState: EditorState.createWithContent(convertFromRaw((contentState)))});
+        // }
+        // if (this.props.location.state.noteData.title){
+        //     let contentState = this.props.location.state.noteData.content
+        //     console.log('got title', contentState)
+        //     this.setState({editorState: EditorState.createWithContent(convertFromRaw((contentState)))});
+        // }
+        const noteID = this.props.location.state.noteID
+        var fetchNote = {
+            method: 'GET',
+            url: 'http://127.0.0.1:5000/fetch-note/'+ String(noteID),
+            qs: { email: localStorage.getItem("email"), noteID },
+            headers: {'Content-Type': 'application/x-www-form-urlencoded' }
+        };
+        request(fetchNote, function (error, response, body) {
+            var parsedData = JSON.parse(body)
+            if (parsedData.noteSettings){
+                let contentState = parsedData.noteSettings
+                this.setState({
+                    editorState: EditorState.createWithContent(convertFromRaw((contentState)))
+                });
+            }
+            if (parsedData.title){
+                let contentState = parsedData.content
+                this.setState({
+                    editorState: EditorState.createWithContent(convertFromRaw((contentState))),
+                    noteTitle: parsedData.title,
+                    noteCategory: parsedData.category
+                });
+            }
+        }.bind(this));
     }
+
     saveNote(title, category, noteID, noteContent){
         if(!title){
             this.handleJelly()
@@ -80,16 +104,15 @@ class Note extends React.Component {
                 method: 'POST',
                 url: 'http://127.0.0.1:5000/save-note',
                 body: JSON.stringify(obj),
-                //qs: { title: title, category: category, noteID: noteID, content: convertedNoteContent},
                 headers: {'Content-Type': 'application/x-www-form-urlencoded' }
             };
-            request(saveNote, function (error, response, body) {
-                if (response.statusCode === 401){
-                    this.setState({errors: body})
-                } else {
-                }
-            }.bind(this));
+            return request(saveNote)
         }
+    }
+
+    async goToDashBoard(){
+        await this.saveNote(this.state.noteTitle, this.state.noteCategory, this.props.location.state.noteID, this.state.editorState.getCurrentContent())
+        this.props.history.push("/dashboard")
     }
 
     speechNote(noteContent){
@@ -98,10 +121,6 @@ class Note extends React.Component {
             text = text + (noteContent.blocks[line].text) + ". "
         }
         return text
-    }
-
-    renderPDF(noteID){
-        window.open("http://www.localhost:5000/renderPDF?noteID="+noteID);
     }
     handleJelly() {
         Alert.error('Please Enter a Note Header!', {
@@ -118,17 +137,16 @@ class Note extends React.Component {
             this.setState({'toolbar': {'options': []}, 'toolbarCustomButtons': [<WordSpacingOption/>,  <LineSpacingOption/>, <SpeechOption speechText={convertToRaw(this.state.editorState.getCurrentContent())}/>]})
         }
         else if (key === "otherFeatures"){
-            this.setState({'toolbar': {'options': []}, 'toolbarCustomButtons': []})
+            this.setState({'toolbar': {'options': []}, 'toolbarCustomButtons': [<ConvertToPDF noteID={this.props.location.state.noteID}/>]})
         }
 
     }
 
     render() {
         const {editorState} = this.state;
-        console.log(this.state)
         return (
             <div>
-                <Input placeholder={"Note Header"} value={this.state.noteHeader} onChange={noteHeader => this.setState({noteHeader: noteHeader.target.value})}></Input>
+                <Input placeholder={"Note Header"} value={this.state.noteTitle} onChange={noteTitle => this.setState({noteTitle: noteTitle.target.value})}></Input>
                 <Input placeholder={"Note Category"} value={this.state.noteCategory} onChange={noteCategory => {this.setState({noteCategory: noteCategory.target.value})}}></Input>
                 <Tabs onChange={this.changeToolBar} type="card">
                     <TabPane tab="Basic" key="basicFeatures"/>
@@ -151,9 +169,8 @@ class Note extends React.Component {
             </div>
                 <p> State Representation of Note </p>
                 <div>{JSON.stringify(convertToRaw(editorState.getCurrentContent()))}</div>
-                <Button onClick={() => this.saveNote(this.state.noteHeader, this.state.noteCategory, this.props.location.state.noteData._id, editorState.getCurrentContent())}>Save Note</Button>
-                <DashBoardButton/>
-                <Button onClick={() => this.renderPDF(this.props.location.state.noteData._id)}>Convert to PDF</Button>
+                <Button type="primary" onClick={() => this.goToDashBoard()}>Go To Dashboard</Button>
+
             </div>
         );
     }
@@ -334,5 +351,20 @@ class LineSpacingOption extends React.Component {
     }
 }
 
+class ConvertToPDF extends React.Component {
+    constructor(props){
+        super(props)
+    }
+
+    renderPDF(noteID){
+        window.open("http://www.localhost:5000/renderPDF?noteID="+noteID);
+    }
+
+    render() {
+        return (
+            <Button onClick={() => this.renderPDF(this.props.noteID)}>Convert to PDF</Button>
+        );
+    }
+}
 
 export default withRouter(Note);
