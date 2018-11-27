@@ -1,4 +1,0 @@
-1. GET Methods should use parameters
-2. POST Methods should use form
-3. Always write unit tests
-4. Auto Refresh Flask: FLASK_APP=app.py FLASK_DEBUG=1 python -m flask run
