@@ -35,15 +35,12 @@ class CreateAccount extends React.Component {
                  */
                 handleAccountError(error)
             } else {
-                const parsedBody = JSON.parse(body)
-                var ident = parsedBody.credentials._id
-                const cookies = new Cookies();
-                cookies.set('email', email, { path: '/', maxAge: 1800 });
-                cookies.set('id',ident,{ path: '/', maxAge: 1800 });
-                this.props.history.push({
-                    pathname: "/default-settings",
-                    state: {notes: parsedBody.notes, credentials: parsedBody.credentials}
-                });
+                const parsedData = JSON.parse(body)
+                localStorage.setItem("email", email);
+                localStorage.setItem("access_token", parsedData.access_token);
+                localStorage.setItem("id", parsedData.access_token);
+                localStorage.setItem("refresh_token", parsedData.refresh_token);
+                this.props.history.push("/default-settings")
             }
         }.bind(this));
     }
@@ -54,7 +51,7 @@ class CreateAccount extends React.Component {
         var name = (response.profileObj.name).toString();
         var postLoginInformation = {
             method: 'POST',
-            url: 'http://127.0.0.1:5000/create-account_google',
+            url: 'http://127.0.0.1:5000/create-account-google',
             qs:{email, google_id, name},
             headers: {'Content-Type': 'application/x-www-form-urlencoded' }
         };
@@ -69,13 +66,11 @@ class CreateAccount extends React.Component {
                 handleAccountError(error)
             } else {
                 const parsedData = JSON.parse(body);
-                const cookies = new Cookies();
-                cookies.set('email', email, { path: '/', maxAge: 1800 });
-                cookies.set('id',parsedData.credentials._id,{path:'/', maxAge: 1800});
-                this.props.history.push({
-                    pathname: "/default-settings",
-                    state: {notes: parsedData.notes, credentials: parsedData.credentials}
-                });
+                localStorage.setItem("email", email);
+                localStorage.setItem("access_token", parsedData.access_token);
+                localStorage.setItem("id", parsedData.access_token);
+                localStorage.setItem("refresh_token", parsedData.refresh_token);
+                this.props.history.push("/default-settings")
             }
         }.bind(this));
     }

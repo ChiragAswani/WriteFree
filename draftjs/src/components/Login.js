@@ -21,14 +21,12 @@ class Login extends React.Component {
     login(email, password) {
         axios.get('http://127.0.0.1:5000/login', {'params': {email, password}},
             {'headers': {'Content-Type': 'application/x-www-form-urlencoded'}}).then(res => {
-                const parsedData = res.data
-                const cookies = new Cookies();
-                cookies.set('email', email, { path: '/', maxAge: 1800 });
-                cookies.set('id', parsedData.credentials._id,{path:'/', maxAge: 1800});
-                this.props.history.push({
-                    pathname: "/dashboard",
-                    state: {notes: parsedData.notes, credentials: parsedData.credentials}
-                });
+            const parsedData = res.data
+            localStorage.setItem("email", email);
+            localStorage.setItem("access_token", parsedData.access_token);
+            localStorage.setItem("id", parsedData.access_token);
+            localStorage.setItem("refresh_token", parsedData.refresh_token);
+            return this.props.history.push("/dashboard")
         }).catch(error => {
             handleAccountError(error.response.data)
         })
@@ -38,14 +36,12 @@ class Login extends React.Component {
         var googleID = response.profileObj.googleId
         axios.get('http://127.0.0.1:5000/login-google', {'params': {email, googleID}},
             {'headers': {'Content-Type': 'application/x-www-form-urlencoded'}}).then(res => {
-                const parsedData = res.data
-                const cookies = new Cookies();
-                cookies.set('email', email, { path: '/', maxAge: 1800 });
-                cookies.set('id',parsedData.credentials._id,{path:'/', maxAge: 1800});
-                this.props.history.push({
-                    pathname: "/dashboard",
-                    state: {notes: parsedData.notes, credentials: parsedData.credentials}
-                });
+            const parsedData = res.data
+            localStorage.setItem("email", email);
+            localStorage.setItem("access_token", parsedData.access_token);
+            localStorage.setItem("id", parsedData.access_token);
+            localStorage.setItem("refresh_token", parsedData.refresh_token);
+            this.props.history.push("/dashboard")
         }).catch(error => {
             handleAccountError(error.response.data)
         })

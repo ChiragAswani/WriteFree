@@ -8,6 +8,8 @@ import Dashboard from './components/Dashboard';
 import NewNote from './components/Note';
 import DefaultSettings from './components/DefaultSettings';
 import * as serviceWorker from './serviceWorker';
+import createHistory from "history/createBrowserHistory";
+const history = createHistory()
 
 ReactDOM.render(
     <BrowserRouter >

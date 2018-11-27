@@ -9,10 +9,6 @@ import axios from 'axios';
 class Walkthrough extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            notes : null,
-            credentials: null
-        }
     }
 
     handleJoyrideCallback = data => {
@@ -23,44 +19,25 @@ class Walkthrough extends React.Component {
         }
     }
 
-    removeTutorial(_id){
+    removeTutorial(email){
         var editNote = {
             method: 'POST',
             url: 'http://127.0.0.1:5000/remove-tutorial',
-            qs: {_id},
+            qs: {email},
             headers: {'Content-Type': 'application/x-www-form-urlencoded' }
         };
         request(editNote, function (error, response, body) {}.bind(this));
     }
 
-    componentDidMount() {
-        const cookies2 = new Cookies()
-        var email = cookies2.get('email')
-        var id = cookies2.get('id')
-        axios.get('http://127.0.0.1:5000/get-data', {params: {email: email, id: id}}).then((response) => {
-            this.setState({
-                notes : response.data.notes,
-                credentials : response.data.credentials
-            })
-        }).catch((error) => {
-            cookies2.remove('email');
-            cookies2.remove('id');
-        })
-
-    }
-
     render() {
-        const {notes, credentials} = this.state
-        if (notes, credentials === null) {
-            return null
-        }
+        console.log(this.props)
         return(
             <Joyride
                 continuous
                 scrollToFirstStep
                 showProgress
                 showSkipButton
-                run={this.state.credentials.runTutorial}
+                run={this.props.runTutorial}
                 spotlightPadding={false}
                 steps={[
                     {
@@ -72,7 +49,7 @@ class Walkthrough extends React.Component {
                                 zIndex: 10000
                             }
                         },
-                        locale: { skip: <a onClick={() => this.removeTutorial(this.state.credentials._id)}>Don't Show This Again</a> },
+                        locale: { skip: <a onClick={() => this.removeTutorial(localStorage.getItem("email"))}>Don't Show This Again</a> },
                         target: "body"
                     },
                     {
@@ -119,7 +96,7 @@ class Walkthrough extends React.Component {
                         title: "Delete a Note"
                     }]
                 }
-                callback={this.handleJoyrideCallback}
+                callback={() => this.handleJoyrideCallback}
             />
         )
     }

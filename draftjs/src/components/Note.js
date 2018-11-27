@@ -60,7 +60,6 @@ class Note extends React.Component {
     }
     componentDidMount(){
         if (this.props.history.location.state.noteData.noteSettings){
-
             let contentState = this.props.history.location.state.noteData.noteSettings
             console.log("draft obj", contentState)
             this.setState({editorState: EditorState.createWithContent(convertFromRaw((contentState)))});

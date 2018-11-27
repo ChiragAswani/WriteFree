@@ -4,21 +4,18 @@ import 'antd/dist/antd.css';
 import {withRouter} from "react-router-dom";
 import { CirclePicker } from 'react-color';
 import request from 'request';
-import {getNotesByEmail} from "../constants";
-
+import Dropdown from 'react-dropdown'
+import 'react-dropdown/style.css'
 
 class DefaultSettings extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            noteColor: this.props.history.location.state.credentials.defaultNoteSettings.noteColor,
-            defaultfontName: [this.props.history.location.state.credentials.defaultNoteSettings.fontName],
-            defaultfontSize: [this.props.history.location.state.credentials.defaultNoteSettings.fontSize]
+            credentials: {defaultNoteSettings: {credentials: null}},
+            noteColor: "#8bc34a",
+            defaultfontName: "Georgia",
+            defaultfontSize: 11
         }
-    }
-
-    filter(inputValue, path) {
-        return (path.some(option => (option.label).toLowerCase().indexOf(inputValue.toLowerCase()) > -1));
     }
 
     changeNoteColor = (color) => {
@@ -26,7 +23,8 @@ class DefaultSettings extends React.Component {
     };
 
     saveDefaultSettings(noteColor, fontName, fontSize){
-        const obj = {_id: this.props.location.state.credentials._id, noteColor, fontName, fontSize}
+        const obj = {email: localStorage.getItem("email"), noteColor, fontName, fontSize}
+        console.log(obj)
         if (!obj.noteColor){obj.noteColor = "#8bc34a"}
         if (!obj.fontName){obj.fontName = "Georgia"}
         if (!obj.fontSize){obj.fontSize = 11}
@@ -37,89 +35,54 @@ class DefaultSettings extends React.Component {
             headers: {'Content-Type': 'application/x-www-form-urlencoded' }
         };
         request(updateDefaultSettings, function (error, response, body) {
-            this.goToDashBoard(this.props.location.state.credentials.email)
+            this.props.history.push("/dashboard")
         }.bind(this));
     }
 
-    async goToDashBoard(email){
-        let userData = await getNotesByEmail(email)
-        this.props.history.push({
-            pathname: "/dashboard",
-            state: {
-                credentials: this.props.location.state.credentials,
-                notes: userData.notes
+    fontName = ['Arial','Georgia', 'Impact', 'Tahoma', 'Times New Roman', 'Verdana']
+    fontSize = [8, 9, 10, 11, 12, 14]
+
+    componentDidMount() {
+        var getDefaultSettings = {
+            method: 'GET',
+            url: 'http://127.0.0.1:5000/get-default-settings',
+            qs:{email: localStorage.getItem("email")},
+            headers: {'Content-Type': 'application/x-www-form-urlencoded' }
+        };
+        request(getDefaultSettings, function (error, response, body) {
+            const parsedData = JSON.parse(body)
+            var val = "";
+            try {
+                val = parsedData.credentials.defaultNoteSettings.fontSize.toString()
+            } catch {
+                val = "12"
             }
-        })
+            this.setState({
+                credentials: parsedData.credentials,
+                noteColor: parsedData.credentials.defaultNoteSettings.noteColor,
+                fontName: parsedData.credentials.defaultNoteSettings.fontName,
+                fontSize: val
+            })
+        }.bind(this));
     }
 
-    fontName = [{
-        value: 'Arial',
-        label: 'Arial',
-    }, {
-        value: 'Georgia',
-        label: 'Georgia',
-    }, {
-        value: 'Impact',
-        label: 'Impact',
-    }, {
-        value: 'Tahoma',
-        label: 'Tahoma',
-    }, {
-        value: 'Times New Roman',
-        label: 'Times New Roman',
-    }, {
-        value: 'Verdana',
-        label: 'Verdana'
-    }];
-
-    fontSize = [{
-        value: 8,
-        label: 8,
-    }, {
-        value: 9,
-        label: 9,
-    }, {
-        value: 10,
-        label: 10,
-    }, {
-        value: 11,
-        label: 11,
-    }, {
-        value: 12,
-        label: 12,
-    }, {
-        value: 14,
-        label: 14
-    }];
-
     render() {
+        console.log("STATE", this.state)
         return (
             <div>
                 <br/>
                 <p>Note Color</p>
                 <CirclePicker
-                    color={ this.state.noteColor }
+                    color={this.state.noteColor}
                     onChangeComplete={ this.changeNoteColor }
                 />
                 <p>Font Name</p>
-                <Cascader
-                    options={this.fontName}
-                    onChange={(fontName) => this.setState({fontName: fontName[0]})}
-                    defaultValue={this.state.defaultfontName}
-                    placeholder="Please select"
-                    showSearch={this.filter}
-                />
+                <Dropdown options={this.fontName} onChange={(fontName) => this.setState({fontName})} value={this.state.fontName}/>
                 <p>Font Size</p>
-                <Cascader
-                    options={this.fontSize}
-                    onChange={(fontSize) => this.setState({fontSize: fontSize[0]})}
-                    defaultValue={this.state.defaultfontSize}
-                    placeholder="Please select"
-                    showSearch={this.filter}
-                />
+                <Dropdown options={this.fontSize} onChange={(fontSize) => this.setState({fontSize})} value={this.state.fontSize} />
                 <br/>
                 <a onClick={() => this.saveDefaultSettings("#8bc34a", "Georgia", 11)}> Or Use Reccomended Settings</a><br/>
-                <Button onClick={() => this.saveDefaultSettings(this.state.noteColor, this.state.fontName, this.state.fontSize)}>Save Default Settings</Button>
+                <Button onClick={() => this.saveDefaultSettings(this.state.noteColor, this.state.fontName.value, this.state.fontSize.value)}>Save Default Settings</Button>
                 <br/>
             </div>
         )
