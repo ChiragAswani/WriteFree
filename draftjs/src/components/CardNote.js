@@ -1,11 +1,8 @@
 import React from 'react';
-import { Table, Button, Switch, Card } from 'antd';
+import { Card } from 'antd';
 import 'antd/dist/antd.css';
 import {withRouter} from "react-router-dom";
 import request from 'request';
-
-import Cookies from 'universal-cookie';
-import axios from 'axios';
 
 import '../css/cardnote.css';
 
@@ -28,7 +25,6 @@ class CardListItem extends React.Component {
             headers: {'Content-Type': 'application/x-www-form-urlencoded' }
         };
         request(editNote, function (error, response, body) {
-            if (error) throw new Error(error);
             this.props.history.push({
                 pathname: "/note/"+noteID,
                 state: {

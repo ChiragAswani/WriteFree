@@ -4,7 +4,7 @@ import {withRouter} from "react-router-dom";
 import { Input, Button, Select, Tabs } from 'antd';
 import request from 'request';
 import '../css/note.css';
-import GoToDashboardButton from './GoToDashboardButton';
+import DashBoardButton from './DashBoardButton';
 import Speech from "react-speech";
 import PropTypes from 'prop-types';
 import { Editor } from 'react-draft-wysiwyg';
@@ -60,7 +60,6 @@ class Note extends React.Component {
     }
     componentDidMount(){
         if (this.props.history.location.state.noteData.noteSettings){
-
             let contentState = this.props.history.location.state.noteData.noteSettings
             console.log("draft obj", contentState)
             this.setState({editorState: EditorState.createWithContent(convertFromRaw((contentState)))});
@@ -85,7 +84,6 @@ class Note extends React.Component {
                 headers: {'Content-Type': 'application/x-www-form-urlencoded' }
             };
             request(saveNote, function (error, response, body) {
-                if (error) throw new Error(error);
                 if (response.statusCode === 401){
                     this.setState({errors: body})
                 } else {
@@ -154,7 +152,7 @@ class Note extends React.Component {
                 <p> State Representation of Note </p>
                 <div>{JSON.stringify(convertToRaw(editorState.getCurrentContent()))}</div>
                 <Button onClick={() => this.saveNote(this.state.noteHeader, this.state.noteCategory, this.props.location.state.noteData._id, editorState.getCurrentContent())}>Save Note</Button>
-                <GoToDashboardButton/>
+                <DashBoardButton/>
                 <Button onClick={() => this.renderPDF(this.props.location.state.noteData._id)}>Convert to PDF</Button>
             </div>
         );

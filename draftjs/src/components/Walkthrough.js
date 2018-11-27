@@ -1,126 +1,44 @@
 import React from 'react';
-import { Table, Button } from 'antd';
 import 'antd/dist/antd.css';
 import {withRouter} from "react-router-dom";
 import request from 'request';
-//import createHistory from "history/createBrowserHistory";
-//const history = createHistory()
 import Joyride from "react-joyride";
-import PropTypes from "prop-types";
-
 import Cookies from 'universal-cookie';
 import axios from 'axios';
 
 class Walkthrough extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            notes : null,
-            credentials: null
-        }
     }
-
-    static propTypes = {
-        joyride: PropTypes.shape({
-            callback: PropTypes.func
-        })
-    };
-
-    static defaultProps = {
-        joyride: {}
-    };
-
-    handleClickStart = e => {
-        e.preventDefault();
-
-        this.setState({
-            run: true
-        });
-    };
 
     handleJoyrideCallback = data => {
         const { joyride } = this.props;
         const { type } = data;
-
         if (typeof joyride.callback === "function") {
             joyride.callback(data);
-        } else {
-            console.group(type);
-            console.log(data); //eslint-disable-line no-console
-            console.groupEnd();
         }
-    };
-    removeTutorial(_id){
+    }
+
+    removeTutorial(email){
         var editNote = {
             method: 'POST',
             url: 'http://127.0.0.1:5000/remove-tutorial',
-            qs: {_id},
+            qs: {email},
             headers: {'Content-Type': 'application/x-www-form-urlencoded' }
         };
-        request(editNote, function (error, response, body) {
-            if (error) throw new Error(error);
-            // this.props.history.push({
-            //     pathname: "/note/"+noteID,
-            //     state: {
-            //         credentials: this.props.location.state.credentials,
-            //         noteData: JSON.parse(body)
-            //     }
-            // });
-            console.log(response)
-        }.bind(this));
-    }
-
-
-
-
-    componentDidMount() {
-        const cookies2 = new Cookies()
-        var email = cookies2.get('email')
-        var id = cookies2.get('id')
-        // var _this = this
-        axios.get('http://127.0.0.1:5000/get-data', {
-            params: {
-                email: email,
-                id: id
-            }
-        }).then((response) => {
-
-
-            this.setState({
-                notes : response.data.notes,
-                credentials : response.data.credentials
-            })
-
-
-        }).catch((error) => {
-            // Set cookie to null
-            cookies2.remove('email');
-            cookies2.remove('id');
-            console.log("ERROR - INVALID or NO COOKIES");
-        })
-
-
-
-        //email,password).then((notes, credentials) => this.setState({ notes, credentials }))
-
+        request(editNote, function (error, response, body) {}.bind(this));
     }
 
     render() {
-        const {notes, credentials} = this.state
-        if (notes, credentials === null) {
-            return null
-        }
-        // console.log("STATE", this.state)
-
+        console.log(this.props)
         return(
             <Joyride
                 continuous
                 scrollToFirstStep
                 showProgress
                 showSkipButton
-                run={this.state.credentials.runTutorial}
+                run={this.props.runTutorial}
                 spotlightPadding={false}
-
                 steps={[
                     {
                         content: <h2>Write Free Tutorial</h2>,
@@ -131,9 +49,7 @@ class Walkthrough extends React.Component {
                                 zIndex: 10000
                             }
                         },
-
-                        locale: { skip: <a onClick={() => this.removeTutorial(this.state.credentials._id)}>Don't Show This Again</a> },
-
+                        locale: { skip: <a onClick={() => this.removeTutorial(localStorage.getItem("email"))}>Don't Show This Again</a> },
                         target: "body"
                     },
                     {
@@ -180,7 +96,7 @@ class Walkthrough extends React.Component {
                         title: "Delete a Note"
                     }]
                 }
-                callback={this.handleJoyrideCallback}
+                callback={() => this.handleJoyrideCallback}
             />
         )
     }
