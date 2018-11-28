@@ -1,35 +1,65 @@
-import React, {Component} from 'react';
-import {Editor as DraftEditor, EditorState, RichUtils, convertToRaw, convertFromRaw, } from "draft-js";
-import {withRouter} from "react-router-dom";
+/* eslint-disable */
+import React from 'react';
+import { EditorState, RichUtils, convertToRaw, convertFromRaw } from 'draft-js';
+import { withRouter } from 'react-router-dom';
 import { Input, Button, Select, Tabs } from 'antd';
 import request from 'request';
-import '../css/note.css';
-import DashBoardButton from './DashBoardButton';
-import Speech from "react-speech";
+import Speech from 'react-speech';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import Alert from 'react-s-alert';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
-import {CirclePicker} from "react-color";
+import { CirclePicker } from 'react-color';
+import '../css/note.css';
 
 const Option = Select.Option;
 
 const TabPane = Tabs.TabPane;
 
 class Note extends React.Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {isButtonLoading: false, editorState: EditorState.createEmpty(), noteCategory: undefined, noteTitle: undefined};
-        this.focus = () => this.refs.editor.focus();
-        this.onChange = (editorState) => this.setState({editorState});
-
-        this.handleKeyCommand = (command) => this._handleKeyCommand(command);
-        this.toggleBlockType = (type) => this._toggleBlockType(type);
-        this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
-        this.changeToolBar = this.changeToolBar.bind(this)
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      editorState: EditorState.createEmpty(),
+      noteCategory: undefined,
+      noteTitle: undefined,
+    };
+    this.focus = () => this.refs.editor.focus();
+    this.onChange = editorState => this.setState({ editorState });
+    this.handleKeyCommand = command => this._handleKeyCommand(command);
+    this.toggleBlockType = type => this._toggleBlockType(type);
+    this.toggleInlineStyle = style => this._toggleInlineStyle(style);
+    this.changeToolBar = this.changeToolBar.bind(this);
+  }
+  componentDidMount() {
+    const noteID = this.props.location.state.noteID;
+    const fetchNote = {
+      method: 'GET',
+      url: `http://127.0.0.1:5000/fetch-note/${String(noteID)}`,
+      qs: { email: localStorage.getItem('email'), noteID },
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    };
+    request(fetchNote, function (error, response, body) {
+        var parsedData = JSON.parse(body)
+        if (parsedData.noteSettings){
+            let contentState = parsedData.noteSettings
+            this.setState({
+                editorState: EditorState.createWithContent(convertFromRaw((contentState))),
+                noteColor: parsedData.noteColor
+            });
+        }
+        if (parsedData.title){
+            let contentState = parsedData.content
+            this.setState({
+                editorState: EditorState.createWithContent(convertFromRaw((contentState))),
+                noteTitle: parsedData.title,
+                noteCategory: parsedData.category,
+                noteColor: parsedData.noteColor
+            });
+        }
+    }.bind(this));
+  }
 
     _handleKeyCommand(command) {
         const {editorState} = this.state;
@@ -58,34 +88,7 @@ class Note extends React.Component {
             )
         );
     }
-    componentDidMount(){
-        const noteID = this.props.location.state.noteID
-        var fetchNote = {
-            method: 'GET',
-            url: 'http://127.0.0.1:5000/fetch-note/'+ String(noteID),
-            qs: { email: localStorage.getItem("email"), noteID },
-            headers: {'Content-Type': 'application/x-www-form-urlencoded' }
-        };
-        request(fetchNote, function (error, response, body) {
-            var parsedData = JSON.parse(body)
-            if (parsedData.noteSettings){
-                let contentState = parsedData.noteSettings
-                this.setState({
-                    editorState: EditorState.createWithContent(convertFromRaw((contentState))),
-                    noteColor: parsedData.noteColor
-                });
-            }
-            if (parsedData.title){
-                let contentState = parsedData.content
-                this.setState({
-                    editorState: EditorState.createWithContent(convertFromRaw((contentState))),
-                    noteTitle: parsedData.title,
-                    noteCategory: parsedData.category,
-                    noteColor: parsedData.noteColor
-                });
-            }
-        }.bind(this));
-    }
+
 
     saveNote(title, category, noteID, noteContent){
         if(!title){
@@ -371,7 +374,7 @@ class NoteColor extends React.Component {
         this.setState({noteColor: this.props.noteColor})
     }
 
-    changeNoteColor = (noteColor) => {
+    changeNoteColor(noteColor) {
         const noteID = this.props.noteID
         var changeNoteColor = {
             method: 'POST',
@@ -390,7 +393,7 @@ class NoteColor extends React.Component {
                 <p>Note Color</p>
                 <CirclePicker
                     color={this.state.noteColor}
-                    onChangeComplete={this.changeNoteColor}
+                    onChangeComplete={color => this.changeNoteColor(color)}
                 />
             </div>
         );

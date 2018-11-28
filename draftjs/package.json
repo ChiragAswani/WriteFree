@@ -13,6 +13,7 @@
     "html-pdf": "^2.2.0",
     "nan": "^2.11.1",
     "pdfmake": "^0.1.38",
+    "prop-types": "^15.6.2",
     "react": "^16.5.2",
     "react-color": "^2.14.1",
     "react-dom": "^16.5.2",
