@@ -1,47 +1,36 @@
 import React from 'react';
 import { Card } from 'antd';
 import 'antd/dist/antd.css';
-import {withRouter} from "react-router-dom";
+import { withRouter } from 'react-router-dom';
 import request from 'request';
 import '../css/cardnote.css';
 
 class CardListItem extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            'noteTitle': props.note.title,
-            'note': props.note
-        }
-    }
-    displayNoteData(note){
+  constructor(props) {
+    super(props);
+    this.state = {
+      noteTitle: props.note.title,
+      note: props.note
+    };
+  }
+    displayNoteData(note) {
         this.setState({'moreNoteData': note['lastUpdated'] + " | " + note['category'], 'noteDelete': <a>x</a>})
     }
     editNote(email, noteID){
-        var editNote = {
-            method: 'GET',
-            url: 'http://127.0.0.1:5000/fetch-note/'+ String(noteID),
-            qs: { email, noteID },
-            headers: {'Content-Type': 'application/x-www-form-urlencoded' }
-        };
-        request(editNote, function (error, response, body) {
-            this.props.history.push({
-                pathname: "/note/"+noteID,
-                state: {
-                    credentials: this.props.history.location.state.credentials,
-                    noteData: JSON.parse(body)
-                }
-            });
-        }.bind(this));
+        this.props.history.push({pathname: "/note/"+noteID,
+            state: {noteID}
+        });
     }
 
     render() {
         return(
-            <div >
+            <div>
                 <Card
                     extra={this.state.noteDelete}
-                    onClick={() => this.editNote("chirag@aswani.net", this.state.note._id)}
+                    onClick={() => this.editNote(localStorage.getItem("email"), this.state.note._id)}
                     onMouseEnter={() => this.displayNoteData(this.state.note)}
                     onMouseLeave={() => this.setState({'moreNoteData': undefined, 'noteDelete': undefined})}
+                    style={{backgroundColor: this.state.note.noteColor}}
                 >
                     {this.state.noteTitle} <br/>
                     {this.state.moreNoteData}

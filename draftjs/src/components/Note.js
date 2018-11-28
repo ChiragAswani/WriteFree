@@ -11,6 +11,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import Alert from 'react-s-alert';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
+import {CirclePicker} from "react-color";
 
 const Option = Select.Option;
 
@@ -58,16 +59,6 @@ class Note extends React.Component {
         );
     }
     componentDidMount(){
-        // if (this.props.history.location.state.noteData.noteSettings){
-        //     let contentState = this.props.history.location.state.noteData.noteSettings
-        //     console.log("draft obj", contentState)
-        //     this.setState({editorState: EditorState.createWithContent(convertFromRaw((contentState)))});
-        // }
-        // if (this.props.location.state.noteData.title){
-        //     let contentState = this.props.location.state.noteData.content
-        //     console.log('got title', contentState)
-        //     this.setState({editorState: EditorState.createWithContent(convertFromRaw((contentState)))});
-        // }
         const noteID = this.props.location.state.noteID
         var fetchNote = {
             method: 'GET',
@@ -80,7 +71,8 @@ class Note extends React.Component {
             if (parsedData.noteSettings){
                 let contentState = parsedData.noteSettings
                 this.setState({
-                    editorState: EditorState.createWithContent(convertFromRaw((contentState)))
+                    editorState: EditorState.createWithContent(convertFromRaw((contentState))),
+                    noteColor: parsedData.noteColor
                 });
             }
             if (parsedData.title){
@@ -88,7 +80,8 @@ class Note extends React.Component {
                 this.setState({
                     editorState: EditorState.createWithContent(convertFromRaw((contentState))),
                     noteTitle: parsedData.title,
-                    noteCategory: parsedData.category
+                    noteCategory: parsedData.category,
+                    noteColor: parsedData.noteColor
                 });
             }
         }.bind(this));
@@ -110,9 +103,13 @@ class Note extends React.Component {
         }
     }
 
-    async goToDashBoard(){
-        await this.saveNote(this.state.noteTitle, this.state.noteCategory, this.props.location.state.noteID, this.state.editorState.getCurrentContent())
-        this.props.history.push("/dashboard")
+    async goToDashBoard(title){
+        if(!title){
+            this.handleJelly()
+        } else {
+            await this.saveNote(this.state.noteTitle, this.state.noteCategory, this.props.location.state.noteID, this.state.editorState.getCurrentContent())
+            this.props.history.push("/dashboard")
+        }
     }
 
     speechNote(noteContent){
@@ -129,12 +126,11 @@ class Note extends React.Component {
         });
     }
     changeToolBar(key){
-        console.log(key)
         if (key === "basicFeatures"){
             this.setState({'toolbar': {}, 'toolbarCustomButtons': []})
         }
         else if (key === "dyslexicFeatures"){
-            this.setState({'toolbar': {'options': []}, 'toolbarCustomButtons': [<WordSpacingOption/>,  <LineSpacingOption/>, <SpeechOption speechText={convertToRaw(this.state.editorState.getCurrentContent())}/>]})
+            this.setState({'toolbar': {'options': []}, 'toolbarCustomButtons': [<WordSpacingOption/>,  <LineSpacingOption/>, <SpeechOption speechText={convertToRaw(this.state.editorState.getCurrentContent())}/>, <NoteColor noteColor={this.state.noteColor} noteID={this.props.location.state.noteID}/>]})
         }
         else if (key === "otherFeatures"){
             this.setState({'toolbar': {'options': []}, 'toolbarCustomButtons': [<ConvertToPDF noteID={this.props.location.state.noteID}/>]})
@@ -155,7 +151,7 @@ class Note extends React.Component {
                 </Tabs>
 
                 <Alert stack={true} timeout={3000} />
-            <div className="RichEditor-root" id={"textEdiotr"}>
+            <div className="RichEditor-root" id={"textEdiotr"} style={{backgroundColor: this.state.noteColor}}>
                 <Editor
                     spellCheck={true}
                     editorState={editorState}
@@ -169,7 +165,7 @@ class Note extends React.Component {
             </div>
                 <p> State Representation of Note </p>
                 <div>{JSON.stringify(convertToRaw(editorState.getCurrentContent()))}</div>
-                <Button type="primary" onClick={() => this.goToDashBoard()}>Go To Dashboard</Button>
+                <Button type="primary" onClick={() => this.goToDashBoard(this.state.noteTitle)}>Go To Dashboard</Button>
 
             </div>
         );
@@ -178,7 +174,6 @@ class Note extends React.Component {
 
 // value for selection
 function changeLineSpacing(value) {
-    console.log(`selected ${value}`);
     document.getElementById("textEdiotr").style.lineHeight = value;
 }
 
@@ -305,7 +300,6 @@ class WordSpacingOption extends React.Component {
     }
     // spacing methods
     changeWordSpacing(value) {
-        console.log(`selected ${value}`);
         var textfiled = document.getElementsByClassName('DraftEditor-root');
         textfiled[0].style.wordSpacing = value;
     }
@@ -331,7 +325,6 @@ class LineSpacingOption extends React.Component {
     }
 
     changeLineSpacing(value) {
-        console.log(`selected ${value}`);
         var textfiled = document.getElementsByClassName('DraftEditor-root');
         textfiled[0].style.lineHeight = value;
     }
@@ -346,6 +339,7 @@ class LineSpacingOption extends React.Component {
                     <Option value="1">2</Option>
                     <Option value="4">5</Option>
                 </Select>
+
             </div>
         );
     }
@@ -366,5 +360,42 @@ class ConvertToPDF extends React.Component {
         );
     }
 }
+
+class NoteColor extends React.Component {
+    constructor(props){
+        super(props)
+        this.state={}
+    }
+
+    componentDidMount(){
+        this.setState({noteColor: this.props.noteColor})
+    }
+
+    changeNoteColor = (noteColor) => {
+        const noteID = this.props.noteID
+        var changeNoteColor = {
+            method: 'POST',
+            url: 'http://127.0.0.1:5000/change-note-color',
+            qs: {noteID, noteColor: noteColor.hex},
+            headers: {'Content-Type': 'application/x-www-form-urlencoded' }
+        };
+        request(changeNoteColor, function (error, response, body) {
+            this.setState({ noteColor: noteColor.hex });
+        }.bind(this));
+    };
+
+    render() {
+        return (
+            <div>
+                <p>Note Color</p>
+                <CirclePicker
+                    color={this.state.noteColor}
+                    onChangeComplete={this.changeNoteColor}
+                />
+            </div>
+        );
+    }
+}
+
 
 export default withRouter(Note);

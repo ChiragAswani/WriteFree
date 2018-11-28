@@ -22,27 +22,59 @@ class Dashboard extends React.Component {
     noteColumns = [{
         title:"Document Name",
         dataIndex: "title",
+        render(text, record) {
+            return {
+                props: {
+                    style: { background: record.noteColor },
+                },
+                children: <div>{text}</div>,
+            }
+        }
     }, {
         title:"Date Created",
         dataIndex:"createdAt",
+        render(text, record) {
+            return {
+                props: {
+                    style: { background: record.noteColor },
+                },
+                children: <div>{text}</div>,
+            }
+        }
     }, {
         title:"Last Updated",
         dataIndex:"lastUpdated",
+        render(text, record) {
+            return {
+                props: {
+                    style: { background: record.noteColor },
+                },
+                children: <div>{text}</div>,
+            }
+        }
     },{
         title:"Category",
         dataIndex: "category",
+        render(text, record) {
+            return {
+                props: {
+                    style: { background: record.noteColor },
+                },
+                children: <div>{text}</div>,
+            }
+        }
     }, {
         title: 'Action',
         render: (text,record) =>
             <div>
                 <a className={"editNote"} onClick={() => this.editNote(localStorage.getItem("email"), record._id)}>Edit | </a>
                 <a className={"deleteNote"} onClick={() => this.deleteNote(localStorage.getItem("email"), record._id)}>Delete</a>
-            </div>,
+            </div>
+
     }]
 
     editNote(email, noteID){
-        this.props.history.push({
-            pathname: "/note/"+noteID,
+        this.props.history.push({pathname: "/note/"+noteID,
             state: {noteID}
         });
     }
@@ -162,6 +194,13 @@ class Dashboard extends React.Component {
                 </div>
             )
         } else {
+            for (var x in this.state.notes){
+                console.log(this.state.notes[x])
+                var m = document.getElementsByName("ant-table-row ant-table-row-level-0")
+                console.log(m)
+                //("data-row-key='5bfdc2d39d75ac2c70f64d1e'")
+                //style: "background-color: red"
+            }
             return (
                 <div>
                     <Walkthrough runTutorial={this.state.credentials.runTutorial}/>
@@ -178,6 +217,7 @@ class Dashboard extends React.Component {
                         <a className="ant-dropdown-link" href="#">Sort By<Icon type="down" /> </a>
                     </Dropdown>
                     <Table dataSource={this.state.notes} className={"notesTable"} rowKey={"_id"}
+                           rowClassName={(record, index) => console.log(record)}
                            columns={this.noteColumns}/>
                 </div>
             )

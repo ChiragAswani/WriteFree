@@ -12,9 +12,7 @@ class DefaultSettings extends React.Component {
         super(props);
         this.state = {
             credentials: {defaultNoteSettings: {credentials: null}},
-            noteColor: "#8bc34a",
-            defaultfontName: "Georgia",
-            defaultfontSize: 11
+            noteColor: "#8bc34a"
         }
     }
 
@@ -24,7 +22,6 @@ class DefaultSettings extends React.Component {
 
     saveDefaultSettings(noteColor, fontName, fontSize){
         const obj = {email: localStorage.getItem("email"), noteColor, fontName, fontSize}
-        console.log(obj)
         if (!obj.noteColor){obj.noteColor = "#8bc34a"}
         if (!obj.fontName){obj.fontName = "Georgia"}
         if (!obj.fontSize){obj.fontSize = 11}
@@ -38,9 +35,6 @@ class DefaultSettings extends React.Component {
             this.props.history.push("/dashboard")
         }.bind(this));
     }
-
-    fontName = ['Arial','Georgia', 'Impact', 'Tahoma', 'Times New Roman', 'Verdana']
-    fontSize = [8, 9, 10, 11, 12, 14]
 
     componentDidMount() {
         var getDefaultSettings = {
@@ -61,13 +55,14 @@ class DefaultSettings extends React.Component {
                 credentials: parsedData.credentials,
                 noteColor: parsedData.credentials.defaultNoteSettings.noteColor,
                 fontName: parsedData.credentials.defaultNoteSettings.fontName,
-                fontSize: val
+                fontSize: val,
+                fontNames: parsedData.applicationSettings.fontNames,
+                fontSizes: parsedData.applicationSettings.fontSizes
             })
         }.bind(this));
     }
 
     render() {
-        console.log("STATE", this.state)
         return (
             <div>
                 <br/>
@@ -77,12 +72,12 @@ class DefaultSettings extends React.Component {
                     onChangeComplete={ this.changeNoteColor }
                 />
                 <p>Font Name</p>
-                <Dropdown options={this.fontName} onChange={(fontName) => this.setState({fontName})} value={this.state.fontName}/>
+                <Dropdown options={this.state.fontNames} onChange={(fontName) => this.setState({fontName: fontName.value})} value={this.state.fontName}/>
                 <p>Font Size</p>
-                <Dropdown options={this.fontSize} onChange={(fontSize) => this.setState({fontSize})} value={this.state.fontSize} />
+                <Dropdown options={this.state.fontSizes} onChange={(fontSize) => this.setState({fontSize: fontSize.value.toString()})} value={this.state.fontSize} />
                 <br/>
                 <a onClick={() => this.saveDefaultSettings("#8bc34a", "Georgia", 11)}> Or Use Reccomended Settings</a><br/>
-                <Button onClick={() => this.saveDefaultSettings(this.state.noteColor, this.state.fontName.value, this.state.fontSize.value)}>Save Default Settings</Button>
+                <Button onClick={() => this.saveDefaultSettings(this.state.noteColor, this.state.fontName, this.state.fontSize)}>Save Default Settings</Button>
                 <br/>
             </div>
         )
