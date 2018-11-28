@@ -134,10 +134,10 @@ def getDefaultSettings():
     applicationSettings["_id"] = str(applicationSettings["_id"])
     return jsonify({"credentials": credentials, "applicationSettings": applicationSettings}), 200;
 
-@app.route('/get-notes', methods= ['GET', 'OPTIONS'])
+@app.route('/get-notes', methods= ['POST', 'OPTIONS'])
 def getNotes():
-    email = request.args['email']
-    arrayOfNotes = getArrayOfNotes(email)
+    form_data = json.loads(request.get_data())
+    arrayOfNotes = getArrayOfNotes(form_data['email'])
     return jsonify({"notes": arrayOfNotes}), 200
 
 
