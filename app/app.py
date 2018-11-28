@@ -29,6 +29,7 @@ client = MongoClient('mongodb://localhost:27017/')
 
 credentials_collection = client['WriteFreeDB']['credentials']
 notes_collection = client['WriteFreeDB']['notes']
+application_collection = client['WriteFreeDB']['application']
 
 @jwt.token_in_blacklist_loader
 def check_if_token_in_blacklist(decrypted_token):
@@ -128,7 +129,10 @@ def getDefaultSettings():
     credentials = credentials_collection.find_one({'email': email})
     credentials["_id"] = str(credentials["_id"])
     del credentials['password']
-    return jsonify({"credentials": credentials}), 200;
+
+    applicationSettings = application_collection.find_one({})
+    applicationSettings["_id"] = str(applicationSettings["_id"])
+    return jsonify({"credentials": credentials, "applicationSettings": applicationSettings}), 200;
 
 @app.route('/get-notes', methods= ['GET', 'OPTIONS'])
 def getNotes():
@@ -160,6 +164,7 @@ def addNote():
         "noteSettings": defaultNoteSettings,
         "lastUpdated": datetime.datetime.fromtimestamp(time.time()).strftime('%c'),
         "category": None,
+        "noteColor": userData['defaultNoteSettings']['noteColor']
 
     }
     _id = notes_collection.insert(baseNewNote)
@@ -191,6 +196,15 @@ def updateDefaultSettings():
 def removeTutorial():
     query = {'$set': {'runTutorial': False}}
     credentials_collection.find_one_and_update({'email': request.args['email']}, query)
+    return "HI", 200
+
+@app.route ('/change-note-color', methods= ['POST', 'OPTIONS'])
+def changeNoteColor():
+    noteID = ObjectId(request.args['noteID'])
+    noteColor = request.args['noteColor']
+    query = {'$set': {'noteColor': noteColor}}
+    print(noteID, noteColor)
+    notes_collection.find_one_and_update({'_id': noteID}, query)
     return "HI", 200
 
 @app.route ('/fetch-note/<note_id>', methods= ['GET', 'OPTIONS'])
