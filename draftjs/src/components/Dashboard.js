@@ -8,7 +8,7 @@ import Walkthrough from './Walkthrough';
 import CardNote from './CardNote';
 import '../css/dashboard.css';
 import { mergeSort } from '../constants';
-import {convertFromRaw, EditorState} from "draft-js";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const Search = Input.Search;
 
@@ -185,7 +185,7 @@ class Dashboard extends React.Component {
             const filteredNotes = [];
             for (var note in parsedData.notes){
                 if (parsedData.notes[note].title.includes(query)){
-                    filteredNotes.push(this.state.notes[note])
+                    filteredNotes.push(parsedData.notes[note])
                 }
             }
             this.setState({'notes': filteredNotes})
@@ -204,18 +204,18 @@ class Dashboard extends React.Component {
         <div>
           <Walkthrough runTutorial={this.state.credentials.runTutorial} />
           <Button type="primary" className="generateNewNote" onClick={() => this.createNote(localStorage.getItem('email'))}>New Document</Button>
-          <Button type="danger" className="defaultSettings" onClick={() => this.props.history.push('/default-settings')}>Default Settings</Button>
-          <Button type="primary" className="generateNewNote" onClick={() => this.logout()}>Log Out</Button>
           <Switch checkedChildren="table" unCheckedChildren="card" defaultChecked onChange={child => this.switchView(child)} />
           <Search
             placeholder="note title"
-            onSearch={searchContent => this.searchNotes(searchContent)}
+            onChange={searchContent => this.searchNotes(searchContent.target.value)}
             style={{ width: 200 }}
           />
-          <Dropdown overlay={this.state.menu}>
-            <a className='ant-dropdown-link' href='#'>Sort By<Icon type='down' /> </a>
-          </Dropdown>
-          <CardNote notes={this.state.notes} history={this.props.history} />
+            <Dropdown overlay={this.state.menu}>
+                <a className="ant-dropdown-link" href='#'><FontAwesomeIcon icon="filter" /> </a>
+            </Dropdown>
+            <FontAwesomeIcon icon="cog" onClick={() => this.props.history.push('/default-settings')} />
+            <FontAwesomeIcon icon="user" onClick={() => this.logout()} />
+            <CardNote notes={this.state.notes} history={this.props.history} />
         </div>
       )
     }
@@ -223,18 +223,18 @@ class Dashboard extends React.Component {
       <div>
         <Walkthrough runTutorial={this.state.credentials.runTutorial} />
         <Button type="primary" className="generateNewNote" onClick={() => this.createNote(localStorage.getItem('email'))}>New Document</Button>
-        <Button type="danger" className="defaultSettings" onClick={() => this.props.history.push('/default-settings')}>Default Settings</Button>
-        <Button type="primary" className="generateNewNote" onClick={() => this.logout()}>Log Out</Button>
         <Switch checkedChildren="table" unCheckedChildren="card" defaultChecked onChange={child => this.switchView(child)} />
         <Search
           placeholder="input search text"
-          onSearch={searchContent => this.searchNotes(searchContent)}
+          onChange={searchContent => this.searchNotes(searchContent.target.value)}
           style={{ width: 200 }}
         />
         <Dropdown overlay={this.state.menu}>
-          <a className="ant-dropdown-link" href='#'>Sort By<Icon type='down' /> </a>
+          <a className="ant-dropdown-link" href='#'><FontAwesomeIcon icon="filter" /> </a>
         </Dropdown>
-        <Table
+          <FontAwesomeIcon icon="cog" onClick={() => this.props.history.push('/default-settings')} />
+          <FontAwesomeIcon icon="user" onClick={() => this.logout()} />
+          <Table
           dataSource={this.state.notes}
           className="notesTable"
           rowKey="_id"

@@ -154,20 +154,18 @@ class Note extends React.Component {
                 </Tabs>
 
                 <Alert stack={true} timeout={3000} />
-            <div className="RichEditor-root" id={"textEdiotr"} style={{backgroundColor: this.state.noteColor}}>
+            <div className="RichEditor-root" id={"textEdiotr"}>
                 <Editor
                     spellCheck={true}
                     editorState={editorState}
                     toolbarClassName="rdw-storybook-toolbar"
                     wrapperClassName="rdw-storybook-wrapper"
-                    editorClassName="rdw-storybook-editor"
+                    editorStyle={{backgroundColor: this.state.noteColor}}
                     onEditorStateChange={this.onChange}
                     toolbarCustomButtons={this.state.toolbarCustomButtons}
                     toolbar={this.state.toolbar}
                 />
             </div>
-                <p> State Representation of Note </p>
-                <div>{JSON.stringify(convertToRaw(editorState.getCurrentContent()))}</div>
                 <Button type="primary" onClick={() => this.goToDashBoard(this.state.noteTitle)}>Go To Dashboard</Button>
 
             </div>
@@ -394,6 +392,7 @@ class NoteColor extends React.Component {
                 <CirclePicker
                     color={this.state.noteColor}
                     onChangeComplete={color => this.changeNoteColor(color)}
+                    colors={["#FCDFD7", "#FCF9DA", "#D4ECDC", "#E1EBF5", "#F0E5EB"]}
                 />
             </div>
         );

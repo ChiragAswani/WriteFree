@@ -69,6 +69,7 @@ class DefaultSettings extends React.Component {
         <CirclePicker
           color={this.state.noteColor}
           onChangeComplete={color => this.changeNoteColor(color)}
+          colors={["#FCDFD7", "#FCF9DA", "#D4ECDC", "#E1EBF5", "#F0E5EB"]}
         />
         <p>Font Name</p>
         <Dropdown options={this.state.fontNames} onChange={fontName => this.setState({ fontName: fontName.value })} value={this.state.fontName} />
