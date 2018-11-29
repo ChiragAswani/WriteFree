@@ -106,7 +106,7 @@ def login():
 @app.route('/login-google', methods= ['GET', 'OPTIONS'])
 def login_google():
     email = request.args['email']
-    google_id = request.args['google_id']
+    google_id = request.args['googleID']
     credentials = dbcalls.DB_find_one(credentials_collection, {'email': email})
     if (credentials):
         if (bcrypt.check_password_hash(credentials['password'], google_id.encode('utf-8'))):
@@ -167,8 +167,8 @@ def updateDefaultSettings():
 
 @app.route ('/remove-tutorial', methods= ['POST', 'OPTIONS'])
 def removeTutorial():
-    _id = ObjectId(request.args['_id'])
-    control.disable_tutorial(credentials_collection, _id)
+    email = request.args['email'];
+    control.disable_tutorial(credentials_collection, email)
     return "Tutorial disabled", 200
 
 @app.route ('/change-note-color', methods= ['POST', 'OPTIONS'])

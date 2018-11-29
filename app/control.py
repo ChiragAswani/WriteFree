@@ -97,11 +97,11 @@ def update_default_setting(cred_db, form_data):
 
 # input:
 #       cred_db: the credential database object
-#       _id: item id in mongoDB (unique)
+#       email
 # output: None
-def disable_tutorial(cred_db, _id):
+def disable_tutorial(cred_db, email):
     query = {'$set': {'runTutorial': False}}
-    dbcalls.DB_find_one_and_update(cred_db, {'email': request.args['email']}, query)
+    dbcalls.DB_find_one_and_update(cred_db, {'email': email}, query)
 # input:
 #       cred_db: the credential database object
 #       value: value used for retrieval (dictionary)
