@@ -144,9 +144,9 @@ class Note extends React.Component {
     render() {
         const {editorState} = this.state;
         return (
-            <div>
-                <Input placeholder={"Note Header"} value={this.state.noteTitle} onChange={noteTitle => this.setState({noteTitle: noteTitle.target.value})}></Input>
-                <Input placeholder={"Note Category"} value={this.state.noteCategory} onChange={noteCategory => {this.setState({noteCategory: noteCategory.target.value})}}></Input>
+            <div style={{background: "#f5f5f5"}}>
+                <Input style={{ border: 'none', background: "#f5f5f5" }} placeholder={"Note Header"} value={this.state.noteTitle} onChange={noteTitle => this.setState({noteTitle: noteTitle.target.value})}></Input>
+                <Input style={{ border: 'none', background: "#f5f5f5" }} placeholder={"Note Category"} value={this.state.noteCategory} onChange={noteCategory => {this.setState({noteCategory: noteCategory.target.value})}}></Input>
                 <Tabs onChange={this.changeToolBar} type="card">
                     <TabPane tab="Basic" key="basicFeatures"/>
                     <TabPane tab="Dyslexic" key="dyslexicFeatures"/>
@@ -159,14 +159,15 @@ class Note extends React.Component {
                     spellCheck={true}
                     editorState={editorState}
                     toolbarClassName="rdw-storybook-toolbar"
-                    wrapperClassName="rdw-storybook-wrapper"
+                    wrapperStyle={{background: "#f5f5f5"}}
                     editorStyle={{backgroundColor: this.state.noteColor}}
                     onEditorStateChange={this.onChange}
                     toolbarCustomButtons={this.state.toolbarCustomButtons}
                     toolbar={this.state.toolbar}
                 />
             </div>
-                <Button type="primary" onClick={() => this.goToDashBoard(this.state.noteTitle)}>Go To Dashboard</Button>
+                <br/>
+                <Button style={{"width": "100%"}}type="primary" onClick={() => this.goToDashBoard(this.state.noteTitle)}>Go To Dashboard</Button>
 
             </div>
         );
@@ -388,7 +389,6 @@ class NoteColor extends React.Component {
     render() {
         return (
             <div>
-                <p>Note Color</p>
                 <CirclePicker
                     color={this.state.noteColor}
                     onChangeComplete={color => this.changeNoteColor(color)}

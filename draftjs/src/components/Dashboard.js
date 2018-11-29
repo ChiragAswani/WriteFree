@@ -201,7 +201,7 @@ class Dashboard extends React.Component {
   render() {
     if (this.state.isCardView) {
       return (
-        <div>
+        <div style={{background: "#f5f5f5"}}>
           <Walkthrough runTutorial={this.state.credentials.runTutorial} />
           <Button type="primary" className="generateNewNote" onClick={() => this.createNote(localStorage.getItem('email'))}>New Document</Button>
           <Switch checkedChildren="table" unCheckedChildren="card" defaultChecked onChange={child => this.switchView(child)} />
@@ -220,7 +220,7 @@ class Dashboard extends React.Component {
       )
     }
     return (
-      <div>
+      <div style={{background: "#f5f5f5"}}>
         <Walkthrough runTutorial={this.state.credentials.runTutorial} />
         <Button type="primary" className="generateNewNote" onClick={() => this.createNote(localStorage.getItem('email'))}>New Document</Button>
         <Switch checkedChildren="table" unCheckedChildren="card" defaultChecked onChange={child => this.switchView(child)} />
