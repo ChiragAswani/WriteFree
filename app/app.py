@@ -63,7 +63,7 @@ def create_google():
          "defaultNoteSettings": {},
         }
         document = control.new_account(credentials_collection, savedDocument)
-        return document, 200;
+        return document, 200
 
 
 # create account and store info into DB
@@ -119,7 +119,7 @@ def login_google():
 def getDefaultSettings():
     email = request.args['email']
     cred_and_setting = control.get_default_setting(credentials_collection, application_collection, email)
-    return cred_and_setting, 200;
+    return cred_and_setting, 200
 
 @app.route('/get-notes', methods= ['GET', 'OPTIONS'])
 def getNotes():
@@ -167,7 +167,7 @@ def updateDefaultSettings():
 
 @app.route ('/remove-tutorial', methods= ['POST', 'OPTIONS'])
 def removeTutorial():
-    email = request.args['email'];
+    email = request.args['email']
     control.disable_tutorial(credentials_collection, email)
     return "Tutorial disabled", 200
 
@@ -211,10 +211,10 @@ def getData():
 def verify():
     current_user = get_jwt_identity()
     bool = False
-    credentials = credentials_collection.find_one({'email': current_user})
+    credentials = dbcalls.DB_find_one(credentials_collection, {'email': current_user})
     if(credentials):
         bool = True
-    return jsonify({"bool": bool}), 200;
+    return jsonify({"bool": bool}), 200
 
 #Reissue a jwt token
 @app.route('/refresh', methods=['GET'])
