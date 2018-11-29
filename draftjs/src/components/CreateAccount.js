@@ -18,6 +18,7 @@ class CreateAccount extends React.Component {
     };
   }
   createAccount(email, fullName, password) {
+
     const postCreateAnAccountInformation = {
       method: 'POST',
       url: 'http://127.0.0.1:5000/create-account',
@@ -25,14 +26,26 @@ class CreateAccount extends React.Component {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     };
     request(postCreateAnAccountInformation, (error, response, body) => {
-      if (response.statusCode === 401) {
+      if (response.statusCode === 501) {
+          var err = "Invalid email address"
+          handleAccountError(err);
+      } else if (response.statusCode === 502) {
+          var err = "Invalid name entered"
+          handleAccountError(err);
+      } else if (response.statusCode === 503) {
+          var err = "Password must be at least 8 characters long and contain 1 special character"
+
         /* TODO in backend:
            -is email valid
            -is email duplicate
            -is fullName valid
            -is password valid
          */
-        handleAccountError(error);
+        handleAccountError(err);
+      } else if (response.statusCode === 401){
+        var err = "An account with that email already exists"
+          handleAccountError(err);
+
       } else {
         const parsedData = JSON.parse(body);
         localStorage.setItem('email', email);
@@ -86,7 +99,7 @@ class CreateAccount extends React.Component {
           <Input placeholder="Full Name" onChange={fullName => this.setState({ fullName: fullName.target.value })} /> <br />
           <Input placeholder="Password" type="password" onChange={password => this.setState({ password: password.target.value })} /> <br />
           <Button type="primary" onClick={() => this.createAccount(this.state.email, this.state.fullName, this.state.password)}>Sign Up</Button><br />
-          <Card>
+            <Card>
             <p>Have an account? <a onClick={() => this.props.history.push("/login")}> Login </a> </p>
           </Card>
           <GoogleLogin

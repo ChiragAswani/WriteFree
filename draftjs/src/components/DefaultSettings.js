@@ -23,6 +23,7 @@ class DefaultSettings extends React.Component {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     };
     request(getDefaultSettings, (error, response, body) => {
+      console.log(localStorage.getItem('email'));
       const parsedData = JSON.parse(body);
       let val = '';
       try {
