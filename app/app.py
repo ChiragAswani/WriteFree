@@ -13,7 +13,6 @@ from flask_jwt_extended import (
     get_jwt_identity, jwt_refresh_token_required, get_raw_jwt
 )
 
-
 # initializations
 app = Flask(__name__)
 CORS(app)
