@@ -194,7 +194,6 @@ def renderPDF():
     return response
 
 #####JWT!!!######
-
 # verify username and password, returns account details and notes
 @app.route('/get-data', methods= ['GET'])
 @jwt_required
@@ -226,7 +225,6 @@ def refresh():
         'access_token': create_access_token(identity=current_user)
     }
     return jsonify(ret), 200
-
 
 # Endpoint for revoking the current users access token
 @app.route('/logout', methods=['GET'])
