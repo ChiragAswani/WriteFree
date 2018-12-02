@@ -122,7 +122,7 @@ def getDefaultSettings():
     cred_and_setting = control.get_default_setting(credentials_collection, application_collection, email)
     return cred_and_setting, 200
 
-@app.route('/get-notes', methods= ['GET', 'OPTIONS'])
+@app.route('/get-notes', methods= ['POST', 'OPTIONS'])
 def getNotes():
     email = request.args['email']
     notes = control.get_note(notes_collection, email)
