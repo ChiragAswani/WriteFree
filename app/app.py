@@ -14,6 +14,7 @@ from draftjs_exporter.html import HTML
 
 import MongoDBCalls as dbcalls
 import control as control
+import mongomock
 
 from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token, create_refresh_token,
@@ -34,10 +35,21 @@ jwt = JWTManager(app)
 blacklist = set()
 
 client = MongoClient('mongodb://localhost:27017/')
+#client = mongomock.MongoClient().db.collection
+
+
 
 credentials_collection = client['WriteFreeDB']['credentials']
 notes_collection = client['WriteFreeDB']['notes']
 application_collection = client['WriteFreeDB']['application']
+
+
+with open('collection - (mongo)/application.json') as f:
+    file_data = json.load(f)
+
+print(file_data)
+application_collection.insert(file_data)
+
 
 @jwt.token_in_blacklist_loader
 def check_if_token_in_blacklist(decrypted_token):

@@ -1,1 +1,1 @@
-{"_id":{"$oid":"5bd1f1f465839e27ccb49a62"},"fontNames":["Arial","Georgia","Impact","Tahoma","Times New Roman","Verdana"],"fontSizes":[{"$numberInt":"8"},{"$numberInt":"9"},{"$numberInt":"10"},{"$numberInt":"11"},{"$numberInt":"12"},{"$numberInt":"14"}]}
+{"_id":{"oid":"5bd1f1f465839e27ccb49a62"},"fontNames":["Arial","Georgia","Impact","Tahoma","Times New Roman","Verdana"],"fontSizes":[{"numberInt":"8"},{"numberInt":"9"},{"numberInt":"10"},{"numberInt":"11"},{"numberInt":"12"},{"numberInt":"14"}]}
