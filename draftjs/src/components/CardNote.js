@@ -13,7 +13,7 @@ class CardListItem extends React.Component {
     };
   }
   displayNoteData(note) {
-    this.setState({ moreNoteData: `${note.lastUpdated} | ${note.category}`, noteDelete: <a>x</a> });
+    this.setState({ moreNoteData: `${note.lastUpdated} | ${note.category}`, noteDelete: <img height="40px" width="40px" src={"https://github.com/ChiragAswani/Husky-Test/blob/master/delete@3x.png?raw=true"} />});
   }
   editNote(email, noteID) {
     this.props.history.push({
@@ -30,7 +30,7 @@ class CardListItem extends React.Component {
           onClick={() => this.editNote(localStorage.getItem('email'), this.state.note._id)}
           onMouseEnter={() => this.displayNoteData(this.state.note)}
           onMouseLeave={() => this.setState({ moreNoteData: undefined, noteDelete: undefined })}
-          style={{ backgroundColor: this.state.note.noteColor }}
+          style={{ backgroundColor: this.state.note.noteColor, "border-radius": "10px", "box-shadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)" }}
         >
           {this.state.noteTitle} <br />
           {this.state.moreNoteData}
@@ -41,13 +41,13 @@ class CardListItem extends React.Component {
 }
 
 const CardList = (props) => {
-  const videoItems = props.notes.map(note => (
-    <CardListItem key={note._id} note={note} history={props.history} />
+  const cardItems = props.notes.map(note => (
+    <CardListItem  key={note._id} note={note} history={props.history} />
   ));
   return (
-    <ul className="col-md-4 list-group">
-      {videoItems}
-    </ul>
+    <div class="flex-container">
+      {cardItems}
+    </div>
   );
 };
 

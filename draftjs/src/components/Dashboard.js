@@ -6,6 +6,7 @@ import request from 'request';
 import axios from 'axios';
 import Walkthrough from './Walkthrough';
 import CardNote from './CardNote';
+import NavigationBar from './NavigationBar';
 import '../css/dashboard.css';
 import { mergeSort } from '../constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -77,8 +78,9 @@ class Dashboard extends React.Component {
         },
       }, {
         title: 'Action',
+        className: "classNameOfColumn",
         render: (text, record) => (
-          <div>
+          <div style={ {background: record.noteColor} }>
             <a className={'editNote'} onClick={() => this.editNote(localStorage.getItem('email'), record._id)}>Edit | </a>
             <a className={'deleteNote'} onClick={() => this.deleteNote(localStorage.getItem('email'), record._id)}>Delete</a>
           </div>
@@ -145,24 +147,11 @@ class Dashboard extends React.Component {
     });
   }
 
-  logout() {
-    const accessToken = localStorage.getItem('access_token');
-    const refreshToken = localStorage.getItem('refresh_token');
-    const AuthStr = 'Bearer '.concat(accessToken);
-    const AuthStr2 = 'Bearer '.concat(refreshToken);
-    const headers = { Authorization: AuthStr };
-    axios.get('http://127.0.0.1:5000/logout', { headers });
-    axios.get('http://127.0.0.1:5000/logout2', { headers: { Authorization: AuthStr2 } }).then((response) => {
-      localStorage.clear();
-      this.props.history.push('/login');
-    });
-  }
-
   switchView(child) {
     if (!child) {
-      this.setState({ isCardView: true });
+      this.setState({ isTableView: true });
     } else {
-      this.setState({ isCardView: false });
+      this.setState({ isTableView: false });
     }
   }
 
@@ -183,7 +172,7 @@ class Dashboard extends React.Component {
         var parsedData = JSON.parse(body);
         if (query.trim().length !== 0){
             const filteredNotes = [];
-            for (var note in parsedData.notes){
+            for (let note in parsedData.notes){
                 if (parsedData.notes[note].title.includes(query)){
                     filteredNotes.push(parsedData.notes[note])
                 }
@@ -199,47 +188,61 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    if (this.state.isCardView) {
+    document.body.style.backgroundColor = "#eaeaea";
+    if (this.state.isTableView) {
       return (
-        <div style={{background: "#f5f5f5"}}>
-          <Walkthrough runTutorial={this.state.credentials.runTutorial} />
-          <Button type="primary" className="generateNewNote" onClick={() => this.createNote(localStorage.getItem('email'))}>New Document</Button>
-          <Switch checkedChildren="table" unCheckedChildren="card" defaultChecked onChange={child => this.switchView(child)} />
-          <Search
-            placeholder="note title"
-            onChange={searchContent => this.searchNotes(searchContent.target.value)}
-            style={{ width: 200 }}
-          />
-            <Dropdown overlay={this.state.menu}>
-                <a className="ant-dropdown-link" href='#'><FontAwesomeIcon icon="filter" /> </a>
-            </Dropdown>
-            <FontAwesomeIcon icon="cog" onClick={() => this.props.history.push('/default-settings')} />
-            <FontAwesomeIcon icon="user" onClick={() => this.logout()} />
-            <CardNote notes={this.state.notes} history={this.props.history} />
+        <div style={{background: "#eaeaea"}}>
+            <NavigationBar/>
+            <div className={"middle"}>
+                <div className={"child"}>
+                    <Walkthrough runTutorial={this.state.credentials.runTutorial} />
+                    <Search
+                        onChange={searchContent => this.searchNotes(searchContent.target.value)}
+                        style={{ width: 200 }}
+                    />
+                    <Dropdown overlay={this.state.menu}>
+                        <a className="ant-dropdown-link" href='#'><FontAwesomeIcon icon="filter" /> </a>
+                    </Dropdown>
+                    <Switch checkedChildren="table" unCheckedChildren="card" onChange={child => this.switchView(child)} />
+
+                    <Icon type="setting" theme="filled" onClick={() => this.props.history.push('/default-settings')} />
+                    <Button type="primary" className="generateNewNote" onClick={() => this.createNote(localStorage.getItem('email'))}>New Document</Button>
+                </div>
+            </div>
+            <div className={"bottom"}>
+              <CardNote notes={this.state.notes} history={this.props.history} />
+            </div>
         </div>
       )
     }
     return (
-      <div style={{background: "#f5f5f5"}}>
-        <Walkthrough runTutorial={this.state.credentials.runTutorial} />
-        <Button type="primary" className="generateNewNote" onClick={() => this.createNote(localStorage.getItem('email'))}>New Document</Button>
-        <Switch checkedChildren="table" unCheckedChildren="card" defaultChecked onChange={child => this.switchView(child)} />
-        <Search
-          placeholder="input search text"
-          onChange={searchContent => this.searchNotes(searchContent.target.value)}
-          style={{ width: 200 }}
-        />
-        <Dropdown overlay={this.state.menu}>
-          <a className="ant-dropdown-link" href='#'><FontAwesomeIcon icon="filter" /> </a>
-        </Dropdown>
-          <FontAwesomeIcon icon="cog" onClick={() => this.props.history.push('/default-settings')} />
-          <FontAwesomeIcon icon="user" onClick={() => this.logout()} />
-          <Table
-          dataSource={this.state.notes}
-          className="notesTable"
-          rowKey="_id"
-          columns={this.state.noteColumns}
-        />
+      <div style={{background: "#eaeaea"}}>
+        <NavigationBar/>
+        <div className={"middle"}>
+            <div className={"child"}>
+            <Walkthrough runTutorial={this.state.credentials.runTutorial} />
+                  <Search
+                      onChange={searchContent => this.searchNotes(searchContent.target.value)}
+                      style={{ width: 200 }}
+                  />
+            <Dropdown overlay={this.state.menu}>
+                <a className="ant-dropdown-link" href='#'><FontAwesomeIcon icon="filter" /> </a>
+            </Dropdown>
+            <Switch checkedChildren="table" unCheckedChildren="card" defaultChecked onChange={child => this.switchView(child)} />
+            <Icon type="setting" theme="filled" onClick={() => this.props.history.push('/default-settings')} />
+            <Button type="primary" className="generateNewNote" onClick={() => this.createNote(localStorage.getItem('email'))}>New Document</Button>
+            </div>
+        </div>
+        <div className={"bottom"}>
+            <Table
+                dataSource={this.state.notes}
+                className="notesTable"
+                rowKey="_id"
+                columns={this.state.noteColumns}
+                pagination={{defaultPageSize: 5}}
+                rowClassName={(record) => record.noteColor}
+            />
+        </div>
       </div>
     );
   }
