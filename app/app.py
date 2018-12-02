@@ -236,63 +236,6 @@ def logout():
     blacklist.add(jti)
     return jsonify({"msg": "Successfully logged out"}), 200
 
-#####JWT!!!######
-
-# verify username and password, returns account details and notes
-@app.route('/get-data', methods= ['GET'])
-@jwt_required
-def getData():
-    current_user = get_jwt_identity()
-    print("HERE", current_user)
-    credentials = credentials_collection.find_one({'email': current_user})
-    print(credentials)
-    if (credentials):
-        arrayOfNotes = getArrayOfNotes(current_user)
-        credentials["_id"] = str(credentials["_id"])
-        del credentials["password"]
-        return jsonify({"notes": arrayOfNotes, "credentials": credentials}), 200;
-    return "Invalid Email or Password", 401;
-
-# verify username and password, returns account details and notes
-@app.route('/verify', methods= ['GET'])
-@jwt_required
-def verify():
-    current_user = get_jwt_identity()
-    bool = False
-    credentials = credentials_collection.find_one({'email': current_user})
-    if(credentials):
-        bool = True
-    return jsonify({"bool": bool}), 200;
-
-#Reissue a jwt token
-@app.route('/refresh', methods=['GET'])
-@jwt_refresh_token_required
-def refresh():
-    current_user = get_jwt_identity()
-    ret = {
-        'access_token': create_access_token(identity=current_user)
-    }
-    return jsonify(ret), 200
-
-
-# Endpoint for revoking the current users access token
-@app.route('/logout', methods=['GET'])
-@jwt_required
-def logout():
-    jti = get_raw_jwt()['jti']
-    blacklist.add(jti)
-    return jsonify({"msg": "Successfully logged out"}), 200
-
-
-# Endpoint for revoking the current users refresh token
-@app.route('/logout2', methods=['GET'])
-@jwt_refresh_token_required
-def logout2():
-    jti = get_raw_jwt()['jti']
-    blacklist.add(jti)
-    return jsonify({"msg": "Successfully logged2 out"}), 200
-
-
 # Endpoint for revoking the current users refresh token
 @app.route('/logout2', methods=['GET'])
 @jwt_refresh_token_required
