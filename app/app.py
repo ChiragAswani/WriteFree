@@ -124,8 +124,8 @@ def getDefaultSettings():
 
 @app.route('/get-notes', methods= ['POST', 'OPTIONS'])
 def getNotes():
-    email = request.args['email']
-    notes = control.get_note(notes_collection, email)
+    form_data = json.loads(request.get_data())
+    notes = control.get_note(notes_collection, form_data['email'])
     return notes, 200
 
 @app.route ('/delete-note', methods= ['DELETE', 'OPTIONS'])
