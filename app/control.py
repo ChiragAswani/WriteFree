@@ -78,7 +78,7 @@ def get_default_setting(cred_db, app_db, email):
     credentials["_id"] = str(credentials["_id"])
     del credentials['password']
     # WARNING: this assume that there is only one application setting within the database
-    applicationSettings = dbcalls.DB_find_one(cred_db, {})
+    applicationSettings = dbcalls.DB_find_one(app_db, {})
     applicationSettings["_id"] = str(applicationSettings["_id"])
     return jsonify({"credentials": credentials, "applicationSettings": applicationSettings})
 
