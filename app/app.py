@@ -164,7 +164,7 @@ def addNote():
         "noteSettings": defaultNoteSettings,
         "lastUpdated": datetime.datetime.fromtimestamp(time.time()).strftime('%c'),
         "category": None,
-        "noteColor": userData['defaultNoteSettings']['noteColor']
+        "noteColor": userData['defaultNoteSettings']['noteColor'],
         "wordSpacing": "normal",
         "lineSpacing": "normal"
 
@@ -237,13 +237,13 @@ def renderPDF():
     response.headers['Content-Disposition'] = 'inline; filename=output.pdf'
     return response
 
-@app.route ('/change-word-spacing', methods= ['POST', 'OPTIONS'])
-def renderPDF():
-    form_data = json.loads(request.get_data())
-    noteID = form_data['noteID']
-    noteData = notes_collection.find_one({'_id': ObjectId(noteID)})
-
-    return response
+# @app.route ('/change-word-spacing', methods= ['POST', 'OPTIONS'])
+# def renderPDF():
+#     form_data = json.loads(request.get_data())
+#     noteID = form_data['noteID']
+#     noteData = notes_collection.find_one({'_id': ObjectId(noteID)})
+#
+#     return response
 
 #####JWT!!!######
 
