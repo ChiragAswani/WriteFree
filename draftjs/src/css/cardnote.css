@@ -1,3 +1,13 @@
+@font-face {
+    font-family: brown-bold;
+    src: url(../fonts/Brown/Brown-Bold.otf);
+}
+
+@font-face {
+    font-family: brown-regular;
+    src: url(../fonts/Brown/Brown-Regular.otf);
+}
+
 .ant-card-extra{
     padding-top: 0px;
     padding-right: 0px;
@@ -15,4 +25,34 @@
 }
 .ant-card-head-wrapper{
     height: 0px;
+}
+
+.ant-card-body{
+    height: 220px;
+    width: 220px;
+    padding: 28px;
+    font-size: 18px;
+    font-family: brown-bold;
+}
+
+.flex-container {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.flex-container > div {
+    width: auto;
+    margin: 10px;
+    text-align: left;
+    line-height: 75px;
+}
+.ant-input{
+    height: 30px;
+    border-radius: 15px !important;
+}
+.generateNewNote{
+    height: 30px;
+    width: 140px;
+    background-color: #466fb5;
+    border-radius: 15px !important;
 }

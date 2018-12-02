@@ -2,7 +2,7 @@
 import React from 'react';
 import { EditorState, RichUtils, convertToRaw, convertFromRaw } from 'draft-js';
 import { withRouter } from 'react-router-dom';
-import { Input, Button, Select, Tabs } from 'antd';
+import { Input, Button, Select, Tabs, Icon } from 'antd';
 import request from 'request';
 import Speech from 'react-speech';
 import { Editor } from 'react-draft-wysiwyg';
@@ -12,6 +12,8 @@ import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
 import { CirclePicker } from 'react-color';
 import '../css/note.css';
+import 'antd/dist/antd.css';
+import NavigationBar from "./NavigationBar";
 
 const Option = Select.Option;
 
@@ -24,6 +26,7 @@ class Note extends React.Component {
       editorState: EditorState.createEmpty(),
       noteCategory: undefined,
       noteTitle: undefined,
+        noteCategoryIconColor: undefined
     };
     this.focus = () => this.refs.editor.focus();
     this.onChange = editorState => this.setState({ editorState });
@@ -55,6 +58,7 @@ class Note extends React.Component {
                 editorState: EditorState.createWithContent(convertFromRaw((contentState))),
                 noteTitle: parsedData.title,
                 noteCategory: parsedData.category,
+                noteCategoryIconColor: "#466fb5",
                 noteColor: parsedData.noteColor
             });
         }
@@ -133,7 +137,7 @@ class Note extends React.Component {
             this.setState({'toolbar': {}, 'toolbarCustomButtons': []})
         }
         else if (key === "dyslexicFeatures"){
-            this.setState({'toolbar': {'options': []}, 'toolbarCustomButtons': [<WordSpacingOption/>,  <LineSpacingOption/>, <SpeechOption speechText={convertToRaw(this.state.editorState.getCurrentContent())}/>, <NoteColor noteColor={this.state.noteColor} noteID={this.props.location.state.noteID}/>]})
+            this.setState({'toolbar': {'options': []}, 'toolbarCustomButtons': [<WordSpacingOption noteID={this.props.location.state.noteID} />,  <LineSpacingOption/>, <SpeechOption speechText={convertToRaw(this.state.editorState.getCurrentContent())}/>, <NoteColor noteColor={this.state.noteColor} noteID={this.props.location.state.noteID}/>]})
         }
         else if (key === "otherFeatures"){
             this.setState({'toolbar': {'options': []}, 'toolbarCustomButtons': [<ConvertToPDF noteID={this.props.location.state.noteID}/>]})
@@ -141,18 +145,31 @@ class Note extends React.Component {
 
     }
 
+    changeNoteCategory(noteCategory){
+        if(noteCategory){
+            this.setState({noteCategory, noteCategoryIconColor: "#466fb5"})
+        } else {
+            this.setState({noteCategory, noteCategoryIconColor: "gray"})
+        }
+
+    }
+
     render() {
         const {editorState} = this.state;
+        document.body.style.backgroundColor = "#f5f5f5"
         return (
             <div style={{background: "#f5f5f5"}}>
-                <Input style={{ border: 'none', background: "#f5f5f5" }} placeholder={"Note Header"} value={this.state.noteTitle} onChange={noteTitle => this.setState({noteTitle: noteTitle.target.value})}></Input>
-                <Input style={{ border: 'none', background: "#f5f5f5" }} placeholder={"Note Category"} value={this.state.noteCategory} onChange={noteCategory => {this.setState({noteCategory: noteCategory.target.value})}}></Input>
-                <Tabs onChange={this.changeToolBar} type="card">
-                    <TabPane tab="Basic" key="basicFeatures"/>
-                    <TabPane tab="Dyslexic" key="dyslexicFeatures"/>
-                    <TabPane tab="Other" key="otherFeatures"/>
-                </Tabs>
-
+                <NavigationBar/>
+                <div className={"add-title"}>
+                    <Input className={"enter-title-here"} placeholder={"Untitled"} value={this.state.noteTitle} onChange={noteTitle => this.setState({noteTitle: noteTitle.target.value})}></Input>
+                    <Icon type="book" theme="filled" style={{'color': this.state.noteCategoryIconColor}} className={"note-category-icon"} />
+                    <Input className={"enter-category-here"} placeholder={"Category"} value={this.state.noteCategory} onChange={noteCategory => this.changeNoteCategory(noteCategory.target.value)}></Input>
+                    <ConvertToPDF/>
+                </div>
+                    <Tabs animated={false} defaultActiveKey="1" onChange={this.changeToolBar} className={"tab-bar"}>
+                        <TabPane tab="Tools" key="basicFeatures"/>
+                        <TabPane tab="Note Settings" key="dyslexicFeatures"/>
+                    </Tabs>
                 <Alert stack={true} timeout={3000} />
             <div className="RichEditor-root" id={"textEdiotr"}>
                 <Editor
@@ -177,6 +194,7 @@ class Note extends React.Component {
 // value for selection
 function changeLineSpacing(value) {
     document.getElementById("textEdiotr").style.lineHeight = value;
+    console.log(value)
 }
 
 // Custom overrides for "code" style.
@@ -299,14 +317,17 @@ const SpeechOption = (props) => {
 class WordSpacingOption extends React.Component {
     constructor(props){
         super(props)
+        this.state = {}
     }
     // spacing methods
     changeWordSpacing(value) {
         var textfiled = document.getElementsByClassName('DraftEditor-root');
         textfiled[0].style.wordSpacing = value;
+        console.log(value)
     }
 
     render() {
+        console.log("HERE", this.props)
         return (
             <div>
                 <Select defaultValue="0.9px" style={{ width: 150 }} onChange={(value) => this.changeWordSpacing(value)}>
@@ -358,7 +379,7 @@ class ConvertToPDF extends React.Component {
 
     render() {
         return (
-            <Button onClick={() => this.renderPDF(this.props.noteID)}>Convert to PDF</Button>
+            <Button className={'convert-to-pdf'} onClick={() => this.renderPDF(this.props.noteID)}>Convert to PDF</Button>
         );
     }
 }
