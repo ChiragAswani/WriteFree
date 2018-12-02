@@ -2,7 +2,7 @@
 import React from 'react';
 import { EditorState, RichUtils, convertToRaw, convertFromRaw } from 'draft-js';
 import { withRouter } from 'react-router-dom';
-import { Input, Button, Select, Tabs, Icon } from 'antd';
+import { Input, Button, Select, Tabs, Icon, Switch } from 'antd';
 import request from 'request';
 import Speech from 'react-speech';
 import { Editor } from 'react-draft-wysiwyg';
@@ -44,16 +44,16 @@ class Note extends React.Component {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     };
     request(fetchNote, function (error, response, body) {
-        var parsedData = JSON.parse(body)
+        var parsedData = JSON.parse(body);
         if (parsedData.noteSettings){
-            let contentState = parsedData.noteSettings
+            let contentState = parsedData.noteSettings;
             this.setState({
                 editorState: EditorState.createWithContent(convertFromRaw((contentState))),
                 noteColor: parsedData.noteColor
             });
         }
         if (parsedData.title){
-            let contentState = parsedData.content
+            let contentState = parsedData.content;
             this.setState({
                 editorState: EditorState.createWithContent(convertFromRaw((contentState))),
                 noteTitle: parsedData.title,
@@ -92,7 +92,6 @@ class Note extends React.Component {
             )
         );
     }
-
 
     saveNote(title, category, noteID, noteContent){
         if(!title){
@@ -137,12 +136,11 @@ class Note extends React.Component {
             this.setState({'toolbar': {}, 'toolbarCustomButtons': []})
         }
         else if (key === "dyslexicFeatures"){
-            this.setState({'toolbar': {'options': []}, 'toolbarCustomButtons': [<WordSpacingOption noteID={this.props.location.state.noteID} />,  <LineSpacingOption/>, <SpeechOption speechText={convertToRaw(this.state.editorState.getCurrentContent())}/>, <NoteColor noteColor={this.state.noteColor} noteID={this.props.location.state.noteID}/>]})
+            this.setState({'toolbar': {'options': []}, 'toolbarCustomButtons': [<WordSpacingOption/>, <LineSpacingOption/>,
+                    <HyphenationOption/>,
+                    <SpeechOption speechText={convertToRaw(this.state.editorState.getCurrentContent())}/>,
+                    <NoteColor noteColor={this.state.noteColor} noteID={this.props.location.state.noteID}/>]})
         }
-        else if (key === "otherFeatures"){
-            this.setState({'toolbar': {'options': []}, 'toolbarCustomButtons': [<ConvertToPDF noteID={this.props.location.state.noteID}/>]})
-        }
-
     }
 
     changeNoteCategory(noteCategory){
@@ -194,7 +192,6 @@ class Note extends React.Component {
 // value for selection
 function changeLineSpacing(value) {
     document.getElementById("textEdiotr").style.lineHeight = value;
-    console.log(value)
 }
 
 // Custom overrides for "code" style.
@@ -323,11 +320,9 @@ class WordSpacingOption extends React.Component {
     changeWordSpacing(value) {
         var textfiled = document.getElementsByClassName('DraftEditor-root');
         textfiled[0].style.wordSpacing = value;
-        console.log(value)
     }
 
     render() {
-        console.log("HERE", this.props)
         return (
             <div>
                 <Select defaultValue="0.9px" style={{ width: 150 }} onChange={(value) => this.changeWordSpacing(value)}>
@@ -362,6 +357,65 @@ class LineSpacingOption extends React.Component {
                     <Option value="1">2</Option>
                     <Option value="4">5</Option>
                 </Select>
+
+            </div>
+        );
+    }
+}
+
+class HyphenationOption extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+    hyphenate(child) {
+        // hyphenation on
+        var hyphenation = "";
+        if (child) {
+            var text = "We learned polymorphism in computer science";
+            var Hypher = require('hypher'),
+                english = require('hyphenation.en-us'),
+                h = new Hypher(english);
+            var splited_text = text.split(" ");
+            for (var i = 0; i < splited_text.length; i++)
+            {
+                var hyphenated = h.hyphenate(splited_text[i]);
+                for (var j = 0; j < hyphenated.length - 1; j++)
+                {
+                    // add unicode dot for each syllables
+                    hyphenation += hyphenated[j] + "\u2022";
+                }
+                // add a space for the splitted word
+                hyphenation += hyphenated[hyphenated.length - 1] + " ";
+            }
+            console.log(hyphenation);
+
+            var restored = hyphenation.split("\u2022")
+            var str = "";
+            for (var i = 0; i < restored.length - 1; i++)
+            {
+                str += restored[i];
+            }
+            str += restored[restored.length - 1];
+            console.log(str);
+        }
+        //eliminate the splitter
+        else
+        {
+            var restored = hyphenation.split("\u2022")
+            console.log(hyphenation);
+            var str = "";
+            for (var i = 0; i < restored.length - 1; i++)
+            {
+                str += restored[i] + " ";
+            }
+            str += restored[restored.length - 1];
+            console.log(str);
+        }
+    }
+    render() {
+        return (
+            <div>
+                <Switch checkedChildren="On" unCheckedChildren="Off" onChange={(child) => this.hyphenate(child)}/>
 
             </div>
         );
