@@ -2,7 +2,7 @@ import os
 import tempfile
 
 import pytest
-
+import json
 from app import app
 import mongomock
 from pytest_mongodb.plugin import mongo_engine
@@ -24,26 +24,6 @@ def client():
     #     app.init_db()
 
     yield client
-    #
-    # #os.close(db_fd)
-    # #os.unlink(app.app.config['DATABASE'])
-    # db_address = 'mongodb://localhost:27017/'
-    # # app = Flask(__name__)
-    # CORS(app)
-    # app.secret_key = 'super secret key'
-    # app.config['JWT_BLACKLIST_ENABLED'] = True
-    # app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
-    # SESSION_TYPE = 'redis'
-    # bcrypt = Bcrypt(app)
-    #
-    # jwt = JWTManager(app)
-    # blacklist = set()
-    #
-    # db = MongoClient('mongodb://localhost:27017/')
-    #
-    # credentials_collection = db['WriteFreeDB']['credentials']
-    # notes_collection = db['WriteFreeDB']['notes']
-    # application_collection = db['WriteFreeDB']['application']
 
 
 #create random ID for the email
@@ -77,14 +57,15 @@ def get_default_settings(client, email):
     return client.get('/get-default-settings',query_string=data)
 
 #helper method to update default settings
-def get_default_settings(client, email):
+def update_default_settings(client, email):
     data = {
-        'email':email,
+        'email': email,
         'noteColor': '#8bc34a',
-        'fontName' : 'Georgia',
-        'fontSize' : 11
+        'applicationColor' : '#8bc34a',
+        'font': 'Georgia'
+        #'fontSize': 11
     }
-    return client.get('/get-default-settings',query_string=data)
+    return client.post('/update-default-settings',data=json.dumps(data),content_type='application/json')
 
 #helper method to create new note
 def create_new_note(client, email):
@@ -92,6 +73,20 @@ def create_new_note(client, email):
         'email':email
     }
     return client.post('/new-note',query_string=data)
+
+def save_new_note(client):
+    with open('formdata.json') as f:
+        data = json.load(f)
+    return client.post('/save-note', query_string=data)
+
+
+#Helper method to get data
+def get_data(client, x):
+    data = {
+        'Authorization': 'Bearer {}'.format(jwt_tokens[x])
+    }
+    return client.get('/get-data',headers=data)
+
 
 #helper method to create fake users
 def create_emails(num_emails):
@@ -107,11 +102,13 @@ def create_emails(num_emails):
 
 
 
+
 #GLOBAL VARIABLES: Users:
 emails, names = create_emails(num_emails=5)
+jwt_tokens = []
 
 #TEST 1: Testing the creation of accounts
-def test_create_account(client):
+def test_createAccount(client):
     for x in range(len(emails)):
         email = emails[x]
         name = names[x]
@@ -123,6 +120,9 @@ def test_login(client):
     for x in range(len(emails)):
         email = emails[x]
         rv= login(client, email, "test1234!")
+        #save the jwt token created
+        temp = rv.json
+        jwt_tokens.append(temp['access_token'])
         assert rv.status_code==200
 
 #TEST 3: Update default settings
@@ -132,23 +132,37 @@ def test_update_default_settings(client):
         rv = update_default_settings(client, email)
         assert rv.status_code==200
 
-#TEST 4: Getting default settings
-def test_get_default_settings(client):
-    for x in range(len(emails)):
-        email = emails[x]
-        rv = get_default_settings(client, email)
-        assert rv.status_code==200
-
-# #TEST 5: Creating newe note
-# def test_create_new_note(client):
+# #TEST 4: Getting default settings
+# def test_get_default_settings(client):
+#     for x in range(len(emails)):
+#         email = emails[x]
+#         rv = get_default_settings(client, email)
+#         assert rv.status_code==200
+#
+# #TEST 5: Creating new note
+# def test_createNewNote(client):
 #     for x in range(len(emails)):
 #         email = emails[x]
 #         rv = create_new_note(client, email)
+#         print(rv)
+#         assert rv.status_code==200
+
+# #TEST 6: Saving the note we created
+# def test_saveNewNote(client):
+#     for x in range(len(emails)):
+#         rv = save_new_note(client)
 #         assert rv.status_code==200
 
 
+#TEST 7: Get-Data
+def test_getData(client):
+    for x in range(len(emails)):
+        rv = get_data(client, x)
+        assert rv.status_code==200
 
-#TESTS: New note, save note, get default settings, get notes*, get data,
-#Test login, then get-data
+
+
+
+
 
 
