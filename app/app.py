@@ -149,7 +149,9 @@ def addNote():
         "noteSettings": defaultNoteSettings,
         "lastUpdated": datetime.datetime.fromtimestamp(time.time()).strftime('%c'),
         "category": None,
-        "noteColor": credentials['defaultNoteSettings']['noteColor']
+        "noteColor": userData['defaultNoteSettings']['noteColor'],
+        "wordSpacing": "0.9px",
+        "lineSpacing": "0.05"
     }
     notes = control.add_note(notes_collection, baseNewNote)
     return notes, 200
@@ -192,6 +194,25 @@ def renderPDF():
     noteID = request.args['noteID']
     response = control.render_PDF(notes_collection, noteID)
     return response
+
+@app.route ('/change-word-spacing', methods= ['POST', 'OPTIONS'])
+def changeWordSpacing():
+    form_data = json.loads(request.get_data())
+    noteID = form_data['noteID']
+    wordSpacing = form_data['wordSpacing']
+    query = {'$set': {'wordSpacing': wordSpacing}}
+    print(ObjectId(noteID), wordSpacing)
+    notes_collection.find_one_and_update({'_id': ObjectId(noteID)}, query)
+    return "HI", 200
+
+@app.route ('/change-line-spacing', methods= ['POST', 'OPTIONS'])
+def changeLineSpacing():
+    form_data = json.loads(request.get_data())
+    noteID = form_data['noteID']
+    lineSpacing = form_data['lineSpacing']
+    query = {'$set': {'lineSpacing': lineSpacing}}
+    notes_collection.find_one_and_update({'_id': ObjectId(noteID)}, query)
+    return "HI", 200
 
 #####JWT!!!######
 # verify username and password, returns account details and notes
