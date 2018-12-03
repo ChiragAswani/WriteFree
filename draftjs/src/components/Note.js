@@ -28,6 +28,7 @@ class Note extends React.Component {
       noteTitle: undefined,
         noteCategoryIconColor: undefined
     };
+    hyphenate = hyphenate.bind(this)
     this.focus = () => this.refs.editor.focus();
     this.onChange = editorState => this.setState({ editorState });
     this.handleKeyCommand = command => this._handleKeyCommand(command);
@@ -151,7 +152,6 @@ class Note extends React.Component {
         }
 
     }
-
     render() {
         const {editorState} = this.state;
         document.body.style.backgroundColor = "#f5f5f5"
@@ -189,9 +189,55 @@ class Note extends React.Component {
     }
 }
 
-// value for selection
-function changeLineSpacing(value) {
-    document.getElementById("textEdiotr").style.lineHeight = value;
+// Function for hyphenating the contents in text editor, binded with Note class.
+function hyphenate(child) {
+    // hyphenation on
+    var newContents = convertToRaw(this.state.editorState.getCurrentContent())
+    console.log(newContents)
+    var hyphenation = "";
+    // enable hyphenation
+    if (child) {
+        var Hypher = require('hypher'),
+            english = require('hyphenation.en-us'),
+            h = new Hypher(english);
+        for (var line = 0; line < newContents.blocks.length; line++) {
+            //counts the number of dots added
+            var numberOfDots = 0;
+            //parse the line into words by spaces
+            var oneLine = newContents.blocks[line]['text'].split(" ");
+            var hyphenatedLine = "";
+            //hyphenate each work
+            for (var i = 0; i < oneLine.length; i++) {
+                var hyphenatedWord = h.hyphenate(oneLine[i]);
+                for (var j = 0; j < hyphenatedWord.length - 1; j++) {
+                    // add unicode dot for each syllables
+                    hyphenatedLine += hyphenatedWord[j] + "\u2022";
+                    numberOfDots += 1;
+                }
+                hyphenatedLine += hyphenatedWord[hyphenatedWord.length - 1] + " ";
+            }
+            newContents.blocks[line]['text'] = hyphenatedLine;
+            //change inline css style for the extra dot characters
+            newContents.blocks[line]['inlineStyleRanges'][0]['length'] += numberOfDots;
+            newContents.blocks[line]['inlineStyleRanges'][1]['length'] += numberOfDots;
+        }
+        //convert to  note content
+        console.log(newContents);
+        this.setState({
+            editorState: EditorState.createWithContent(convertFromRaw((newContents))),
+        });
+    }
+    //eliminate the splitter
+    else
+    {
+        console.log();
+        var restored = hyphenation.split("\u2022")
+        var str = "";
+        for (var i = 0; i < restored.length - 1; i++) {
+            str += restored[i] + " ";
+        }
+        str += restored[restored.length - 1];
+    }
 }
 
 // Custom overrides for "code" style.
@@ -362,61 +408,14 @@ class LineSpacingOption extends React.Component {
         );
     }
 }
-
 class HyphenationOption extends React.Component {
     constructor(props) {
         super(props)
     }
-    hyphenate(child) {
-        // hyphenation on
-        var hyphenation = "";
-        if (child) {
-            var text = "We learned polymorphism in computer science";
-            var Hypher = require('hypher'),
-                english = require('hyphenation.en-us'),
-                h = new Hypher(english);
-            var splited_text = text.split(" ");
-            for (var i = 0; i < splited_text.length; i++)
-            {
-                var hyphenated = h.hyphenate(splited_text[i]);
-                for (var j = 0; j < hyphenated.length - 1; j++)
-                {
-                    // add unicode dot for each syllables
-                    hyphenation += hyphenated[j] + "\u2022";
-                }
-                // add a space for the splitted word
-                hyphenation += hyphenated[hyphenated.length - 1] + " ";
-            }
-            console.log(hyphenation);
-
-            var restored = hyphenation.split("\u2022")
-            var str = "";
-            for (var i = 0; i < restored.length - 1; i++)
-            {
-                str += restored[i];
-            }
-            str += restored[restored.length - 1];
-            console.log(str);
-        }
-        //eliminate the splitter
-        else
-        {
-            var restored = hyphenation.split("\u2022")
-            console.log(hyphenation);
-            var str = "";
-            for (var i = 0; i < restored.length - 1; i++)
-            {
-                str += restored[i] + " ";
-            }
-            str += restored[restored.length - 1];
-            console.log(str);
-        }
-    }
     render() {
         return (
             <div>
-                <Switch checkedChildren="On" unCheckedChildren="Off" onChange={(child) => this.hyphenate(child)}/>
-
+                <Switch checkedChildren="On" unCheckedChildren="Off" onChange={(child) => hyphenate(child)}/>
             </div>
         );
     }
