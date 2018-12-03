@@ -165,8 +165,8 @@ def addNote():
         "lastUpdated": datetime.datetime.fromtimestamp(time.time()).strftime('%c'),
         "category": None,
         "noteColor": userData['defaultNoteSettings']['noteColor'],
-        "wordSpacing": "normal",
-        "lineSpacing": "normal"
+        "wordSpacing": "0.9px",
+        "lineSpacing": "0.05"
 
     }
     _id = notes_collection.insert(baseNewNote)
@@ -237,13 +237,24 @@ def renderPDF():
     response.headers['Content-Disposition'] = 'inline; filename=output.pdf'
     return response
 
-# @app.route ('/change-word-spacing', methods= ['POST', 'OPTIONS'])
-# def renderPDF():
-#     form_data = json.loads(request.get_data())
-#     noteID = form_data['noteID']
-#     noteData = notes_collection.find_one({'_id': ObjectId(noteID)})
-#
-#     return response
+@app.route ('/change-word-spacing', methods= ['POST', 'OPTIONS'])
+def changeWordSpacing():
+    form_data = json.loads(request.get_data())
+    noteID = form_data['noteID']
+    wordSpacing = form_data['wordSpacing']
+    query = {'$set': {'wordSpacing': wordSpacing}}
+    print(ObjectId(noteID), wordSpacing)
+    notes_collection.find_one_and_update({'_id': ObjectId(noteID)}, query)
+    return "HI", 200
+
+@app.route ('/change-line-spacing', methods= ['POST', 'OPTIONS'])
+def changeLineSpacing():
+    form_data = json.loads(request.get_data())
+    noteID = form_data['noteID']
+    lineSpacing = form_data['lineSpacing']
+    query = {'$set': {'lineSpacing': lineSpacing}}
+    notes_collection.find_one_and_update({'_id': ObjectId(noteID)}, query)
+    return "HI", 200
 
 #####JWT!!!######
 
