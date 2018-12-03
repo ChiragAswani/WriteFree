@@ -1,6 +1,9 @@
 from flask import Flask, request, jsonify, session, render_template, make_response, send_file
 import time
 from flask_cors import CORS
+from flask import Flask, request, jsonify, session, render_template, make_response, send_file
+import time
+from flask_cors import CORS
 from pymongo import MongoClient
 import json
 from bson.objectid import ObjectId
@@ -8,13 +11,17 @@ from flask_bcrypt import Bcrypt
 import pdfkit
 import datetime
 from draftjs_exporter.html import HTML
+
+import MongoDBCalls as dbcalls
+import control as control
+
 from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token, create_refresh_token,
     get_jwt_identity, jwt_refresh_token_required, get_raw_jwt
 )
 
-
 # initializations
+db_address = 'mongodb://localhost:27017/'
 app = Flask(__name__)
 CORS(app)
 app.secret_key = 'super secret key'
@@ -22,6 +29,7 @@ app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
 SESSION_TYPE = 'redis'
 bcrypt = Bcrypt(app)
+
 jwt = JWTManager(app)
 blacklist = set()
 
@@ -44,7 +52,8 @@ def create_google():
     createdAt = datetime.datetime.fromtimestamp(time.time()).strftime('%c')
     # hash the googleID and save it in pw_hash
     pw_hash = bcrypt.generate_password_hash(google_id.encode('utf-8'))
-    if (credentials_collection.find_one({'email': email})):
+    # account exists
+    if dbcalls.DB_find_one(credentials_collection, {'email': email}):
         return "An account already exists with " + email, 401
     else:
         savedDocument = {
@@ -55,12 +64,8 @@ def create_google():
          "runTutorial": True,
          "defaultNoteSettings": {},
         }
-        credentials_collection.insert_one(savedDocument)
-        savedDocument["_id"] = str(savedDocument["_id"])
-        del savedDocument['password']
-        access_token = create_access_token(identity=email)
-        refresh_token = create_refresh_token(identity=email)
-        return jsonify({"credentials": savedDocument, "access_token": access_token, "refresh_token": refresh_token}), 200;
+        document = control.new_account(credentials_collection, savedDocument)
+        return document, 200
 
 # create account and store info into DB
 @app.route('/create-account', methods= ['POST', 'OPTIONS'])
@@ -71,7 +76,7 @@ def create():
     createdAt = datetime.datetime.fromtimestamp(time.time()).strftime('%c')
     # hash the password and save it in pw_hash
     pw_hash = bcrypt.generate_password_hash(password.encode('utf-8'))
-    if(credentials_collection.find_one({'email': email})):
+    if dbcalls.DB_find_one(credentials_collection, {'email': email}):
         return "An account already exists with " + email, 401
     else:
         savedDocument = {
@@ -82,80 +87,60 @@ def create():
             "runTutorial": True,
             "defaultNoteSettings": {},
         }
-        credentials_collection.insert_one(savedDocument)
-        savedDocument["_id"] = str(savedDocument["_id"])
-        del savedDocument['password']
-        access_token = create_access_token(identity=email)
-        refresh_token = create_refresh_token(identity=email)
-        return jsonify({"credentials": savedDocument, "access_token": access_token, "refresh_token": refresh_token}), 200;
-
+        document = control.new_account(credentials_collection, savedDocument)
+        return (document, 200)
 
 # verify username and password, returns account details and notes
 @app.route('/login', methods= ['GET', 'OPTIONS'])
 def login():
     email = request.args['email']
     password = request.args['password']
-    credentials = credentials_collection.find_one({'email': email})
+    credentials = dbcalls.DB_find_one(credentials_collection, {'email': email})
     if (credentials):
         hashed_password = bcrypt.generate_password_hash(password)
         if (bcrypt.check_password_hash(hashed_password, password.encode('utf-8'))):
-            credentials["_id"] = str(credentials["_id"])
-            del credentials["password"]
-            access_token = create_access_token(identity=email)
-            refresh_token = create_refresh_token(identity=email)
-            return jsonify({"credentials": credentials, "access_token": access_token, "refresh_token": refresh_token}), 200;
-        return "Invalid Email or Password", 401;
+            login_credential = control.get_credential(credentials, email)
+            return login_credential, 200
+        return "Invalid Email or Password", 401
     return "Email Does Not Exist", 401
 
 @app.route('/login-google', methods= ['GET', 'OPTIONS'])
 def login_google():
     email = request.args['email']
     google_id = request.args['googleID']
-    credentials = credentials_collection.find_one({'email': email})
+    credentials = dbcalls.DB_find_one(credentials_collection, {'email': email})
     if (credentials):
         if (bcrypt.check_password_hash(credentials['password'], google_id.encode('utf-8'))):
-            credentials["_id"] = str(credentials["_id"])
-            del credentials["password"]
-            access_token = create_access_token(identity=email)
-            refresh_token = create_refresh_token(identity=email)
-            return jsonify({"credentials": credentials, "access_token": access_token, "refresh_token": refresh_token}), 200;
-        return "Invalid Email or Password", 401;
+            login_credential = control.get_credential(credentials, email)
+            return login_credential, 200
+        return "Invalid Email or Password", 401
     return "Email Does Not Exist", 401
-
 
 @app.route('/get-default-settings', methods= ['GET', 'OPTIONS'])
 def getDefaultSettings():
     email = request.args['email']
-    credentials = credentials_collection.find_one({'email': email})
-    credentials["_id"] = str(credentials["_id"])
-    del credentials['password']
-
-    applicationSettings = application_collection.find_one({})
-    applicationSettings["_id"] = str(applicationSettings["_id"])
-    return jsonify({"credentials": credentials, "applicationSettings": applicationSettings}), 200;
+    cred_and_setting = control.get_default_setting(credentials_collection, application_collection, email)
+    return cred_and_setting, 200
 
 @app.route('/get-notes', methods= ['POST', 'OPTIONS'])
 def getNotes():
     form_data = json.loads(request.get_data())
-    arrayOfNotes = getArrayOfNotes(form_data['email'])
-    return jsonify({"notes": arrayOfNotes}), 200
-
+    notes = control.get_note(notes_collection, form_data['email'])
+    return notes, 200
 
 @app.route ('/delete-note', methods= ['DELETE', 'OPTIONS'])
 def deleteNote():
     email = request.args['email']
     noteID = request.args['noteID']
-    notes_collection.delete_one({'email': email, "_id": ObjectId(noteID)})
-    arrayOfNotes = getArrayOfNotes(email)
-    return jsonify({"notes": arrayOfNotes}), 200
-
+    dbcalls.DB_delete_one(notes_collection, {'email': email, "_id": ObjectId(noteID)})
+    notes = control.get_note(notes_collection, email)
+    return notes, 200
 
 @app.route ('/new-note', methods= ['POST', 'OPTIONS'])
 def addNote():
     email = request.args['email']
-    userData = credentials_collection.find_one({"email": email})
-    defaultNoteSettings = userData['defaultNoteSettings']['draftjsObj']
-
+    credentials = dbcalls.DB_find_one(credentials_collection, {'email': email})
+    defaultNoteSettings = credentials['defaultNoteSettings']['draftjsObj']
     baseNewNote = {
         "email": email,
         "title": None,
@@ -167,74 +152,47 @@ def addNote():
         "noteColor": userData['defaultNoteSettings']['noteColor'],
         "wordSpacing": "0.9px",
         "lineSpacing": "0.05"
-
     }
-    _id = notes_collection.insert(baseNewNote)
-    x = notes_collection.find_one({"_id": ObjectId(_id)})
-    x["_id"] = str(x["_id"])
-    return jsonify(x), 200
+    notes = control.add_note(notes_collection, baseNewNote)
+    return notes, 200
 
 @app.route ('/save-note', methods= ['POST', 'GET', 'OPTIONS'])
 def saveNote():
     form_data = json.loads(request.get_data())
-    query = {"_id": ObjectId(form_data["noteID"])}
-    new_values={"title": form_data['title'], "category": form_data['category'], "content": form_data['noteContent'], "lastUpdated": datetime.datetime.fromtimestamp(time.time()).strftime('%c')}
-    notes_collection.update_one(query, {"$set": new_values})
-    return "HI", 200
+    control.save_note(notes_collection, form_data)
+    return "SAVED", 200
 
 @app.route ('/update-default-settings', methods= ['POST', 'OPTIONS'])
 def updateDefaultSettings():
     form_data = json.loads(request.get_data())
-    email = form_data['email']
-    noteColor = form_data['noteColor']
-    fontName = form_data['fontName']
-    fontSize = form_data['fontSize']
-    draftjs = {"blocks":[{"key":"9043t","text":" ","type":"unstyled","depth":0,"inlineStyleRanges":[{"offset":0,"length":1,"style":"fontsize-" + str(fontSize)},{"offset":0,"length":1,"style":"fontfamily-" + fontName}],"entityRanges":[],"data":{}}],"entityMap":{}}
-    query = {'$set': {'defaultNoteSettings': {'noteColor': noteColor, 'fontName': fontName, 'fontSize': fontSize, 'draftjsObj': draftjs}}}
-    credentials_collection.find_one_and_update({'email': email}, query)
-    return "HI", 200
+    control.update_default_setting(credentials_collection, form_data)
+    return "Default Setting updated", 200
 
 @app.route ('/remove-tutorial', methods= ['POST', 'OPTIONS'])
 def removeTutorial():
-    query = {'$set': {'runTutorial': False}}
-    credentials_collection.find_one_and_update({'email': request.args['email']}, query)
-    return "HI", 200
+    email = request.args['email']
+    control.disable_tutorial(credentials_collection, email)
+    return "Tutorial disabled", 200
 
 @app.route ('/change-note-color', methods= ['POST', 'OPTIONS'])
 def changeNoteColor():
     noteID = ObjectId(request.args['noteID'])
     noteColor = request.args['noteColor']
     query = {'$set': {'noteColor': noteColor}}
-    print(noteID, noteColor)
-    notes_collection.find_one_and_update({'_id': noteID}, query)
-    return "HI", 200
+    dbcalls.DB_find_one_and_update(notes_collection, {'_id': noteID}, query)
+    return "Note Color Changed", 200
 
 @app.route ('/fetch-note/<note_id>', methods= ['GET', 'OPTIONS'])
 def fetchNote(note_id):
-    print("fetch")
     email = request.args['email']
     noteID = request.args['noteID']
-    print(email, noteID)
-    data = notes_collection.find_one({'email': email, "_id": ObjectId(noteID)})
-    data["_id"] = str(data["_id"])
-    return jsonify(data), 200
+    note_fetched = control.fetch_note(notes_collection, {'email': email, "_id": ObjectId(noteID)})
+    return note_fetched, 200
 
 @app.route ('/renderPDF', methods= ['GET', 'OPTIONS'])
 def renderPDF():
     noteID = request.args['noteID']
-    noteData = notes_collection.find_one({'_id': ObjectId(noteID)})
-    noteContent = noteData['content']
-    config = {
-
-    }
-    exporter = HTML(config)
-    noteHTML = exporter.render(noteContent)
-
-    pdf = pdfkit.from_string(noteHTML, False)
-
-    response = make_response(pdf)
-    response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = 'inline; filename=output.pdf'
+    response = control.render_PDF(notes_collection, noteID)
     return response
 
 @app.route ('/change-word-spacing', methods= ['POST', 'OPTIONS'])
@@ -257,21 +215,16 @@ def changeLineSpacing():
     return "HI", 200
 
 #####JWT!!!######
-
 # verify username and password, returns account details and notes
 @app.route('/get-data', methods= ['GET'])
 @jwt_required
 def getData():
     current_user = get_jwt_identity()
-    print("HERE", current_user)
-    credentials = credentials_collection.find_one({'email': current_user})
-    print(credentials)
+    credentials = dbcalls.DB_find_one(credentials_collection, {'email': current_user})
     if (credentials):
-        arrayOfNotes = getArrayOfNotes(current_user)
-        credentials["_id"] = str(credentials["_id"])
-        del credentials["password"]
-        return jsonify({"notes": arrayOfNotes, "credentials": credentials}), 200;
-    return "Invalid Email or Password", 401;
+        note_and_credential = control.get_note_and_credential(notes_collection, credentials, current_user)
+        return note_and_credential, 200
+    return "Invalid Email or Password", 401
 
 # verify username and password, returns account details and notes
 @app.route('/verify', methods= ['GET'])
@@ -279,10 +232,10 @@ def getData():
 def verify():
     current_user = get_jwt_identity()
     bool = False
-    credentials = credentials_collection.find_one({'email': current_user})
+    credentials = dbcalls.DB_find_one(credentials_collection, {'email': current_user})
     if(credentials):
         bool = True
-    return jsonify({"bool": bool}), 200;
+    return jsonify({"bool": bool}), 200
 
 #Reissue a jwt token
 @app.route('/refresh', methods=['GET'])
@@ -294,7 +247,6 @@ def refresh():
     }
     return jsonify(ret), 200
 
-
 # Endpoint for revoking the current users access token
 @app.route('/logout', methods=['GET'])
 @jwt_required
@@ -303,7 +255,6 @@ def logout():
     blacklist.add(jti)
     return jsonify({"msg": "Successfully logged out"}), 200
 
-
 # Endpoint for revoking the current users refresh token
 @app.route('/logout2', methods=['GET'])
 @jwt_refresh_token_required
@@ -311,12 +262,3 @@ def logout2():
     jti = get_raw_jwt()['jti']
     blacklist.add(jti)
     return jsonify({"msg": "Successfully logged2 out"}), 200
-
-
-def getArrayOfNotes(email):
-    userNotes = notes_collection.find({'email': email})
-    arrayOfNotes = []
-    for doc in userNotes:
-        doc["_id"] = str(doc["_id"])
-        arrayOfNotes.append(doc)
-    return arrayOfNotes
