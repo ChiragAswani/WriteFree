@@ -4,20 +4,20 @@ import { EditorState, RichUtils, convertToRaw, convertFromRaw } from 'draft-js';
 import { withRouter } from 'react-router-dom';
 import { Input, Button, Select, Tabs, Icon, Switch, Slider } from 'antd';
 import request from 'request';
-import Speech from 'react-speech';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import Alert from 'react-s-alert';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
-import { CirclePicker } from 'react-color';
-import '../css/note.css';
+import '../../css/note.css';
 import 'antd/dist/antd.css';
-import NavigationBar from "./NavigationBar";
-
-const Option = Select.Option;
-
-const TabPane = Tabs.TabPane;
+import NavigationBar from "../NavigationBar";
+import ConvertToPDF from "./ToolBarOptions/ConvertToPDF";
+import HyphenationOption from "./ToolBarOptions/Hyphenation";
+import NoteColor from "./ToolBarOptions/NoteColor";
+import SpeechOption from "./ToolBarOptions/TextToSpeech";
+import WordSpacingOption from "./ToolBarOptions/WordSpacing";
+import LineSpacingOption from "./ToolBarOptions/LineSpacing";
 
 class Note extends React.Component {
   constructor(props) {
@@ -131,9 +131,10 @@ class Note extends React.Component {
                 noteSettingsButtonHighlight: {'background-color': '#466fb5', 'color': 'white', isSelected: true},
                 toolsButtonHighlight: {'border': 'none', isSelected: false},
                 'toolbar': {'options': []},
-                'toolbarCustomButtons': [<HyphenationOption/>,
-                    <WordSpacingOption noteID={this.props.location.state.noteID} wordSpacing={this.state.wordSpacing}/>,
-                    <LineSpacingOption noteID={this.props.location.state.noteID} lineSpacing={this.state.lineSpacing}/>,
+                'toolbarCustomButtons': [
+                    <HyphenationOption hyphenate={hyphenate}/>,
+                    <WordSpacingOption setDocumentWordSpacing={setDocumentWordSpacing} noteID={this.props.location.state.noteID} wordSpacing={this.state.wordSpacing}/>,
+                    <LineSpacingOption setDocumentLineSpacing={setDocumentLineSpacing} noteID={this.props.location.state.noteID} lineSpacing={this.state.lineSpacing}/>,
                     <SpeechOption speechText={convertToRaw(this.state.editorState.getCurrentContent())}/>,
                     <NoteColor noteColor={this.state.noteColor} noteID={this.props.location.state.noteID}/>]
             })
@@ -295,177 +296,5 @@ function hyphenate(child) {
         str += restored[restored.length - 1];
     }
 }
-
-const SpeechOption = (props) => {
-    function speechNote(noteContent) {
-        var text = '';
-        for (var line in noteContent.blocks){
-            text = text + (noteContent.blocks[line].text) + ". "
-        }
-        return text
-    }
-    return (
-        <Speech
-            text={speechNote(props.speechText)}
-            displayText={"Text to Speech"}
-            textAsButton={true}
-            voice="Google UK English Female" />
-    );
-};
-
-class WordSpacingOption extends React.Component {
-    constructor(props) {
-        super(props)
-    }
-
-
-    changeWordSpacing(value) {
-        const obj = {'noteID': this.props.noteID, 'wordSpacing': value}
-        const changeWordSpacing = {
-            method: 'POST',
-            url: 'http://127.0.0.1:5000/change-word-spacing',
-            body: JSON.stringify(obj),
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        };
-        request(changeWordSpacing, (error, response, body) => {
-            setDocumentWordSpacing(value);
-        });
-    }
-
-    render() {
-        const marks = {
-            0.9: '0.0px',
-            1: 'normal',
-            10: '10px',
-            20: '20px',
-            50: '50px',
-        };
-        return (
-            <div>
-                <h4>Word Spacing</h4>
-                <Slider style={{'width': 500}} marks={marks} step={null} defaultValue={1}/>
-                <Select
-                    defaultValue={this.props.wordSpacing}
-                    style={{width: 150}} max={51}
-                    onChange={(value) => this.changeWordSpacing(value)}
-                >
-                    <Option value="0.9px" disabled>Word Spacing</Option>
-                    <Option value="normal">Default</Option>
-                    <Option value="10px">10px</Option>
-                    <Option value="20px">20px</Option>
-                    <Option value="50px">50px</Option>
-                </Select>
-            </div>
-        );
-    }
-}
-
-class LineSpacingOption extends React.Component {
-    constructor(props){
-        super(props)
-    }
-
-    changeLineSpacing(value) {
-        const obj = {'noteID': this.props.noteID, 'lineSpacing': value}
-        const changeLineSpacing = {
-            method: 'POST',
-            url: 'http://127.0.0.1:5000/change-line-spacing',
-            body: JSON.stringify(obj),
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        };
-        request(changeLineSpacing, (error, response, body) => {
-            setDocumentLineSpacing(value);
-        });
-
-    }
-
-    render() {
-        const marks = {
-            0.06: 'Default',
-            0.6: '1.6',
-            1: '2',
-            4: '5',
-        };
-        return (
-            <div>
-                <h4>Line Spacing</h4>
-                <Slider style={{ width: 400, margin: 50 }} marks={marks} step={null} defaultValue={0.06} />
-                <Select defaultValue={this.props.lineSpacing} style={{ width: 150 }} onChange={(value) => this.changeLineSpacing(value)}>
-                    <Option value="0.05" disabled>Line Spacing</Option>
-                    <Option value="0.06">Default</Option>
-                    <Option value="0.6">1.6</Option>
-                    <Option value="1">2</Option>
-                    <Option value="4">5</Option>
-                </Select>
-
-            </div>
-        );
-    }
-}
-class HyphenationOption extends React.Component {
-    constructor(props) {
-        super(props)
-    }
-    render() {
-        return (
-            <div>
-                <Switch checkedChildren="On" unCheckedChildren="Off" onChange={(child) => hyphenate(child)}/>
-            </div>
-        );
-    }
-}
-
-class ConvertToPDF extends React.Component {
-    constructor(props){
-        super(props)
-    }
-
-    renderPDF(noteID){
-        window.open("http://www.localhost:5000/renderPDF?noteID="+noteID);
-    }
-
-    render() {
-        return (
-            <Button className={'convert-to-pdf'} onClick={() => this.renderPDF(this.props.noteID)}>Convert to PDF</Button>
-        );
-    }
-}
-
-class NoteColor extends React.Component {
-    constructor(props){
-        super(props)
-        this.state={}
-    }
-
-    componentDidMount(){
-        this.setState({noteColor: this.props.noteColor})
-    }
-
-    changeNoteColor(noteColor) {
-        const noteID = this.props.noteID
-        var changeNoteColor = {
-            method: 'POST',
-            url: 'http://127.0.0.1:5000/change-note-color',
-            qs: {noteID, noteColor: noteColor.hex},
-            headers: {'Content-Type': 'application/x-www-form-urlencoded' }
-        };
-        request(changeNoteColor, function (error, response, body) {
-            this.setState({ noteColor: noteColor.hex });
-        }.bind(this));
-    };
-
-    render() {
-        return (
-            <div>
-                <CirclePicker
-                    color={this.state.noteColor}
-                    onChangeComplete={color => this.changeNoteColor(color)}
-                    colors={["#FCDFD7", "#FCF9DA", "#D4ECDC", "#E1EBF5", "#F0E5EB"]}
-                />
-            </div>
-        );
-    }
-}
-
 
 export default withRouter(Note);
