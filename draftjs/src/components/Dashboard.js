@@ -183,8 +183,6 @@ class Dashboard extends React.Component {
         }
 
     }.bind(this));
-
-
   }
 
   render() {

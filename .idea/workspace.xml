@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="277c3bf4-190c-4fc0-8628-b299b7861d4d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/draftjs/src/components/DefaultSettings.js" beforeDir="false" afterPath="$PROJECT_DIR$/draftjs/src/components/DefaultSettings.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/draftjs/src/components/Note.js" beforeDir="false" afterPath="$PROJECT_DIR$/draftjs/src/components/Note.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/draftjs/src/components/Walkthrough.js" beforeDir="false" afterPath="$PROJECT_DIR$/draftjs/src/components/Walkthrough.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -68,22 +65,22 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="js" value="856" />
+          <entry key="js" value="2753" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JavaScript" value="856" />
+          <entry key="JavaScript" value="2753" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="js" value="6" />
+          <entry key="js" value="7" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="JavaScript" value="6" />
+          <entry key="JavaScript" value="7" />
         </counts>
       </usages-collector>
     </session>
@@ -91,19 +88,43 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/draftjs/src/css/dashboard.css">
+        <entry file="file://$PROJECT_DIR$/draftjs/src/components/Dashboard.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" column="7" selection-start-line="5" selection-start-column="7" selection-end-line="5" selection-end-column="7" />
+            <state relative-caret-position="-1176">
+              <caret line="169" column="5" lean-forward="true" selection-start-line="169" selection-start-column="5" selection-end-line="169" selection-end-column="5" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/draftjs/src/components/CreateAccount.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="37">
+              <caret line="71" column="49" selection-start-line="71" selection-start-column="34" selection-end-line="71" selection-end-column="49" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/draftjs/src/components/Dashboard.js">
+        <entry file="file://$PROJECT_DIR$/draftjs/src/components/Note.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="37">
-              <caret line="175" column="57" selection-start-line="175" selection-start-column="57" selection-end-line="175" selection-end-column="57" />
+            <state relative-caret-position="211">
+              <caret line="223" column="34" selection-start-line="223" selection-start-column="34" selection-end-line="223" selection-end-column="34" />
+              <folding>
+                <element signature="e#21#47#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/draftjs/src/components/DefaultSettings.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-304">
+              <caret line="17" column="14" selection-start-line="17" selection-start-column="14" selection-end-line="17" selection-end-column="14" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -123,15 +144,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>setS</find>
-      <find>new-</find>
-      <find>onChange</find>
-      <find>editorState</find>
-      <find>setState</find>
-      <find>console</find>
-      <find>gotTo</find>
-      <find>fontName</find>
-      <find>spot</find>
       <find>unstyl</find>
       <find>GoTo</find>
       <find>save defa</find>
@@ -153,6 +165,15 @@
       <find>PDF</find>
       <find>save defaul</find>
       <find>handleJelly</find>
+      <find>switch</find>
+      <find>r</find>
+      <find>default-setting</find>
+      <find>console.log</find>
+      <find>dysle</find>
+      <find>hyphenate</find>
+      <find>convertFromRaw</find>
+      <find>convertToRaw</find>
+      <find>FromRaw</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -168,9 +189,9 @@
         <option value="$PROJECT_DIR$/draftjs/src/components/Walkthrough.js" />
         <option value="$PROJECT_DIR$/draftjs/src/components/CreateAccount.js" />
         <option value="$PROJECT_DIR$/draftjs/src/components/DefaultSettings.js" />
-        <option value="$PROJECT_DIR$/draftjs/src/components/Note.js" />
         <option value="$PROJECT_DIR$/draftjs/src/css/dashboard.css" />
         <option value="$PROJECT_DIR$/draftjs/src/components/Dashboard.js" />
+        <option value="$PROJECT_DIR$/draftjs/src/components/Note.js" />
       </list>
     </option>
   </component>
@@ -287,13 +308,22 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="53861000" />
+    <option name="totallyTimeSpent" value="67517000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="729" extended-state="0" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24861" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16192994" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -303,11 +333,11 @@
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32907802" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Version Control" order="8" weight="0.32907802" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50039715" side_tool="true" weight="0.2354788" />
-      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49960285" visible="true" weight="0.2354788" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" sideWeight="0.49960285" visible="true" weight="0.235461" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -354,20 +384,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/draftjs/src/components/DefaultSettings.js">
+    <entry file="file://$PROJECT_DIR$/draftjs/src/components/GoToDashboardButton.js" />
+    <entry file="file://$PROJECT_DIR$/draftjs/src/css/dashboard.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="45" column="117" selection-start-line="45" selection-start-column="117" selection-end-line="45" selection-end-column="117" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="75">
+          <caret line="15" column="7" selection-start-line="15" selection-start-column="7" selection-end-line="15" selection-end-column="7" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/draftjs/src/components/GoToDashboardButton.js">
+    <entry file="file://$PROJECT_DIR$/draftjs/src/components/Dashboard.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-35">
-          <caret line="15" column="8" lean-forward="true" selection-start-line="15" selection-start-column="8" selection-end-line="35" selection-end-column="22" />
+        <state relative-caret-position="-1176">
+          <caret line="169" column="5" lean-forward="true" selection-start-line="169" selection-start-column="5" selection-end-line="169" selection-end-column="5" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
@@ -376,34 +404,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/draftjs/src/components/CreateAccount.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="44" column="52" selection-start-line="44" selection-start-column="52" selection-end-line="44" selection-end-column="52" />
+        <state relative-caret-position="37">
+          <caret line="71" column="49" selection-start-line="71" selection-start-column="34" selection-end-line="71" selection-end-column="49" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/draftjs/src/components/Note.js">
+    <entry file="file://$PROJECT_DIR$/draftjs/src/components/DefaultSettings.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="104" column="33" selection-start-line="104" selection-start-column="33" selection-end-line="104" selection-end-column="33" />
+        <state relative-caret-position="-304">
+          <caret line="17" column="14" selection-start-line="17" selection-start-column="14" selection-end-line="17" selection-end-column="14" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/draftjs/src/css/dashboard.css">
+    <entry file="file://$PROJECT_DIR$/draftjs/src/components/Note.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="7" selection-start-line="5" selection-start-column="7" selection-end-line="5" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/draftjs/src/components/Dashboard.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="37">
-          <caret line="175" column="57" selection-start-line="175" selection-start-column="57" selection-end-line="175" selection-end-column="57" />
+        <state relative-caret-position="211">
+          <caret line="223" column="34" selection-start-line="223" selection-start-column="34" selection-end-line="223" selection-end-column="34" />
           <folding>
-            <element signature="e#0#26#0" expanded="true" />
+            <element signature="e#21#47#0" expanded="true" />
           </folding>
         </state>
       </provider>

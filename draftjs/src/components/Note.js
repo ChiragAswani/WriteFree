@@ -2,7 +2,7 @@
 import React from 'react';
 import { EditorState, RichUtils, convertToRaw, convertFromRaw } from 'draft-js';
 import { withRouter } from 'react-router-dom';
-import { Input, Button, Select, Tabs, Icon, Slider } from 'antd';
+import { Input, Button, Select, Tabs, Icon, Switch } from 'antd';
 import request from 'request';
 import Speech from 'react-speech';
 import { Editor } from 'react-draft-wysiwyg';
@@ -30,6 +30,7 @@ class Note extends React.Component {
         toolsButtonHighlight: {'background-color': '#466fb5', 'color': 'white', isSelected: true},
         noteSettingsButtonHighlight: {'border': 'none', isSelected: false}
     };
+    hyphenate = hyphenate.bind(this)
     this.focus = () => this.refs.editor.focus();
     this.onChange = editorState => this.setState({ editorState });
     this.handleKeyCommand = command => this._handleKeyCommand(command);
@@ -44,7 +45,7 @@ class Note extends React.Component {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     };
     request(fetchNote, function (error, response, body) {
-        var parsedData = JSON.parse(body)
+        var parsedData = JSON.parse(body);
         if (parsedData.noteSettings){
             setDocumentWordSpacing(parsedData.wordSpacing);
             setDocumentLineSpacing(parsedData.lineSpacing);
@@ -57,7 +58,7 @@ class Note extends React.Component {
             });
         }
         if (parsedData.title){
-            let contentState = parsedData.content
+            let contentState = parsedData.content;
             this.setState({
                 editorState: EditorState.createWithContent(convertFromRaw((contentState))),
                 noteTitle: parsedData.title,
@@ -78,7 +79,6 @@ class Note extends React.Component {
         }
         return false;
     }
-
 
     saveNote(title, category, noteID, noteContent){
         if(!title){
@@ -130,10 +130,8 @@ class Note extends React.Component {
             this.setState({
                 noteSettingsButtonHighlight: {'background-color': '#466fb5', 'color': 'white', isSelected: true},
                 toolsButtonHighlight: {'border': 'none', isSelected: false},
-                'toolbar': {'options': []}, 'toolbarCustomButtons': [<WordSpacingOption noteID={this.props.location.state.noteID} wordSpacing={this.state.wordSpacing} />,  <LineSpacingOption noteID={this.props.location.state.noteID} lineSpacing={this.state.lineSpacing}/>, <SpeechOption speechText={convertToRaw(this.state.editorState.getCurrentContent())}/>, <NoteColor noteColor={this.state.noteColor} noteID={this.props.location.state.noteID}/>]
+                'toolbar': {'options': []}, 'toolbarCustomButtons': [<HyphenationOption/>, <WordSpacingOption noteID={this.props.location.state.noteID} wordSpacing={this.state.wordSpacing} />,  <LineSpacingOption noteID={this.props.location.state.noteID} lineSpacing={this.state.lineSpacing}/>, <SpeechOption speechText={convertToRaw(this.state.editorState.getCurrentContent())}/>, <NoteColor noteColor={this.state.noteColor} noteID={this.props.location.state.noteID}/>]
             })
-        }
-
     }
 
     changeNoteCategory(noteCategory){
@@ -144,7 +142,7 @@ class Note extends React.Component {
         }
 
     }
-
+      
     _handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             console.log('do validate');
@@ -179,7 +177,6 @@ class Note extends React.Component {
         }
 
     }
-
     render() {
         const {editorState} = this.state;
         document.body.style.backgroundColor = "#f5f5f5"
@@ -232,16 +229,66 @@ class Note extends React.Component {
     }
 }
 
-function setDocumentLineSpacing(lineSpacing) {
-    var textfiled = document.getElementsByClassName('DraftEditor-root');
-    textfiled[0].style.lineHeight = lineSpacing;
-}
-
 function setDocumentWordSpacing(wordSpacing) {
     var textfiled = document.getElementsByClassName('DraftEditor-root');
     textfiled[0].style.wordSpacing = wordSpacing;
 }
 
+function setDocumentLineSpacing(lineSpacing) {
+    var textfiled = document.getElementsByClassName('DraftEditor-root');
+    textfiled[0].style.lineHeight = lineSpacing;
+}
+
+// Function for hyphenating the contents in text editor, binded with Note class.
+function hyphenate(child) {
+    // hyphenation on
+    var newContents = convertToRaw(this.state.editorState.getCurrentContent())
+    console.log(newContents)
+    var hyphenation = "";
+    // enable hyphenation
+    if (child) {
+        var Hypher = require('hypher'),
+            english = require('hyphenation.en-us'),
+            h = new Hypher(english);
+        for (var line = 0; line < newContents.blocks.length; line++) {
+            //counts the number of dots added
+            var numberOfDots = 0;
+            //parse the line into words by spaces
+            var oneLine = newContents.blocks[line]['text'].split(" ");
+            var hyphenatedLine = "";
+            //hyphenate each work
+            for (var i = 0; i < oneLine.length; i++) {
+                var hyphenatedWord = h.hyphenate(oneLine[i]);
+                for (var j = 0; j < hyphenatedWord.length - 1; j++) {
+                    // add unicode dot for each syllables
+                    hyphenatedLine += hyphenatedWord[j] + "\u2022";
+                    numberOfDots += 1;
+                }
+                hyphenatedLine += hyphenatedWord[hyphenatedWord.length - 1] + " ";
+            }
+            newContents.blocks[line]['text'] = hyphenatedLine;
+            //change inline css style for the extra dot characters
+            newContents.blocks[line]['inlineStyleRanges'][0]['length'] += numberOfDots;
+            newContents.blocks[line]['inlineStyleRanges'][1]['length'] += numberOfDots;
+        }
+        //convert to  note content
+        console.log(newContents);
+        this.setState({
+            editorState: EditorState.createWithContent(convertFromRaw((newContents))),
+        });
+    }
+    //eliminate the splitter
+    else
+    {
+        console.log();
+        var restored = hyphenation.split("\u2022")
+        var str = "";
+        for (var i = 0; i < restored.length - 1; i++) {
+            str += restored[i] + " ";
+        }
+        str += restored[restored.length - 1];
+    }
+}
 
 const SpeechOption = (props) => {
     function speechNote(noteContent) {
@@ -301,7 +348,6 @@ class WordSpacingOption extends React.Component {
             </div>
         );
     }
-}
 
 class LineSpacingOption extends React.Component {
     constructor(props){
@@ -341,6 +387,18 @@ class LineSpacingOption extends React.Component {
                     <Option value="4">5</Option>
                 </Select>
 
+            </div>
+        );
+    }
+}
+class HyphenationOption extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+    render() {
+        return (
+            <div>
+                <Switch checkedChildren="On" unCheckedChildren="Off" onChange={(child) => hyphenate(child)}/>
             </div>
         );
     }
