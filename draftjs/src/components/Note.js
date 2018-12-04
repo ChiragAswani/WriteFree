@@ -2,7 +2,7 @@
 import React from 'react';
 import { EditorState, RichUtils, convertToRaw, convertFromRaw } from 'draft-js';
 import { withRouter } from 'react-router-dom';
-import { Input, Button, Select, Tabs, Icon, Switch } from 'antd';
+import { Input, Button, Select, Tabs, Icon, Switch, Slider } from 'antd';
 import request from 'request';
 import Speech from 'react-speech';
 import { Editor } from 'react-draft-wysiwyg';
@@ -126,12 +126,18 @@ class Note extends React.Component {
                 'toolbar': {}, 'toolbarCustomButtons': []
             })
         }
-        else if (key === "noteSettings"){
+        else if (key === "noteSettings") {
             this.setState({
                 noteSettingsButtonHighlight: {'background-color': '#466fb5', 'color': 'white', isSelected: true},
                 toolsButtonHighlight: {'border': 'none', isSelected: false},
-                'toolbar': {'options': []}, 'toolbarCustomButtons': [<HyphenationOption/>, <WordSpacingOption noteID={this.props.location.state.noteID} wordSpacing={this.state.wordSpacing} />,  <LineSpacingOption noteID={this.props.location.state.noteID} lineSpacing={this.state.lineSpacing}/>, <SpeechOption speechText={convertToRaw(this.state.editorState.getCurrentContent())}/>, <NoteColor noteColor={this.state.noteColor} noteID={this.props.location.state.noteID}/>]
+                'toolbar': {'options': []},
+                'toolbarCustomButtons': [<HyphenationOption/>,
+                    <WordSpacingOption noteID={this.props.location.state.noteID} wordSpacing={this.state.wordSpacing}/>,
+                    <LineSpacingOption noteID={this.props.location.state.noteID} lineSpacing={this.state.lineSpacing}/>,
+                    <SpeechOption speechText={convertToRaw(this.state.editorState.getCurrentContent())}/>,
+                    <NoteColor noteColor={this.state.noteColor} noteID={this.props.location.state.noteID}/>]
             })
+        }
     }
 
     changeNoteCategory(noteCategory){
@@ -142,7 +148,7 @@ class Note extends React.Component {
         }
 
     }
-      
+
     _handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             console.log('do validate');
@@ -308,7 +314,7 @@ const SpeechOption = (props) => {
 };
 
 class WordSpacingOption extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props)
     }
 
@@ -319,7 +325,7 @@ class WordSpacingOption extends React.Component {
             method: 'POST',
             url: 'http://127.0.0.1:5000/change-word-spacing',
             body: JSON.stringify(obj),
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         };
         request(changeWordSpacing, (error, response, body) => {
             setDocumentWordSpacing(value);
@@ -337,8 +343,12 @@ class WordSpacingOption extends React.Component {
         return (
             <div>
                 <h4>Word Spacing</h4>
-                <Slider style={{'width': 500}} marks={marks} step={null} defaultValue={1} />
-                <Select defaultValue={this.props.wordSpacing} style={{ width: 150 }} max={51} onChange={(value) => this.changeWordSpacing(value)}>
+                <Slider style={{'width': 500}} marks={marks} step={null} defaultValue={1}/>
+                <Select
+                    defaultValue={this.props.wordSpacing}
+                    style={{width: 150}} max={51}
+                    onChange={(value) => this.changeWordSpacing(value)}
+                >
                     <Option value="0.9px" disabled>Word Spacing</Option>
                     <Option value="normal">Default</Option>
                     <Option value="10px">10px</Option>
@@ -348,6 +358,7 @@ class WordSpacingOption extends React.Component {
             </div>
         );
     }
+}
 
 class LineSpacingOption extends React.Component {
     constructor(props){
