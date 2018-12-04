@@ -11,7 +11,6 @@ from flask_bcrypt import Bcrypt
 import pdfkit
 import datetime
 from draftjs_exporter.html import HTML
-
 import MongoDBCalls as dbcalls
 import control as control
 
