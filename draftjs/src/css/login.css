@@ -1,0 +1,58 @@
+@font-face {
+    font-family: brown-bold;
+    src: url(../fonts/Brown/Brown-Bold.otf);
+}
+
+@font-face {
+    font-family: brown-regular;
+    src: url(../fonts/Brown/Brown-Regular.otf);
+}
+
+.login-center {
+    padding: 20px;
+    width: 100vw;
+    height: 100vh;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.login-center-center {
+    text-align: center;
+}
+
+.sign-in{
+    font-family: brown-bold;
+    font-size: 28px;
+    color: #466fb5;
+    padding-bottom: 40px;
+    margin: 0px;
+}
+
+.email-input{
+    border-radius: 15px !important;
+    height: 30px !important;
+    border: none;
+    background: #d1dceb;
+
+}
+
+.email-input::placeholder {
+    color: #466fb5;
+}
+
+.password-input{
+    border-radius: 15px !important;
+    height: 30px !important;
+    border: none;
+    background: #d1dceb;
+    margin-top: 20px;
+}
+
+.password-input::placeholder {
+    color: #466fb5;
+}
+
+.forgot-password{
+    padding-top: 20px;
+    text-align: right;
+}

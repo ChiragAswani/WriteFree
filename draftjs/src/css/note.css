@@ -11,7 +11,7 @@
 
 .RichEditor-root {
     background: #fff;
-    border: 1px solid #ddd;
+    border: none;
     font-family: 'Georgia', serif;
     font-size: 14px;
     padding-top: 0px;
@@ -83,12 +83,13 @@
 
 .rdw-editor-main{
     margin-top: 32px;
-    margin-left: 200px;
-    margin-right: 200px;
-
+    margin-left: 10%;
+    margin-right: 10%;
     height: 700px;
     border-radius: 0px !important;
     padding: 10px;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.15);
+    border: 1px solid #cccccc;
 }
 ::-webkit-scrollbar {
     display: none;
@@ -164,6 +165,19 @@
 
 .note-category-icon{
     padding-left: 30px;
+}
+
+.rdw-editor-toolbar{
+    padding-right: 60px;
+    padding-left: 60px;
+    border: none;
+    padding-top: 12.5px;
+    padding-bottom: 12.5px;
+}
+
+.tab-buttons{
+    font-family: brown-bold;
+    font-size: 14px;
 }
 
 
