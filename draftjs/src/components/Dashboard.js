@@ -156,6 +156,7 @@ class Dashboard extends React.Component {
   }
 
   sortNotes(option) {
+      console.log("OPTION HERE", option)
     const sortedNotes = mergeSort(this.state.notes, option);
     this.setState({ notes: sortedNotes });
   }
@@ -173,7 +174,8 @@ class Dashboard extends React.Component {
         if (query.trim().length !== 0){
             const filteredNotes = [];
             for (let note in parsedData.notes){
-                if (parsedData.notes[note].title.includes(query)){
+                if (parsedData.notes[note].title.includes(query) ||
+                    parsedData.notes[note].category.includes(query)){
                     filteredNotes.push(parsedData.notes[note])
                 }
             }
@@ -202,7 +204,6 @@ class Dashboard extends React.Component {
                        <Icon type="filter" theme="filled" style={{'color': '#466fb5'}}/>
                     </Dropdown>
                     <Switch checkedChildren="table" unCheckedChildren="card" onChange={child => this.switchView(child)} />
-
                     <Icon type="setting" theme="filled" onClick={() => this.props.history.push('/default-settings')} />
                     <Button type="primary" className="generateNewNote" onClick={() => this.createNote(localStorage.getItem('email'))}>New Document</Button>
                 </div>

@@ -12,12 +12,21 @@ export function handleAccountError(errorMessage) {
 function merge(left, right, option) {
   const result = [];
   while (left.length && right.length) {
-    if (left[option] >= right[option]) {
-      result.push(left.shift());
-    } else {
-      result.push(right.shift());
-    }
+      if (option === 'lastUpdated'){
+          if (Date.parse(left[0][option]) >= Date.parse(right[0][option])) {
+              result.push(left.shift());
+          } else {
+              result.push(right.shift());
+          }
+      } else {
+          if (left[0][option].charCodeAt(0) <= right[0][option].charCodeAt(0)) {
+              result.push(left.shift());
+          } else {
+              result.push(right.shift());
+          }
+      }
   }
+
   while (left.length) {
     result.push(left.shift());
   }
@@ -35,5 +44,5 @@ export function mergeSort(arr, option) {
   const left = arr.slice(0, middle);
   const right = arr.slice(middle, arr.length);
 
-  return merge(mergeSort(left), mergeSort(right), option);
+  return merge(mergeSort(left, option), mergeSort(right, option), option);
 }
