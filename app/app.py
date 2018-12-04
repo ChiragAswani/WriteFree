@@ -149,7 +149,7 @@ def addNote():
         "noteSettings": defaultNoteSettings,
         "lastUpdated": datetime.datetime.fromtimestamp(time.time()).strftime('%c'),
         "category": None,
-        "noteColor": userData['defaultNoteSettings']['noteColor'],
+        "noteColor": credentials['defaultNoteSettings']['noteColor'],
         "wordSpacing": "0.9px",
         "lineSpacing": "0.05"
     }
