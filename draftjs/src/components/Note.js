@@ -26,14 +26,14 @@ class Note extends React.Component {
       editorState: EditorState.createEmpty(),
       noteCategory: undefined,
       noteTitle: undefined,
-        noteCategoryIconColor: undefined
+        noteCategoryIconColor: undefined,
+        toolsButtonHighlight: {'background-color': '#466fb5', 'color': 'white', isSelected: true},
+        noteSettingsButtonHighlight: {'border': 'none', isSelected: false}
     };
     hyphenate = hyphenate.bind(this)
     this.focus = () => this.refs.editor.focus();
     this.onChange = editorState => this.setState({ editorState });
     this.handleKeyCommand = command => this._handleKeyCommand(command);
-    this.toggleBlockType = type => this._toggleBlockType(type);
-    this.toggleInlineStyle = style => this._toggleInlineStyle(style);
     this.changeToolBar = this.changeToolBar.bind(this);
   }
   componentDidMount() {
@@ -47,10 +47,14 @@ class Note extends React.Component {
     request(fetchNote, function (error, response, body) {
         var parsedData = JSON.parse(body);
         if (parsedData.noteSettings){
-            let contentState = parsedData.noteSettings;
+            setDocumentWordSpacing(parsedData.wordSpacing);
+            setDocumentLineSpacing(parsedData.lineSpacing);
+            let contentState = parsedData.noteSettings
             this.setState({
                 editorState: EditorState.createWithContent(convertFromRaw((contentState))),
-                noteColor: parsedData.noteColor
+                noteColor: parsedData.noteColor,
+                wordSpacing: parsedData.wordSpacing,
+                lineSpacing: parsedData.lineSpacing
             });
         }
         if (parsedData.title){
@@ -74,24 +78,6 @@ class Note extends React.Component {
             return true;
         }
         return false;
-    }
-
-    _toggleBlockType(blockType) {
-        this.onChange(
-            RichUtils.toggleBlockType(
-                this.state.editorState,
-                blockType
-            )
-        );
-    }
-
-    _toggleInlineStyle(inlineStyle) {
-        this.onChange(
-            RichUtils.toggleInlineStyle(
-                this.state.editorState,
-                inlineStyle
-            )
-        );
     }
 
     saveNote(title, category, noteID, noteContent){
@@ -133,15 +119,19 @@ class Note extends React.Component {
         });
     }
     changeToolBar(key){
-        if (key === "basicFeatures"){
-            this.setState({'toolbar': {}, 'toolbarCustomButtons': []})
+        if (key === "tools"){
+            this.setState({
+                toolsButtonHighlight: {'background-color': '#466fb5', 'color': 'white', isSelected: true},
+                noteSettingsButtonHighlight: {'border': 'none', isSelected: false},
+                'toolbar': {}, 'toolbarCustomButtons': []
+            })
         }
-        else if (key === "dyslexicFeatures"){
-            this.setState({'toolbar': {'options': []}, 'toolbarCustomButtons': [<WordSpacingOption/>, <LineSpacingOption/>,
-                    <HyphenationOption/>,
-                    <SpeechOption speechText={convertToRaw(this.state.editorState.getCurrentContent())}/>,
-                    <NoteColor noteColor={this.state.noteColor} noteID={this.props.location.state.noteID}/>]})
-        }
+        else if (key === "noteSettings"){
+            this.setState({
+                noteSettingsButtonHighlight: {'background-color': '#466fb5', 'color': 'white', isSelected: true},
+                toolsButtonHighlight: {'border': 'none', isSelected: false},
+                'toolbar': {'options': []}, 'toolbarCustomButtons': [<HyphenationOption/>, <WordSpacingOption noteID={this.props.location.state.noteID} wordSpacing={this.state.wordSpacing} />,  <LineSpacingOption noteID={this.props.location.state.noteID} lineSpacing={this.state.lineSpacing}/>, <SpeechOption speechText={convertToRaw(this.state.editorState.getCurrentContent())}/>, <NoteColor noteColor={this.state.noteColor} noteID={this.props.location.state.noteID}/>]
+            })
     }
 
     changeNoteCategory(noteCategory){
@@ -152,6 +142,41 @@ class Note extends React.Component {
         }
 
     }
+      
+    _handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            console.log('do validate');
+        }
+    }
+
+    showSelectedButton(buttonType){
+      if (buttonType === "tools"){
+          if (!this.state.toolsButtonHighlight.isSelected){
+              this.setState({'toolsButtonHighlight': {'background-color': '#466fb5', 'color': 'white', isSelected: false}})
+          }
+      }
+        if (buttonType === "noteSettings"){
+            if (!this.state.noteSettingsButtonHighlight.isSelected){
+                this.setState({'noteSettingsButtonHighlight': {'background-color': '#466fb5', 'color': 'white', isSelected: false}})
+            }
+        }
+
+    }
+
+    hideSelectedButton(buttonType){
+        if (buttonType === "tools"){
+            if (!this.state.toolsButtonHighlight.isSelected){
+                this.setState({'toolsButtonHighlight': {'border': 'none', isSelected: false}})
+            }
+        }
+        if (buttonType === "noteSettings"){
+            if (!this.state.noteSettingsButtonHighlight.isSelected){
+                this.setState({'noteSettingsButtonHighlight': {'border': 'none', isSelected: false}})
+            }
+
+        }
+
+    }
     render() {
         const {editorState} = this.state;
         document.body.style.backgroundColor = "#f5f5f5"
@@ -159,15 +184,30 @@ class Note extends React.Component {
             <div style={{background: "#f5f5f5"}}>
                 <NavigationBar/>
                 <div className={"add-title"}>
-                    <Input className={"enter-title-here"} placeholder={"Untitled"} value={this.state.noteTitle} onChange={noteTitle => this.setState({noteTitle: noteTitle.target.value})}></Input>
+                    <Input className={"enter-title-here"} placeholder={"Untitled"} onKeyPress={this._handleKeyPress} value={this.state.noteTitle} onChange={noteTitle => this.setState({noteTitle: noteTitle.target.value})}></Input>
                     <Icon type="book" theme="filled" style={{'color': this.state.noteCategoryIconColor}} className={"note-category-icon"} />
                     <Input className={"enter-category-here"} placeholder={"Category"} value={this.state.noteCategory} onChange={noteCategory => this.changeNoteCategory(noteCategory.target.value)}></Input>
                     <ConvertToPDF/>
                 </div>
-                    <Tabs animated={false} defaultActiveKey="1" onChange={this.changeToolBar} className={"tab-bar"}>
-                        <TabPane tab="Tools" key="basicFeatures"/>
-                        <TabPane tab="Note Settings" key="dyslexicFeatures"/>
-                    </Tabs>
+                <div className={"tab-bar"}>
+                    <Button
+                        style={this.state.toolsButtonHighlight}
+                        className={"tab-buttons"}
+                        onMouseEnter={() => this.showSelectedButton("tools")}
+                        onMouseLeave={() => this.hideSelectedButton("tools")}
+                        onClick={() => this.changeToolBar("tools")}>
+                        Tools
+                    </Button>
+                    <Button
+                        style={this.state.noteSettingsButtonHighlight}
+                        className={"tab-buttons"}
+                        onMouseEnter={() => this.showSelectedButton("noteSettings")}
+                        onMouseLeave={() => this.hideSelectedButton("noteSettings")}
+                        onClick={() => this.changeToolBar("noteSettings")}>
+                        Note Settings
+                    </Button>
+                </div>
+
                 <Alert stack={true} timeout={3000} />
             <div className="RichEditor-root" id={"textEdiotr"}>
                 <Editor
@@ -187,6 +227,16 @@ class Note extends React.Component {
             </div>
         );
     }
+}
+
+function setDocumentWordSpacing(wordSpacing) {
+    var textfiled = document.getElementsByClassName('DraftEditor-root');
+    textfiled[0].style.wordSpacing = wordSpacing;
+}
+
+function setDocumentLineSpacing(lineSpacing) {
+    var textfiled = document.getElementsByClassName('DraftEditor-root');
+    textfiled[0].style.lineHeight = lineSpacing;
 }
 
 // Function for hyphenating the contents in text editor, binded with Note class.
@@ -240,106 +290,6 @@ function hyphenate(child) {
     }
 }
 
-// Custom overrides for "code" style.
-const styleMap = {
-    CODE: {
-        backgroundColor: 'rgba(0, 0, 0, 0.05)',
-        fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
-        fontSize: 60,
-        padding: 2,
-    },
-};
-
-function getBlockStyle(block) {
-    switch (block.getType()) {
-        case 'blockquote': return 'RichEditor-blockquote';
-        default: return null;
-    }
-}
-
-class StyleButton extends React.Component {
-    constructor() {
-        super();
-        this.onToggle = (e) => {
-            e.preventDefault();
-            this.props.onToggle(this.props.style);
-        };
-    }
-
-    render() {
-        let className = 'RichEditor-styleButton';
-        if (this.props.active) {
-            className += ' RichEditor-activeButton';
-        }
-
-        return (
-            <span className={className} onMouseDown={this.onToggle}>
-        {this.props.label}
-      </span>
-        );
-    }
-}
-
-const BLOCK_TYPES = [
-    {label: 'H1', style: 'header-one'},
-    {label: 'H2', style: 'header-two'},
-    {label: 'H3', style: 'header-three'},
-    {label: 'H4', style: 'header-four'},
-    {label: 'H5', style: 'header-five'},
-    {label: 'H6', style: 'header-six'},
-    {label: 'Blockquote', style: 'blockquote'},
-    {label: 'UL', style: 'unordered-list-item'},
-    {label: 'OL', style: 'ordered-list-item'},
-    {label: 'Code Block', style: 'code-block'},
-];
-
-const BlockStyleControls = (props) => {
-    const {editorState} = props;
-    const selection = editorState.getSelection();
-    const blockType = editorState
-        .getCurrentContent()
-        .getBlockForKey(selection.getStartKey())
-        .getType();
-
-    return (
-        <div className="RichEditor-controls">
-            {BLOCK_TYPES.map((type) =>
-                <StyleButton
-                    key={type.label}
-                    active={type.style === blockType}
-                    label={type.label}
-                    onToggle={props.onToggle}
-                    style={type.style}
-                />
-            )}
-        </div>
-    );
-};
-
-var INLINE_STYLES = [
-    {label: 'Bold', style: 'BOLD'},
-    {label: 'Italic', style: 'ITALIC'},
-    {label: 'Underline', style: 'UNDERLINE'},
-    {label: 'Monospace', style: 'CODE'},
-];
-
-const InlineStyleControls = (props) => {
-    var currentStyle = props.editorState.getCurrentInlineStyle();
-    return (
-        <div className="RichEditor-controls">
-            {INLINE_STYLES.map(type =>
-                <StyleButton
-                    key={type.label}
-                    active={currentStyle.has(type.style)}
-                    label={type.label}
-                    onToggle={props.onToggle}
-                    style={type.style}
-                />
-            )}
-        </div>
-    );
-};
-
 const SpeechOption = (props) => {
     function speechNote(noteContent) {
         var text = '';
@@ -360,18 +310,35 @@ const SpeechOption = (props) => {
 class WordSpacingOption extends React.Component {
     constructor(props){
         super(props)
-        this.state = {}
     }
-    // spacing methods
+
+
     changeWordSpacing(value) {
-        var textfiled = document.getElementsByClassName('DraftEditor-root');
-        textfiled[0].style.wordSpacing = value;
+        const obj = {'noteID': this.props.noteID, 'wordSpacing': value}
+        const changeWordSpacing = {
+            method: 'POST',
+            url: 'http://127.0.0.1:5000/change-word-spacing',
+            body: JSON.stringify(obj),
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        };
+        request(changeWordSpacing, (error, response, body) => {
+            setDocumentWordSpacing(value);
+        });
     }
 
     render() {
+        const marks = {
+            0.9: '0.0px',
+            1: 'normal',
+            10: '10px',
+            20: '20px',
+            50: '50px',
+        };
         return (
             <div>
-                <Select defaultValue="0.9px" style={{ width: 150 }} onChange={(value) => this.changeWordSpacing(value)}>
+                <h4>Word Spacing</h4>
+                <Slider style={{'width': 500}} marks={marks} step={null} defaultValue={1} />
+                <Select defaultValue={this.props.wordSpacing} style={{ width: 150 }} max={51} onChange={(value) => this.changeWordSpacing(value)}>
                     <Option value="0.9px" disabled>Word Spacing</Option>
                     <Option value="normal">Default</Option>
                     <Option value="10px">10px</Option>
@@ -381,7 +348,6 @@ class WordSpacingOption extends React.Component {
             </div>
         );
     }
-}
 
 class LineSpacingOption extends React.Component {
     constructor(props){
@@ -389,14 +355,31 @@ class LineSpacingOption extends React.Component {
     }
 
     changeLineSpacing(value) {
-        var textfiled = document.getElementsByClassName('DraftEditor-root');
-        textfiled[0].style.lineHeight = value;
+        const obj = {'noteID': this.props.noteID, 'lineSpacing': value}
+        const changeLineSpacing = {
+            method: 'POST',
+            url: 'http://127.0.0.1:5000/change-line-spacing',
+            body: JSON.stringify(obj),
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        };
+        request(changeLineSpacing, (error, response, body) => {
+            setDocumentLineSpacing(value);
+        });
+
     }
 
     render() {
+        const marks = {
+            0.06: 'Default',
+            0.6: '1.6',
+            1: '2',
+            4: '5',
+        };
         return (
             <div>
-                <Select defaultValue="0.05" style={{ width: 150 }} onChange={(value) => this.changeLineSpacing(value)}>
+                <h4>Line Spacing</h4>
+                <Slider style={{ width: 400, margin: 50 }} marks={marks} step={null} defaultValue={0.06} />
+                <Select defaultValue={this.props.lineSpacing} style={{ width: 150 }} onChange={(value) => this.changeLineSpacing(value)}>
                     <Option value="0.05" disabled>Line Spacing</Option>
                     <Option value="0.06">Default</Option>
                     <Option value="0.6">1.6</Option>

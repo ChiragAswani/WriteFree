@@ -5,10 +5,10 @@ import { withRouter } from 'react-router-dom';
 import request from 'request';
 import axios from 'axios';
 import Walkthrough from './Walkthrough';
-import CardNote from './CardNote';
+import CardNote from './CardNote/CardNote';
 import NavigationBar from './NavigationBar';
 import '../css/dashboard.css';
-import { mergeSort } from '../constants';
+import { mergeSort } from '../defaults/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const Search = Input.Search;
@@ -199,7 +199,7 @@ class Dashboard extends React.Component {
                         style={{ width: 200 }}
                     />
                     <Dropdown overlay={this.state.menu}>
-                        <a className="ant-dropdown-link" href='#'><FontAwesomeIcon icon="filter" /> </a>
+                       <Icon type="filter" theme="filled" style={{'color': '#466fb5'}}/>
                     </Dropdown>
                     <Switch checkedChildren="table" unCheckedChildren="card" onChange={child => this.switchView(child)} />
 
@@ -224,7 +224,7 @@ class Dashboard extends React.Component {
                       style={{ width: 200 }}
                   />
             <Dropdown overlay={this.state.menu}>
-                <a className="ant-dropdown-link" href='#'><FontAwesomeIcon icon="filter" /> </a>
+                <Icon type="filter" theme="filled" style={{'color': '#466fb5'}}/>
             </Dropdown>
             <Switch checkedChildren="table" unCheckedChildren="card" defaultChecked onChange={child => this.switchView(child)} />
             <Icon type="setting" theme="filled" onClick={() => this.props.history.push('/default-settings')} />

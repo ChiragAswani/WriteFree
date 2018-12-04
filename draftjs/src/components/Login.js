@@ -7,7 +7,8 @@ import { Input, Button, Card } from 'antd';
 import PropTypes from 'prop-types';
 import 'antd/dist/antd.css';
 import Alert from 'react-s-alert';
-import { handleAccountError } from '../constants';
+import { handleAccountError } from '../defaults/constants';
+import '../css/login.css';
 
 class Login extends React.Component {
   constructor(props) {
@@ -54,32 +55,44 @@ class Login extends React.Component {
   render() {
     document.body.style.backgroundColor = "#f5f5f5"
     return (
-      <div>
-        <Alert timeout={3000} />
-        <Card
-          title="Login"
-          style={{ width: 400 }}
-        >
-          <Input placeholder="Email" onChange={email => this.setState({ email: email.target.value })} /> <br />
-          <Input placeholder="Password" type="password" onChange={password => this.setState({ password: password.target.value })} /> <br />
-          <Button type="primary" onClick={() => this.login(this.state.email, this.state.password)}>Login</Button>
-          <Card>
-            <p>Dont have an account? <a onClick={() => this.props.history.push("/create-account")}> Sign Up </a> </p>
-          </Card>
-          <GoogleLogin
-            clientId="402919311024-18n9b01dptgeg774297fp4u9ir18sb6g.apps.googleusercontent.com"
-            onSuccess={succ => this.googleLogin(succ)}
-            onFailure={fail => this.googleLogin(fail)}
-            style={{
-                border: 'none',
-                background: 'none',
-                padding: 0,
-                margin: 0,
-            }}
-          >
-            <GoogleButton />
-          </GoogleLogin>
-        </Card>
+      <div className={"login-center"}>
+        <div className={"login-center-center"}>
+            <p className={"sign-in"}>Sign In</p>
+            <Alert timeout={3000} />
+
+            <Input
+                placeholder="Email"
+                onChange={email => this.setState({ email: email.target.value })}
+                className={"email-input"}
+            />
+            <br />
+            <Input
+                placeholder="Password"
+                type="password"
+                onChange={password => this.setState({ password: password.target.value })}
+                className={"password-input"}
+            />
+            <br />
+            <p className={"forgot-password"}>Forgot Password?</p>
+            <Button type="primary" onClick={() => this.login(this.state.email, this.state.password)}>Sign In</Button>
+            <Card>
+                <p>Dont have an account? <a onClick={() => this.props.history.push("/create-account")}> Sign Up </a> </p>
+            </Card>
+            <GoogleLogin
+                clientId="402919311024-18n9b01dptgeg774297fp4u9ir18sb6g.apps.googleusercontent.com"
+                onSuccess={succ => this.googleLogin(succ)}
+                onFailure={fail => this.googleLogin(fail)}
+                style={{
+                    border: 'none',
+                    background: 'none',
+                    padding: 0,
+                    margin: 0,
+                }}
+            >
+                <GoogleButton />
+            </GoogleLogin>
+        </div>
+
       </div>
     );
   }
