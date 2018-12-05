@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Button, Switch, Input, Menu, Dropdown, Icon } from 'antd';
+import { Table, Button, Switch, Input, Menu, Dropdown, Icon, Popconfirm } from 'antd';
 import 'antd/dist/antd.css';
 import { withRouter } from 'react-router-dom';
 import request from 'request';
@@ -82,7 +82,13 @@ class Dashboard extends React.Component {
         render: (text, record) => (
           <div style={ {background: record.noteColor} }>
             <a className={'editNote'} onClick={() => this.editNote(localStorage.getItem('email'), record._id)}>Edit | </a>
-            <a className={'deleteNote'} onClick={() => this.deleteNote(localStorage.getItem('email'), record._id)}>Delete</a>
+              <Popconfirm
+                  title="Are you sure you want to delete this note?"
+                  onConfirm={() => this.deleteNote(localStorage.getItem('email'), record._id)}
+                  okText="Yes"
+                  cancelText="No">
+                  <a className={'deleteNote'}>Delete</a>
+              </Popconfirm>
           </div>
         ),
       }],
@@ -156,7 +162,6 @@ class Dashboard extends React.Component {
   }
 
   sortNotes(option) {
-      console.log("OPTION HERE", option)
     const sortedNotes = mergeSort(this.state.notes, option);
     this.setState({ notes: sortedNotes });
   }

@@ -6,9 +6,6 @@ import { Input, Button, Select, Tabs, Icon, Switch, Slider } from 'antd';
 import request from 'request';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import Alert from 'react-s-alert';
-import 'react-s-alert/dist/s-alert-default.css';
-import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
 import '../../css/note.css';
 import 'antd/dist/antd.css';
 import NavigationBar from "../NavigationBar";
@@ -70,6 +67,18 @@ class Note extends React.Component {
     }.bind(this));
   }
 
+    async componentWillUnmount(){
+      if (this.state.noteTitle && this.state.noteCategory){
+          await this.saveNote(this.state.noteTitle, this.state.noteCategory, this.props.location.state.noteID, this.state.editorState.getCurrentContent())
+      } else if (this.state.noteTitle === undefined && this.state.noteCategory === undefined) {
+          await this.saveNote("Untitled", "No Category", this.props.location.state.noteID, this.state.editorState.getCurrentContent())
+      } else if (this.state.noteCategory === undefined) {
+          await this.saveNote(this.state.noteTitle, "No Category", this.props.location.state.noteID, this.state.editorState.getCurrentContent())
+      } else if (this.state.noteTitle === undefined) {
+          await this.saveNote("Untitled", this.state.noteCategory, this.props.location.state.noteID, this.state.editorState.getCurrentContent())
+      }
+    }
+
     _handleKeyCommand(command) {
         const {editorState} = this.state;
         const newState = RichUtils.handleKeyCommand(editorState, command);
@@ -81,29 +90,17 @@ class Note extends React.Component {
     }
 
     saveNote(title, category, noteID, noteContent){
-        if(!title){
-            this.handleJelly()
-        } else {
-            const convertedNoteContent = convertToRaw(noteContent)
-            const obj = {title, category, noteID, noteContent: convertedNoteContent}
-            var saveNote = {
-                method: 'POST',
-                url: 'http://127.0.0.1:5000/save-note',
-                body: JSON.stringify(obj),
-                headers: {'Content-Type': 'application/x-www-form-urlencoded' }
-            };
-            return request(saveNote)
-        }
+        const convertedNoteContent = convertToRaw(noteContent)
+        const obj = {title, category, noteID, noteContent: convertedNoteContent}
+        var saveNote = {
+            method: 'POST',
+            url: 'http://127.0.0.1:5000/save-note',
+            body: JSON.stringify(obj),
+            headers: {'Content-Type': 'application/x-www-form-urlencoded' }
+        };
+        return request(saveNote)
     }
 
-    async goToDashBoard(title){
-        if(!title){
-            this.handleJelly()
-        } else {
-            await this.saveNote(this.state.noteTitle, this.state.noteCategory, this.props.location.state.noteID, this.state.editorState.getCurrentContent())
-            this.props.history.push("/dashboard")
-        }
-    }
 
     speechNote(noteContent){
         var text = '';
@@ -112,12 +109,7 @@ class Note extends React.Component {
         }
         return text
     }
-    handleJelly() {
-        Alert.error('Please Enter a Note Header!', {
-            position: 'top-right',
-            effect: 'jelly'
-        });
-    }
+
     changeToolBar(key){
         if (key === "tools"){
             this.setState({
@@ -215,7 +207,6 @@ class Note extends React.Component {
                     </Button>
                 </div>
 
-                <Alert stack={true} timeout={3000} />
             <div className="RichEditor-root" id={"textEdiotr"}>
                 <Editor
                     spellCheck={true}
@@ -229,8 +220,6 @@ class Note extends React.Component {
                 />
             </div>
                 <br/>
-                <Button style={{"width": "100%"}}type="primary" onClick={() => this.goToDashBoard(this.state.noteTitle)}>Go To Dashboard</Button>
-
             </div>
         );
     }
