@@ -71,9 +71,9 @@ class Note extends React.Component {
       if (this.state.noteTitle && this.state.noteCategory){
           await this.saveNote(this.state.noteTitle, this.state.noteCategory, this.props.location.state.noteID, this.state.editorState.getCurrentContent())
       } else if (this.state.noteTitle === undefined && this.state.noteCategory === undefined) {
-          await this.saveNote("Untitled", "No Category", this.props.location.state.noteID, this.state.editorState.getCurrentContent())
+          await this.saveNote("Untitled", "N/A", this.props.location.state.noteID, this.state.editorState.getCurrentContent())
       } else if (this.state.noteCategory === undefined) {
-          await this.saveNote(this.state.noteTitle, "No Category", this.props.location.state.noteID, this.state.editorState.getCurrentContent())
+          await this.saveNote(this.state.noteTitle, "N/A", this.props.location.state.noteID, this.state.editorState.getCurrentContent())
       } else if (this.state.noteTitle === undefined) {
           await this.saveNote("Untitled", this.state.noteCategory, this.props.location.state.noteID, this.state.editorState.getCurrentContent())
       }

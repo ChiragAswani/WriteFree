@@ -81,7 +81,7 @@ class Dashboard extends React.Component {
         className: "classNameOfColumn",
         render: (text, record) => (
           <div style={ {background: record.noteColor} }>
-            <a className={'editNote'} onClick={() => this.editNote(localStorage.getItem('email'), record._id)}>Edit | </a>
+            <a className={'editNote'} onClick={() => this.goToNote(record._id)}>Edit | </a>
               <Popconfirm
                   title="Are you sure you want to delete this note?"
                   onConfirm={() => this.deleteNote(localStorage.getItem('email'), record._id)}
@@ -116,13 +116,6 @@ class Dashboard extends React.Component {
     });
   }
 
-  editNote(email, noteID) {
-    this.props.history.push({
-      pathname: `/note/${noteID}`,
-      state: { noteID },
-    });
-  }
-
   deleteNote(email, noteID) {
     const deleteNote = {
       method: 'DELETE',
@@ -136,6 +129,12 @@ class Dashboard extends React.Component {
     });
   }
 
+  goToNote(noteID){
+      this.props.history.push({
+          pathname: `/note/${noteID}`,
+          state: { noteID },
+      });
+  }
 
   createNote(email) {
     const postNewNote = {
@@ -146,10 +145,7 @@ class Dashboard extends React.Component {
     };
     request(postNewNote, (error, response, body) => {
       const parsedData = JSON.parse(body);
-      this.props.history.push({
-        pathname: `/new-note/${parsedData._id}`,
-        state: { noteID: parsedData._id },
-      });
+        this.goToNote(parsedData._id);
     });
   }
 

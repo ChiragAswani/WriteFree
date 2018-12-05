@@ -9,10 +9,6 @@ import NewNote from './components/Editor/Note';
 import DefaultSettings from './components/DefaultSettings';
 import * as serviceWorker from './serviceWorker';
 import createHistory from "history/createBrowserHistory";
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFilter, faCog, faUser} from '@fortawesome/free-solid-svg-icons'
-library.add(faFilter, faCog, faUser)
 const history = createHistory()
 
 ReactDOM.render(
@@ -21,7 +17,6 @@ ReactDOM.render(
             <Route path="/create-account" component={CreateAccount} />
             <Route path="/login" component={Login} />
             <Route path="/dashboard" component={Dashboard}/>
-            <Route path="/new-note/:noteid" component={NewNote}/>
             <Route path="/default-settings" component={DefaultSettings}/>
             <Route path="/note/:noteid" component={NewNote}/>
         </Switch>
