@@ -9,6 +9,10 @@ import NewNote from './components/Editor/Note';
 import DefaultSettings from './components/DefaultSettings';
 import * as serviceWorker from './serviceWorker';
 import createHistory from "history/createBrowserHistory";
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {faUser} from '@fortawesome/free-solid-svg-icons'
+library.add( faUser)
 const history = createHistory()
 
 ReactDOM.render(
