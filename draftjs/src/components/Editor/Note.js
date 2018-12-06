@@ -237,12 +237,9 @@ function setDocumentLineSpacing(lineSpacing) {
 
 // Function for hyphenating the contents in text editor, binded with Note class.
 function hyphenate(child) {
-    // hyphenation on
-    var newContents = convertToRaw(this.state.editorState.getCurrentContent())
-    console.log(newContents)
-    var hyphenation = "";
     // enable hyphenation
     if (child) {
+        var newContents = convertToRaw(this.state.editorState.getCurrentContent());
         var Hypher = require('hypher'),
             english = require('hyphenation.en-us'),
             h = new Hypher(english);
@@ -268,7 +265,6 @@ function hyphenate(child) {
             newContents.blocks[line]['inlineStyleRanges'][1]['length'] += numberOfDots;
         }
         //convert to  note content
-        console.log(newContents);
         this.setState({
             editorState: EditorState.createWithContent(convertFromRaw((newContents))),
         });
@@ -276,13 +272,27 @@ function hyphenate(child) {
     //eliminate the splitter
     else
     {
-        console.log();
-        var restored = hyphenation.split("\u2022")
-        var str = "";
-        for (var i = 0; i < restored.length - 1; i++) {
-            str += restored[i] + " ";
+        var newContents = convertToRaw(this.state.editorState.getCurrentContent());
+        // go through each blocks/lines
+        for (var line = 0; line < newContents.blocks.length; line++) {
+            //parse the line into pieces splited by the dots
+            var oneLine = newContents.blocks[line]['text'].split("\u2022");
+            //counts the number of dots eliminated
+            var numberOfDots = oneLine.length - 1;
+            var restoredLine = "";
+            //hyphenate each work
+            for (var i = 0; i < oneLine.length; i++) {
+                restoredLine += oneLine[i];
+            }
+            newContents.blocks[line]['text'] = restoredLine;
+            //change inline css style for the extra dot characters
+            newContents.blocks[line]['inlineStyleRanges'][0]['length'] -= numberOfDots;
+            newContents.blocks[line]['inlineStyleRanges'][1]['length'] -= numberOfDots;
         }
-        str += restored[restored.length - 1];
+        //convert to  note content
+        this.setState({
+            editorState: EditorState.createWithContent(convertFromRaw((newContents))),
+        });
     }
 }
 
