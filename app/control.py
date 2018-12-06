@@ -73,6 +73,11 @@ def save_note(note_db, form_data):
                   "lastUpdated": datetime.datetime.fromtimestamp(time.time()).strftime('%c')}
     dbcalls.DB_update_one(note_db, {"$set": new_values}, query)
 
+# input:
+#       cred_db: credential database object
+#       app_db: application db object
+#       email: used for data retrieval
+# output: jsonified credential and app setting
 def get_default_setting(cred_db, app_db, email):
     credentials = dbcalls.DB_find_one(cred_db, {'email': email})
     credentials["_id"] = str(credentials["_id"])
