@@ -85,6 +85,7 @@ class Note extends React.Component {
       } else if (this.state.noteTitle === undefined) {
           await this.saveNote("Untitled", this.state.noteCategory, this.props.location.state.noteID, this.state.editorState.getCurrentContent())
       }
+
     }
 
     _handleKeyCommand(command) {
