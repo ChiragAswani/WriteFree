@@ -15,7 +15,10 @@ const Search = Input.Search;
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
+    deleteNote = deleteNote.bind(this);
+    goToNote = goToNote.bind(this);
     this.state = {
+
       notes: null,
       credentials: { runTutorial: null },
       menu: (
@@ -78,20 +81,23 @@ class Dashboard extends React.Component {
       }, {
         title: 'Action',
         className: "classNameOfColumn",
-        render: (text, record) => (
-          <div >
-              <div>
-            <a className={'editNote'} onClick={() => this.goToNote(record._id)}>Edit | </a>
-              <Popconfirm
-                  title="Are you sure you want to delete this note?"
-                  onConfirm={() => this.deleteNote(localStorage.getItem('email'), record._id)}
-                  okText="Yes"
-                  cancelText="No">
-                  <a className={'deleteNote'}>Delete</a>
-              </Popconfirm>
-              </div>
-          </div>
-        ),
+          render(text, record) {
+              return {
+                  props: {
+                      style: { background: record.noteColor },
+                  },
+                  children: <div>
+                       <a className={'editNote'} onClick={() => goToNote(record._id)}>Edit | </a>
+                             <Popconfirm
+                                 title="Are you sure you want to delete this note?"
+                                 onConfirm={() => deleteNote(localStorage.getItem('email'), record._id)}
+                                 okText="Yes"
+                                 cancelText="No">
+                                 <a className={'deleteNote'}>Delete</a>
+                             </Popconfirm>
+                             </div>,
+              };
+          },
       }],
     };
   }
@@ -122,29 +128,23 @@ class Dashboard extends React.Component {
     });
   }
 
-    goToNote(noteID){
-        this.props.history.push({
-            pathname: `/note/${noteID}`,
-            state: { noteID },
-        });
-    }
 
-  deleteNote(email, noteID) {
-      const accessToken = localStorage.getItem('access_token');
-      const AuthStr = 'Bearer '.concat(accessToken);
-      const headers = { Authorization: AuthStr, 'Content-Type': 'application/x-www-form-urlencoded' };
-
-      const deleteNote = {
-        method: 'DELETE',
-        url: 'http://127.0.0.1:5000/delete-note',
-        qs: { noteID },
-        headers: headers,
-      };
-      request(deleteNote, (error, response, body) => {
-        const parsedData = JSON.parse(body);
-        this.setState({ notes: parsedData.notes });
-      });
-  }
+  // deleteNote(email, noteID) {
+  //     const accessToken = localStorage.getItem('access_token');
+  //     const AuthStr = 'Bearer '.concat(accessToken);
+  //     const headers = { Authorization: AuthStr, 'Content-Type': 'application/x-www-form-urlencoded' };
+  //
+  //     const deleteNote = {
+  //       method: 'DELETE',
+  //       url: 'http://127.0.0.1:5000/delete-note',
+  //       qs: { noteID },
+  //       headers: headers,
+  //     };
+  //     request(deleteNote, (error, response, body) => {
+  //       const parsedData = JSON.parse(body);
+  //       this.setState({ notes: parsedData.notes });
+  //     });
+  // }
 
 
   createNote(email) {
@@ -270,6 +270,30 @@ class Dashboard extends React.Component {
       </div>
     );
   }
+}
+
+function deleteNote(email, noteID) {
+    const accessToken = localStorage.getItem('access_token');
+    const AuthStr = 'Bearer '.concat(accessToken);
+    const headers = { Authorization: AuthStr, 'Content-Type': 'application/x-www-form-urlencoded' };
+
+    const deleteNote = {
+        method: 'DELETE',
+        url: 'http://127.0.0.1:5000/delete-note',
+        qs: { noteID },
+        headers: headers,
+    };
+    request(deleteNote, (error, response, body) => {
+        const parsedData = JSON.parse(body);
+        this.setState({ notes: parsedData.notes });
+    });
+}
+
+function goToNote(noteID){
+    this.props.history.push({
+        pathname: `/note/${noteID}`,
+        state: { noteID },
+    });
 }
 
 export default withRouter(Dashboard);
