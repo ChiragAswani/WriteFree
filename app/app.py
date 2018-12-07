@@ -112,9 +112,7 @@ def login_google():
     if (credentials):
         if (bcrypt.check_password_hash(credentials['password'], google_id.encode('utf-8'))):
             login_credential = control.get_credential(credentials, email)
-            access_token = create_access_token(identity=email)
-            refresh_token = create_refresh_token(identity=email)
-            return jsonify({"credentials": login_credential, "access_token": access_token, "refresh_token": refresh_token}), 200
+            return login_credential, 200
         return "Invalid Email or Password", 401
     return "Email Does Not Exist", 401
 
@@ -133,7 +131,7 @@ def getNotes():
     notes = control.get_note(notes_collection, email)
     return notes, 200
 
-@app.route ('/delete-note', methods= ['GET'])
+@app.route ('/delete-note', methods= ['DELETE', 'OPTIONS'])
 @jwt_required
 def deleteNote():
     email = get_jwt_identity()
