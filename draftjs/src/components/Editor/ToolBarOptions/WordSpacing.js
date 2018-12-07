@@ -1,5 +1,5 @@
 import request from "request";
-import {Select, Slider} from "antd";
+import {Select} from "antd";
 import React from "react";
 const Option = Select.Option;
 

@@ -2,7 +2,7 @@
 import React from 'react';
 import { EditorState, RichUtils, convertToRaw, convertFromRaw } from 'draft-js';
 import { withRouter } from 'react-router-dom';
-import { Input, Button, Select, Tabs, Icon, Switch, Slider } from 'antd';
+import { Input, Button, Icon } from 'antd';
 import request from 'request';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -19,25 +19,28 @@ import LineSpacingOption from "./ToolBarOptions/LineSpacing";
 class Note extends React.Component {
   constructor(props) {
     super(props);
+    this.mounted = false;
     this.state = {
       editorState: EditorState.createEmpty(),
       noteCategory: undefined,
       noteTitle: undefined,
         noteCategoryIconColor: undefined,
-        toolsButtonHighlight: {'background-color': '#466fb5', 'color': 'white', isSelected: true},
+        toolsButtonHighlight: {'backgroundColor': '#466fb5', 'color': 'white', isSelected: true},
         noteSettingsButtonHighlight: {'border': 'none', isSelected: false}
     };
     hyphenate = hyphenate.bind(this);
-    //changeNoteColor = changeNoteColor.bind(this);
+    changeNoteColor = changeNoteColor.bind(this);
     this.focus = () => this.refs.editor.focus();
     this.onChange = editorState => this.setState({ editorState });
     this.handleKeyCommand = command => this._handleKeyCommand(command);
     this.changeToolBar = this.changeToolBar.bind(this);
   }
   componentDidMount() {
+      this.mounted = true;
       if (!localStorage.getItem('id')){
           return this.props.history.push('/login')
       }
+
       const splitValue = window.location.href.split("/")
       const noteID = splitValue[splitValue.length - 1]
       const accessToken = localStorage.getItem('access_token');
@@ -50,16 +53,20 @@ class Note extends React.Component {
       headers: headers,
     };
     request(fetchNote, function (error, response, body) {
+        if (response.statusCode === 404){
+            return this.props.history.push('/error404')
+        }
         var parsedData = JSON.parse(body);
         if (parsedData.noteSettings){
             setDocumentWordSpacing(parsedData.wordSpacing);
             setDocumentLineSpacing(parsedData.lineSpacing);
-            let contentState = parsedData.noteSettings
+            let contentState = parsedData.noteSettings;
             this.setState({
                 editorState: EditorState.createWithContent(convertFromRaw((contentState))),
                 noteColor: parsedData.noteColor,
                 wordSpacing: parsedData.wordSpacing,
-                lineSpacing: parsedData.lineSpacing
+                lineSpacing: parsedData.lineSpacing,
+                noteID: noteID,
             });
         }
         if (parsedData.title){
@@ -69,21 +76,23 @@ class Note extends React.Component {
                 noteTitle: parsedData.title,
                 noteCategory: parsedData.category,
                 noteCategoryIconColor: "#466fb5",
-                noteColor: parsedData.noteColor
+                noteColor: parsedData.noteColor,
+                noteID: noteID,
             });
         }
     }.bind(this));
   }
 
     async componentWillUnmount(){
+      this.mounted = false;
       if (this.state.noteTitle && this.state.noteCategory){
-          await this.saveNote(this.state.noteTitle, this.state.noteCategory, this.props.location.state.noteID, this.state.editorState.getCurrentContent())
+          await this.saveNote(this.state.noteTitle, this.state.noteCategory, this.state.noteID, this.state.editorState.getCurrentContent())
       } else if (this.state.noteTitle === undefined && this.state.noteCategory === undefined) {
-          await this.saveNote("Untitled", "N/A", this.props.location.state.noteID, this.state.editorState.getCurrentContent())
+          await this.saveNote("Untitled", "N/A", this.state.noteID, this.state.editorState.getCurrentContent())
       } else if (this.state.noteCategory === undefined) {
-          await this.saveNote(this.state.noteTitle, "N/A", this.props.location.state.noteID, this.state.editorState.getCurrentContent())
+          await this.saveNote(this.state.noteTitle, "N/A", this.state.noteID, this.state.editorState.getCurrentContent())
       } else if (this.state.noteTitle === undefined) {
-          await this.saveNote("Untitled", this.state.noteCategory, this.props.location.state.noteID, this.state.editorState.getCurrentContent())
+          await this.saveNote("Untitled", this.state.noteCategory, this.state.noteID, this.state.editorState.getCurrentContent())
       }
 
     }
@@ -126,22 +135,23 @@ class Note extends React.Component {
     changeToolBar(key){
         if (key === "tools"){
             this.setState({
-                toolsButtonHighlight: {'background-color': '#466fb5', 'color': 'white', isSelected: true},
+                toolsButtonHighlight: {'backgroundColor': '#466fb5', 'color': 'white', isSelected: true},
                 noteSettingsButtonHighlight: {'border': 'none', isSelected: false},
                 'toolbar': {}, 'toolbarCustomButtons': []
             })
         }
         else if (key === "noteSettings") {
             this.setState({
-                noteSettingsButtonHighlight: {'background-color': '#466fb5', 'color': 'white', isSelected: true},
+                noteSettingsButtonHighlight: {'backgroundColor': '#466fb5', 'color': 'white', isSelected: true},
                 toolsButtonHighlight: {'border': 'none', isSelected: false},
                 'toolbar': {'options': []},
                 'toolbarCustomButtons': [
                     <HyphenationOption hyphenate={hyphenate}/>,
-                    <WordSpacingOption setDocumentWordSpacing={setDocumentWordSpacing} noteID={this.props.location.state.noteID} wordSpacing={this.state.wordSpacing}/>,
-                    <LineSpacingOption setDocumentLineSpacing={setDocumentLineSpacing} noteID={this.props.location.state.noteID} lineSpacing={this.state.lineSpacing}/>,
+                    <WordSpacingOption setDocumentWordSpacing={setDocumentWordSpacing} noteID={this.state.noteID} wordSpacing={this.state.wordSpacing}/>,
+                    <LineSpacingOption setDocumentLineSpacing={setDocumentLineSpacing} noteID={this.state.noteID} lineSpacing={this.state.lineSpacing}/>,
                     <SpeechOption speechText={convertToRaw(this.state.editorState.getCurrentContent())}/>,
-                    <NoteColor  noteID={this.props.location.state.noteID}/>]
+
+                    <NoteColor changeNoteColor ={changeNoteColor} noteID={this.state.noteID}/>]
             })
         }
     }
@@ -157,19 +167,18 @@ class Note extends React.Component {
 
     _handleKeyPress = (e) => {
         if (e.key === 'Enter') {
-            console.log('do validate');
         }
     };
 
     showSelectedButton(buttonType){
       if (buttonType === "tools"){
           if (!this.state.toolsButtonHighlight.isSelected){
-              this.setState({'toolsButtonHighlight': {'background-color': '#466fb5', 'color': 'white', isSelected: false}})
+              this.setState({'toolsButtonHighlight': {'backgroundColor': '#466fb5', 'color': 'white', isSelected: false}})
           }
       }
         if (buttonType === "noteSettings"){
             if (!this.state.noteSettingsButtonHighlight.isSelected){
-                this.setState({'noteSettingsButtonHighlight': {'background-color': '#466fb5', 'color': 'white', isSelected: false}})
+                this.setState({'noteSettingsButtonHighlight': {'backgroundColor': '#466fb5', 'color': 'white', isSelected: false}})
             }
         }
 
@@ -250,79 +259,79 @@ function setDocumentLineSpacing(lineSpacing) {
 
 // Function for hyphenating the contents in text editor, binded with Note class.
 function hyphenate(child) {
+    console.log(this.mounted);
     // enable hyphenation
-    if (child) {
-        var newContents = convertToRaw(this.state.editorState.getCurrentContent());
-        var Hypher = require('hypher'),
-            english = require('hyphenation.en-us'),
-            h = new Hypher(english);
-        for (var line = 0; line < newContents.blocks.length; line++) {
-            //counts the number of dots added
-            var numberOfDots = 0;
-            //parse the line into words by spaces
-            var oneLine = newContents.blocks[line]['text'].split(" ");
-            var hyphenatedLine = "";
-            //hyphenate each work
-            for (var i = 0; i < oneLine.length; i++) {
-                var hyphenatedWord = h.hyphenate(oneLine[i]);
-                for (var j = 0; j < hyphenatedWord.length - 1; j++) {
-                    // add unicode dot for each syllables
-                    hyphenatedLine += hyphenatedWord[j] + "\u2022";
-                    numberOfDots += 1;
+    if(this.mounted) {
+        if (child) {
+            var newContents = convertToRaw(this.state.editorState.getCurrentContent());
+            var Hypher = require('hypher'),
+                english = require('hyphenation.en-us'),
+                h = new Hypher(english);
+            for (var line = 0; line < newContents.blocks.length; line++) {
+                //counts the number of dots added
+                var numberOfDots = 0;
+                //parse the line into words by spaces
+                var oneLine = newContents.blocks[line]['text'].split(" ");
+                var hyphenatedLine = "";
+                //hyphenate each work
+                for (var i = 0; i < oneLine.length; i++) {
+                    var hyphenatedWord = h.hyphenate(oneLine[i]);
+                    for (var j = 0; j < hyphenatedWord.length - 1; j++) {
+                        // add unicode dot for each syllables
+                        hyphenatedLine += hyphenatedWord[j] + "\u2022";
+                        numberOfDots += 1;
+                    }
+                    hyphenatedLine += hyphenatedWord[hyphenatedWord.length - 1] + " ";
                 }
-                hyphenatedLine += hyphenatedWord[hyphenatedWord.length - 1] + " ";
+                newContents.blocks[line]['text'] = hyphenatedLine;
+                //change inline css style for the extra dot characters
+                newContents.blocks[line]['inlineStyleRanges'][0]['length'] += numberOfDots;
+                newContents.blocks[line]['inlineStyleRanges'][1]['length'] += numberOfDots;
             }
-            newContents.blocks[line]['text'] = hyphenatedLine;
-            //change inline css style for the extra dot characters
-            newContents.blocks[line]['inlineStyleRanges'][0]['length'] += numberOfDots;
-            newContents.blocks[line]['inlineStyleRanges'][1]['length'] += numberOfDots;
+            //convert to  note content
+            this.setState({
+                editorState: EditorState.createWithContent(convertFromRaw((newContents))),
+            });
         }
-        //convert to  note content
-        this.setState({
-            editorState: EditorState.createWithContent(convertFromRaw((newContents))),
-        });
-    }
-    //eliminate the splitter
-    else
-    {
-        var newContents = convertToRaw(this.state.editorState.getCurrentContent());
-        // go through each blocks/lines
-        for (var line = 0; line < newContents.blocks.length; line++) {
-            //parse the line into pieces splited by the dots
-            var oneLine = newContents.blocks[line]['text'].split("\u2022");
-            //counts the number of dots eliminated
-            var numberOfDots = oneLine.length - 1;
-            var restoredLine = "";
-            //hyphenate each work
-            for (var i = 0; i < oneLine.length; i++) {
-                restoredLine += oneLine[i];
+        //eliminate the splitter
+        else {
+            var newContents = convertToRaw(this.state.editorState.getCurrentContent());
+            // go through each blocks/lines
+            for (var line = 0; line < newContents.blocks.length; line++) {
+                //parse the line into pieces splited by the dots
+                var oneLine = newContents.blocks[line]['text'].split("\u2022");
+                //counts the number of dots eliminated
+                var numberOfDots = oneLine.length - 1;
+                var restoredLine = "";
+                //hyphenate each work
+                for (var i = 0; i < oneLine.length; i++) {
+                    restoredLine += oneLine[i];
+                }
+                newContents.blocks[line]['text'] = restoredLine;
+                //change inline css style for the extra dot characters
+                newContents.blocks[line]['inlineStyleRanges'][0]['length'] -= numberOfDots;
+                newContents.blocks[line]['inlineStyleRanges'][1]['length'] -= numberOfDots;
             }
-            newContents.blocks[line]['text'] = restoredLine;
-            //change inline css style for the extra dot characters
-            newContents.blocks[line]['inlineStyleRanges'][0]['length'] -= numberOfDots;
-            newContents.blocks[line]['inlineStyleRanges'][1]['length'] -= numberOfDots;
+            //convert to  note content
+            this.setState({
+                editorState: EditorState.createWithContent(convertFromRaw((newContents))),
+            });
         }
-        //convert to  note content
-        this.setState({
-            editorState: EditorState.createWithContent(convertFromRaw((newContents))),
-        });
     }
 }
 
-// // Function for changing the note background color. Store the changes to database
-// function changeNoteColor(noteID, color)
-// {
-//     console.log(noteID);
-//     console.log(color.hex);
-//     var changeNoteColor = {
-//         method: 'POST',
-//         url: 'http://127.0.0.1:5000/change-note-color',
-//         qs: {noteID, noteColor: color.hex},
-//         headers: {'Content-Type': 'application/x-www-form-urlencoded' }
-//     };
-//     request(changeNoteColor, function (error, response, body) {
-//         this.setState({ noteColor: color.hex });
-//     }.bind(this));
-// }
+// Function for changing the note background color. Store the changes to database
+function changeNoteColor(noteID, color)
+{
+    var changeNoteColor = {
+        method: 'POST',
+        url: 'http://127.0.0.1:5000/change-note-color',
+        qs: {noteID, noteColor: color.hex},
+        headers: {'Content-Type': 'application/x-www-form-urlencoded' }
+    };
+    request(changeNoteColor, function (error, response, body) {
+        this.setState({ noteColor: color.hex });
+    }.bind(this));
+}
 
 export default withRouter(Note);

@@ -8,7 +8,7 @@ const CardList = (props) => {
             <CardListItem  key={note._id} note={note} history={props.history} />
         ));
         return (
-            <div class="cards">
+            <div className="cards">
                 {cardItems}
             </div>
         );
