@@ -9,7 +9,6 @@ import CardNote from './CardNote/CardNote';
 import NavigationBar from './NavigationBar';
 import '../css/dashboard.css';
 import { mergeSort } from '../defaults/constants';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const Search = Input.Search;
 
