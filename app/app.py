@@ -3,7 +3,6 @@ import time
 from flask_cors import CORS
 from flask import Flask, request, jsonify, session, render_template, make_response, send_file
 import time
-from flask_cors import CORS
 from pymongo import MongoClient
 import json
 from bson.objectid import ObjectId
@@ -29,8 +28,10 @@ app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
 SESSION_TYPE = 'redis'
 bcrypt = Bcrypt(app)
 
+#JWT stuff ->
 jwt = JWTManager(app)
 blacklist = set()
+CORS(app, expose_headers='Authorization')
 
 client = MongoClient('mongodb://localhost:27017/')
 
@@ -90,7 +91,7 @@ def create():
         return (document, 200)
 
 # verify username and password, returns account details and notes
-@app.route('/login', methods= ['GET', 'OPTIONS'])
+@app.route('/login', methods= ['GET'])
 def login():
     email = request.args['email']
     password = request.args['password']
@@ -111,33 +112,41 @@ def login_google():
     if (credentials):
         if (bcrypt.check_password_hash(credentials['password'], google_id.encode('utf-8'))):
             login_credential = control.get_credential(credentials, email)
-            return login_credential, 200
+            access_token = create_access_token(identity=email)
+            refresh_token = create_refresh_token(identity=email)
+            return jsonify({"credentials": login_credential, "access_token": access_token, "refresh_token": refresh_token}), 200
         return "Invalid Email or Password", 401
     return "Email Does Not Exist", 401
 
-@app.route('/get-default-settings', methods= ['GET', 'OPTIONS'])
+@app.route('/get-default-settings', methods= ['GET'])
+@jwt_required
 def getDefaultSettings():
-    email = request.args['email']
+    email = get_jwt_identity()
     cred_and_setting = control.get_default_setting(credentials_collection, application_collection, email)
     return cred_and_setting, 200
 
-@app.route('/get-notes', methods= ['POST', 'OPTIONS'])
+@app.route('/get-notes', methods= ['GET'])
+@jwt_required
 def getNotes():
-    form_data = json.loads(request.get_data())
-    notes = control.get_note(notes_collection, form_data['email'])
+    email = get_jwt_identity()
+    # form_data = json.loads(request.get_data())
+    notes = control.get_note(notes_collection, email)
     return notes, 200
 
-@app.route ('/delete-note', methods= ['DELETE', 'OPTIONS'])
+@app.route ('/delete-note', methods= ['GET'])
+@jwt_required
 def deleteNote():
-    email = request.args['email']
+    email = get_jwt_identity()
     noteID = request.args['noteID']
     dbcalls.DB_delete_one(notes_collection, {'email': email, "_id": ObjectId(noteID)})
     notes = control.get_note(notes_collection, email)
     return notes, 200
 
-@app.route ('/new-note', methods= ['POST', 'OPTIONS'])
+@app.route ('/new-note', methods= ['GET'])
+@jwt_required
 def addNote():
-    email = request.args['email']
+    email = get_jwt_identity()
+    print(email)
     credentials = dbcalls.DB_find_one(credentials_collection, {'email': email})
     defaultNoteSettings = credentials['defaultNoteSettings']['draftjsObj']
     baseNewNote = {
@@ -161,11 +170,18 @@ def saveNote():
     control.save_note(notes_collection, form_data)
     return "SAVED", 200
 
-@app.route ('/update-default-settings', methods= ['POST', 'OPTIONS'])
+@app.route ('/update-default-settings', methods= ['POST'])
+@jwt_required
 def updateDefaultSettings():
-    form_data = json.loads(request.get_data())
-    control.update_default_setting(credentials_collection, form_data)
-    return "Default Setting updated", 200
+    email = get_jwt_identity()
+    credentials = dbcalls.DB_find_one(credentials_collection, {'email': email})
+    if credentials:
+        form_data = json.loads(request.get_data())
+        form_data_new = json.loads(form_data['body'])
+        control.update_default_setting(credentials_collection, form_data_new, email)
+        return "Default Setting updated", 200
+    else:
+        return "Error with JWT", 400
 
 @app.route ('/remove-tutorial', methods= ['POST', 'OPTIONS'])
 def removeTutorial():

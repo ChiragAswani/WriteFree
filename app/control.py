@@ -16,6 +16,10 @@ This is the file containing the functions that handles the DB data before return
 #       cred_db: the credential database object
 #       savedDocument: new account profile
 # output: saved profile in json format
+
+
+
+
 def new_account(cred_db, savedDocument):
     dbcalls.DB_insert_one(cred_db, savedDocument)
     savedDocument["_id"] = str(savedDocument["_id"])
@@ -91,8 +95,7 @@ def get_default_setting(cred_db, app_db, email):
 #       cred_db: credential data
 #       form_data: new note data
 # output: None
-def update_default_setting(cred_db, form_data):
-    email = form_data['email']
+def update_default_setting(cred_db, form_data,email):
     noteColor = form_data['noteColor']
     fontName = form_data['fontName']
     fontSize = form_data['fontSize']
