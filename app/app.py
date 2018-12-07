@@ -13,6 +13,7 @@ from draftjs_exporter.html import HTML
 import MongoDBCalls as dbcalls
 import control as control
 import re
+import mongomock
 
 from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token, create_refresh_token,
@@ -34,7 +35,8 @@ jwt = JWTManager(app)
 blacklist = set()
 CORS(app, expose_headers='Authorization')
 
-client = MongoClient('mongodb://localhost:27017/')
+#client = MongoClient('mongodb://localhost:27017/')
+client = mongomock.MongoClient().db.collection
 
 credentials_collection = client['WriteFreeDB']['credentials']
 notes_collection = client['WriteFreeDB']['notes']
