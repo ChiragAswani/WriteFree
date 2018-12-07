@@ -104,9 +104,8 @@ class Dashboard extends React.Component {
     }).catch((error) => {
       console.log(error, 'ERROR - BAD REFRESH TOKEN');
     });
-    const email = localStorage.getItem('email');
     AuthStr = 'Bearer '.concat(id);
-    axios.get('http://127.0.0.1:5000/get-data', { headers: { Authorization: AuthStr }, params: { email, id } }).then((response) => {
+    axios.get('http://127.0.0.1:5000/get-data', { headers: { Authorization: AuthStr }, params: { id } }).then((response) => {
       this.setState({
         notes: response.data.notes,
         credentials: response.data.credentials,
@@ -117,17 +116,21 @@ class Dashboard extends React.Component {
   }
 
   deleteNote(email, noteID) {
-    const deleteNote = {
-      method: 'DELETE',
-      url: 'http://127.0.0.1:5000/delete-note',
-      qs: { email, noteID },
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    };
-    request(deleteNote, (error, response, body) => {
-      const parsedData = JSON.parse(body);
-      this.setState({ notes: parsedData.notes });
-    });
-  }
+      // const deleteNote = {
+      //   method: 'DELETE',
+      //   url: 'http://127.0.0.1:5000/delete-note',
+      //   qs: { email, noteID },
+      //   headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      // };
+      // request(deleteNote, (error, response, body) => {
+      //   const parsedData = JSON.parse(body);
+      //   this.setState({ notes: parsedData.notes });
+      // });
+      const accessToken = localStorage.getItem('access_token');
+      const AuthStr = 'Bearer '.concat(accessToken);
+
+      axios.get('http://127.0.0.1:5000/delete-note', {
+
 
   goToNote(noteID){
       this.props.history.push({
@@ -137,15 +140,30 @@ class Dashboard extends React.Component {
   }
 
   createNote(email) {
-    const postNewNote = {
-      method: 'POST',
-      url: 'http://127.0.0.1:5000/new-note',
-      qs: { email },
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    };
-    request(postNewNote, (error, response, body) => {
-      const parsedData = JSON.parse(body);
+    const accessToken = localStorage.getItem('access_token');
+    const refreshToken = localStorage.getItem('refresh_token');
+    const AuthStr = 'Bearer '.concat(accessToken);
+    const AuthStr2 = 'Bearer '.concat(refreshToken);
+    const headers = { Authorization: AuthStr };
+
+    console.log(headers);
+    axios.get('http://127.0.0.1:5000/new-note', {headers:headers}).then((response) => {
+        const parsedData = response.data;
         this.goToNote(parsedData._id);
+    });
+
+  }
+
+  logout() {
+    const accessToken = localStorage.getItem('access_token');
+    const refreshToken = localStorage.getItem('refresh_token');
+    const AuthStr = 'Bearer '.concat(accessToken);
+    const AuthStr2 = 'Bearer '.concat(refreshToken);
+    const headers = { Authorization: AuthStr };
+    axios.get('http://127.0.0.1:5000/logout', { headers });
+    axios.get('http://127.0.0.1:5000/logout2', { headers: { Authorization: AuthStr2 } }).then((response) => {
+      localStorage.clear();
+      this.props.history.push('/login');
     });
   }
 
@@ -163,16 +181,15 @@ class Dashboard extends React.Component {
   }
 
   searchNotes(query){
-    let obj = { email: localStorage.getItem('email') }
-    const getNotes = {
-        method: 'POST',
-        url: 'http://127.0.0.1:5000/get-notes',
-        body: JSON.stringify(obj),
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    };
-    request(getNotes, function (error, response, body) {
-        var parsedData = JSON.parse(body);
-        if (query.trim().length !== 0){
+      const accessToken = localStorage.getItem('access_token');
+      const refreshToken = localStorage.getItem('refresh_token');
+      const AuthStr = 'Bearer '.concat(accessToken);
+      const AuthStr2 = 'Bearer '.concat(refreshToken);
+      const headers = { Authorization: AuthStr };
+
+      axios.get('http://127.0.0.1:5000/get-notes', {headers:headers}).then((response) => {
+          var parsedData = response.data;
+                  if (query.trim().length !== 0){
             const filteredNotes = [];
             for (let note in parsedData.notes){
                 if (parsedData.notes[note].title.includes(query) ||
@@ -184,15 +201,14 @@ class Dashboard extends React.Component {
         } else {
             this.setState({'notes': parsedData.notes})
         }
-
-    }.bind(this));
+      });
   }
 
   render() {
     document.body.style.backgroundColor = "#eaeaea";
     if (!this.state.isTableView) {
       return (
-        <div style={{background: "#eaeaea"}}>
+      <div style={{background: "#eaeaea"}}>
             <NavigationBar/>
             <div className={"middle"}>
                 <div className={"child"}>
