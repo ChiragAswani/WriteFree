@@ -16,7 +16,9 @@ class DefaultSettings extends React.Component {
   }
 
   componentDidMount() {
-
+      if (!localStorage.getItem('id')){
+          return this.props.history.push('/login')
+      }
       const accessToken = localStorage.getItem('access_token');
       const AuthStr = `Bearer `.concat(accessToken);
       const headers = { Authorization: AuthStr };

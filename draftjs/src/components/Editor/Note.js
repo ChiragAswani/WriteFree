@@ -37,6 +37,10 @@ class Note extends React.Component {
   }
   componentDidMount() {
       this.mounted = true;
+      if (!localStorage.getItem('id')){
+          return this.props.history.push('/login')
+      }
+
       const splitValue = window.location.href.split("/")
       const noteID = splitValue[splitValue.length - 1]
       const accessToken = localStorage.getItem('access_token');
