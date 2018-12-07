@@ -19,7 +19,6 @@ import LineSpacingOption from "./ToolBarOptions/LineSpacing";
 class Note extends React.Component {
   constructor(props) {
     super(props);
-    this.mounted = false;
     this.state = {
       editorState: EditorState.createEmpty(),
       noteCategory: undefined,
@@ -36,11 +35,9 @@ class Note extends React.Component {
     this.changeToolBar = this.changeToolBar.bind(this);
   }
   componentDidMount() {
-      this.mounted = true;
       if (!localStorage.getItem('id')){
           return this.props.history.push('/login')
       }
-
       const splitValue = window.location.href.split("/")
       const noteID = splitValue[splitValue.length - 1]
       const accessToken = localStorage.getItem('access_token');
@@ -67,6 +64,7 @@ class Note extends React.Component {
                 wordSpacing: parsedData.wordSpacing,
                 lineSpacing: parsedData.lineSpacing,
                 noteID: noteID,
+                isHyphenated: parsedData.isHyphenated
             });
         }
         if (parsedData.title){
@@ -77,22 +75,20 @@ class Note extends React.Component {
                 noteCategory: parsedData.category,
                 noteCategoryIconColor: "#466fb5",
                 noteColor: parsedData.noteColor,
-                noteID: noteID,
             });
         }
     }.bind(this));
   }
 
-    async componentWillUnmount(){
-      this.mounted = false;
+     async componentWillUnmount(){
       if (this.state.noteTitle && this.state.noteCategory){
-          await this.saveNote(this.state.noteTitle, this.state.noteCategory, this.state.noteID, this.state.editorState.getCurrentContent())
+           await this.saveNote(this.state.noteTitle, this.state.noteCategory, this.state.noteID, this.state.editorState.getCurrentContent())
       } else if (this.state.noteTitle === undefined && this.state.noteCategory === undefined) {
-          await this.saveNote("Untitled", "N/A", this.state.noteID, this.state.editorState.getCurrentContent())
+           await this.saveNote("Untitled", "N/A", this.state.noteID, this.state.editorState.getCurrentContent())
       } else if (this.state.noteCategory === undefined) {
-          await this.saveNote(this.state.noteTitle, "N/A", this.state.noteID, this.state.editorState.getCurrentContent())
+           await this.saveNote(this.state.noteTitle, "N/A", this.state.noteID, this.state.editorState.getCurrentContent())
       } else if (this.state.noteTitle === undefined) {
-          await this.saveNote("Untitled", this.state.noteCategory, this.state.noteID, this.state.editorState.getCurrentContent())
+           await this.saveNote("Untitled", this.state.noteCategory, this.state.noteID, this.state.editorState.getCurrentContent())
       }
     }
 
@@ -145,7 +141,7 @@ class Note extends React.Component {
                 toolsButtonHighlight: {'border': 'none', isSelected: false},
                 'toolbar': {'options': []},
                 'toolbarCustomButtons': [
-                    <HyphenationOption hyphenate={hyphenate}/>,
+                    <HyphenationOption hyphenate={hyphenate} noteID={this.state.noteID} isHyphenated={this.state.isHyphenated}/>,
                     <WordSpacingOption setDocumentWordSpacing={setDocumentWordSpacing} noteID={this.state.noteID} wordSpacing={this.state.wordSpacing}/>,
                     <LineSpacingOption setDocumentLineSpacing={setDocumentLineSpacing} noteID={this.state.noteID} lineSpacing={this.state.lineSpacing}/>,
                     <SpeechOption speechText={convertToRaw(this.state.editorState.getCurrentContent())}/>,
@@ -257,65 +253,75 @@ function setDocumentLineSpacing(lineSpacing) {
 }
 
 // Function for hyphenating the contents in text editor, binded with Note class.
-function hyphenate(child) {
-    console.log(this.mounted);
-    // enable hyphenation
-    if(this.mounted) {
-        if (child) {
-            var newContents = convertToRaw(this.state.editorState.getCurrentContent());
-            var Hypher = require('hypher'),
-                english = require('hyphenation.en-us'),
-                h = new Hypher(english);
-            for (var line = 0; line < newContents.blocks.length; line++) {
-                //counts the number of dots added
-                var numberOfDots = 0;
-                //parse the line into words by spaces
-                var oneLine = newContents.blocks[line]['text'].split(" ");
-                var hyphenatedLine = "";
-                //hyphenate each work
-                for (var i = 0; i < oneLine.length; i++) {
-                    var hyphenatedWord = h.hyphenate(oneLine[i]);
-                    for (var j = 0; j < hyphenatedWord.length - 1; j++) {
-                        // add unicode dot for each syllables
-                        hyphenatedLine += hyphenatedWord[j] + "\u2022";
-                        numberOfDots += 1;
-                    }
-                    hyphenatedLine += hyphenatedWord[hyphenatedWord.length - 1] + " ";
+function hyphenate(child, noteID) {
+    const postHyphenateChild = {
+        method: 'POST',
+        url: 'http://127.0.0.1:5000/change-hyphenation',
+        body: JSON.stringify({ noteID: noteID, isHyphenated: child }),
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    };
+    if (child) {
+        var newContents = convertToRaw(this.state.editorState.getCurrentContent());
+        console.log(newContents)
+        var Hypher = require('hypher'),
+            english = require('hyphenation.en-us'),
+            h = new Hypher(english);
+        for (var line = 0; line < newContents.blocks.length; line++) {
+            //counts the number of dots added
+            var numberOfDots = 0;
+            //parse the line into words by spaces
+            var oneLine = newContents.blocks[line]['text'].split(" ");
+            var hyphenatedLine = "";
+            //hyphenate each work
+            for (var i = 0; i < oneLine.length; i++) {
+                var hyphenatedWord = h.hyphenate(oneLine[i]);
+                for (var j = 0; j < hyphenatedWord.length - 1; j++) {
+                    // add unicode dot for each syllables
+                    hyphenatedLine += hyphenatedWord[j] + "\u2022";
+                    numberOfDots += 1;
                 }
-                newContents.blocks[line]['text'] = hyphenatedLine;
-                //change inline css style for the extra dot characters
-                newContents.blocks[line]['inlineStyleRanges'][0]['length'] += numberOfDots;
-                newContents.blocks[line]['inlineStyleRanges'][1]['length'] += numberOfDots;
+                hyphenatedLine += hyphenatedWord[hyphenatedWord.length - 1] + " ";
             }
-            //convert to  note content
+            newContents.blocks[line]['text'] = hyphenatedLine;
+            //change inline css style for the extra dot characters
+            newContents.blocks[line]['inlineStyleRanges'][0]['length'] += numberOfDots;
+            newContents.blocks[line]['inlineStyleRanges'][1]['length'] += numberOfDots;
+        }
+        request(postHyphenateChild, (error, response, body) => {
             this.setState({
+                isHyphenated: child,
                 editorState: EditorState.createWithContent(convertFromRaw((newContents))),
             });
-        }
-        //eliminate the splitter
-        else {
-            var newContents = convertToRaw(this.state.editorState.getCurrentContent());
-            // go through each blocks/lines
-            for (var line = 0; line < newContents.blocks.length; line++) {
-                //parse the line into pieces splited by the dots
-                var oneLine = newContents.blocks[line]['text'].split("\u2022");
-                //counts the number of dots eliminated
-                var numberOfDots = oneLine.length - 1;
-                var restoredLine = "";
-                //hyphenate each work
-                for (var i = 0; i < oneLine.length; i++) {
-                    restoredLine += oneLine[i];
-                }
-                newContents.blocks[line]['text'] = restoredLine;
-                //change inline css style for the extra dot characters
-                newContents.blocks[line]['inlineStyleRanges'][0]['length'] -= numberOfDots;
-                newContents.blocks[line]['inlineStyleRanges'][1]['length'] -= numberOfDots;
+        });
+
+    }
+    //eliminate the splitter
+    else { //hyphenate is off
+        var newContents = convertToRaw(this.state.editorState.getCurrentContent());
+        // go through each blocks/lines
+        for (var line = 0; line < newContents.blocks.length; line++) {
+            //parse the line into pieces splited by the dots
+            var oneLine = newContents.blocks[line]['text'].split("\u2022");
+            //counts the number of dots eliminated
+            var numberOfDots = oneLine.length - 1;
+            var restoredLine = "";
+            //hyphenate each work
+            for (var i = 0; i < oneLine.length; i++) {
+                restoredLine += oneLine[i];
             }
-            //convert to  note content
+            newContents.blocks[line]['text'] = restoredLine;
+            //change inline css style for the extra dot characters
+            newContents.blocks[line]['inlineStyleRanges'][0]['length'] -= numberOfDots;
+            newContents.blocks[line]['inlineStyleRanges'][1]['length'] -= numberOfDots;
+        }
+
+
+        request(postHyphenateChild, (error, response, body) => {
             this.setState({
+                isHyphenated: child,
                 editorState: EditorState.createWithContent(convertFromRaw((newContents))),
             });
-        }
+        });
     }
 }
 

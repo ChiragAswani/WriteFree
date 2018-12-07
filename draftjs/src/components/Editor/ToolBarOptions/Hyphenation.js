@@ -6,7 +6,7 @@ const HyphenationOption = (props) => {
     return (
         <div>
             <p>Hyphenation</p>
-            <Switch checkedChildren="On" unCheckedChildren="Off" onChange={(child) => props.hyphenate(child)}/>
+            <Switch disabled defaultChecked={props.isHyphenated} checkedChildren="On" unCheckedChildren="Off" onChange={(child) => props.hyphenate(child, props.noteID)}/>
         </div>
 
     );
