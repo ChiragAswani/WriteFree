@@ -63,7 +63,16 @@ def create_google():
          "fullName": name,
          "password": pw_hash,
          "runTutorial": True,
-         "defaultNoteSettings": {},
+         "defaultNoteSettings": {
+             "noteColor": "#E1EBF5",
+             "fontName": "Arial",
+             "fontSize": "12",
+              "draftjsObj": {"blocks": [{"key": "9043t", "text": " ", "type": "unstyled", "depth": 0,
+                               "inlineStyleRanges": [{"offset": 0, "length": 1, "style": "fontsize-12"},
+                                                     {"offset": 0, "length": 1, "style": "fontfamily-Arial"}],
+                               "entityRanges": [], "data": {}}], "entityMap": {}}
+
+         },
         }
         document = control.new_account(credentials_collection, savedDocument)
         return document, 200
@@ -95,7 +104,16 @@ def create():
             "fullName": fullName,
             "password": pw_hash,
             "runTutorial": True,
-            "defaultNoteSettings": {},
+            "defaultNoteSettings": {
+             "noteColor": "#E1EBF5",
+             "fontName": "Arial",
+             "fontSize": "12",
+              "draftjsObj": {"blocks": [{"key": "9043t", "text": " ", "type": "unstyled", "depth": 0,
+                               "inlineStyleRanges": [{"offset": 0, "length": 1, "style": "fontsize-12"},
+                                                     {"offset": 0, "length": 1, "style": "fontfamily-Arial"}],
+                               "entityRanges": [], "data": {}}], "entityMap": {}}
+
+         },
         }
         credentials_collection.insert_one(savedDocument)
         savedDocument["_id"] = str(savedDocument["_id"])
@@ -170,7 +188,8 @@ def addNote():
         "category": None,
         "noteColor": credentials['defaultNoteSettings']['noteColor'],
         "wordSpacing": "0.9px",
-        "lineSpacing": "0.05"
+        "lineSpacing": "0.05",
+        "isHyphenated": False
     }
     notes = control.add_note(notes_collection, baseNewNote)
     return notes, 200
@@ -218,8 +237,13 @@ def changeNoteColor():
 def fetchNote(note_id):
     email = get_jwt_identity()
     noteID = request.args['noteID']
-    note_fetched = control.fetch_note(notes_collection, {'email': email, "_id": ObjectId(noteID)})
-    return note_fetched, 200
+    try:
+        note_fetched = control.fetch_note(notes_collection, {'email': email, "_id": ObjectId(noteID)})
+        return note_fetched, 200
+    except:
+        return "Note Not Found", 404
+
+
 
 @app.route ('/renderPDF', methods= ['GET', 'OPTIONS'])
 def renderPDF():
@@ -243,6 +267,15 @@ def changeLineSpacing():
     noteID = form_data['noteID']
     lineSpacing = form_data['lineSpacing']
     query = {'$set': {'lineSpacing': lineSpacing}}
+    notes_collection.find_one_and_update({'_id': ObjectId(noteID)}, query)
+    return "HI", 200
+
+@app.route ('/change-hyphenation', methods= ['POST', 'OPTIONS'])
+def changeHyphenation():
+    form_data = json.loads(request.get_data())
+    noteID = form_data['noteID']
+    isHyphenated = form_data['isHyphenated']
+    query = {'$set': {'isHyphenated': isHyphenated}}
     notes_collection.find_one_and_update({'_id': ObjectId(noteID)}, query)
     return "HI", 200
 
