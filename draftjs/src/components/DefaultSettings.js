@@ -3,7 +3,6 @@ import { Button } from 'antd';
 import 'antd/dist/antd.css';
 import { withRouter } from 'react-router-dom';
 import { CirclePicker } from 'react-color';
-import request from 'request';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import axios from "axios";
@@ -65,7 +64,9 @@ class DefaultSettings extends React.Component {
       if(response.status==200){
         this.props.history.push('/dashboard');
       }
-      console.log("ERROR WITH JWT");
+      else {
+          console.log("ERROR WITH JWT");
+      }
 
     });
     // const updateDefaultSettings = {
