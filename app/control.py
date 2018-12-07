@@ -16,6 +16,10 @@ This is the file containing the functions that handles the DB data before return
 #       cred_db: the credential database object
 #       savedDocument: new account profile
 # output: saved profile in json format
+
+
+
+
 def new_account(cred_db, savedDocument):
     dbcalls.DB_insert_one(cred_db, savedDocument)
     savedDocument["_id"] = str(savedDocument["_id"])
@@ -73,6 +77,11 @@ def save_note(note_db, form_data):
                   "lastUpdated": datetime.datetime.fromtimestamp(time.time()).strftime('%c')}
     dbcalls.DB_update_one(note_db, {"$set": new_values}, query)
 
+# input:
+#       cred_db: credential database object
+#       app_db: application db object
+#       email: used for data retrieval
+# output: jsonified credential and app setting
 def get_default_setting(cred_db, app_db, email):
     credentials = dbcalls.DB_find_one(cred_db, {'email': email})
     credentials["_id"] = str(credentials["_id"])
@@ -86,8 +95,7 @@ def get_default_setting(cred_db, app_db, email):
 #       cred_db: credential data
 #       form_data: new note data
 # output: None
-def update_default_setting(cred_db, form_data):
-    email = form_data['email']
+def update_default_setting(cred_db, form_data,email):
     noteColor = form_data['noteColor']
     fontName = form_data['fontName']
     fontSize = form_data['fontSize']
@@ -115,12 +123,7 @@ def fetch_note(cred_db, value):
 #       note_db: the note database object
 #       noteID: value used for retrieval
 # output: response
-def render_PDF(note_db, noteID):
-    noteData = dbcalls.DB_find_one(noteID)
-    noteContent = noteData['content']
-    config = {}
-    exporter = HTML(config)
-    noteHTML = exporter.render(noteContent)
+def render_PDF(noteID, noteHTML):
     pdf = pdfkit.from_string(noteHTML, False)
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
