@@ -12,11 +12,11 @@ import createHistory from "history/createBrowserHistory";
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faUser} from '@fortawesome/free-solid-svg-icons'
+import Error404 from "./components/Error404";
 library.add( faUser)
 const history = createHistory()
 
 ReactDOM.render(
-
     <BrowserRouter >
         <Switch>
             <Route path="/create-account" component={CreateAccount} />
@@ -24,6 +24,8 @@ ReactDOM.render(
             <Route path="/dashboard" component={Dashboard}/>
             <Route path="/default-settings" component={DefaultSettings}/>
             <Route path="/note/:noteid" component={NewNote}/>
+            <Route path="/" component={Error404}/>
+
         </Switch>
     </BrowserRouter >,
     document.getElementById('root'));
