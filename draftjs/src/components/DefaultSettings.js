@@ -6,6 +6,7 @@ import { CirclePicker } from 'react-color';
 import request from 'request';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
+import axios from "axios";
 
 class DefaultSettings extends React.Component {
   constructor(props) {
@@ -16,28 +17,30 @@ class DefaultSettings extends React.Component {
   }
 
   componentDidMount() {
-    const getDefaultSettings = {
-      method: 'GET',
-      url: 'http://127.0.0.1:5000/get-default-settings',
-      qs: { email: localStorage.getItem('email') },
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    };
-    request(getDefaultSettings, (error, response, body) => {
-      const parsedData = JSON.parse(body);
-      let val = '';
-      try {
-        val = parsedData.credentials.defaultNoteSettings.fontSize.toString();
-      } catch (err) {
-        val = '12';
-      }
-      this.setState({
-        noteColor: parsedData.credentials.defaultNoteSettings.noteColor,
-        fontName: parsedData.credentials.defaultNoteSettings.fontName,
-        fontSize: val,
-        fontNames: parsedData.applicationSettings.fontNames,
-        fontSizes: parsedData.applicationSettings.fontSizes,
+
+      const accessToken = localStorage.getItem('access_token');
+      const AuthStr = `Bearer `.concat(accessToken);
+      const headers = { Authorization: AuthStr };
+      axios.get('http://127.0.0.1:5000/get-default-settings', {headers: headers}).then((response) => {
+          console.log(response)
+          const parsedData =response.data;
+          let val = '';
+          try {
+              val = parsedData.credentials.defaultNoteSettings.fontSize.toString();
+          } catch (err) {
+              val = '12';
+          }
+          this.setState({
+              noteColor: parsedData.credentials.defaultNoteSettings.noteColor,
+              fontName: parsedData.credentials.defaultNoteSettings.fontName,
+              fontSize: val,
+              fontNames: parsedData.applicationSettings.fontNames,
+              fontSizes: parsedData.applicationSettings.fontSizes,
+          });
+
       });
-    });
+
+
   }
 
   changeNoteColor(color) {
@@ -46,19 +49,31 @@ class DefaultSettings extends React.Component {
 
   async saveDefaultSettings(noteColor, fontName, fontSize) {
     const obj = {
-      email: localStorage.getItem('email'), noteColor, fontName, fontSize,
+      email: noteColor, fontName, fontSize,
     };
     if (!obj.noteColor) { obj.noteColor = '#8bc34a'; }
     if (!obj.fontName) { obj.fontName = 'Georgia'; }
     if (!obj.fontSize) { obj.fontSize = 11; }
-    const updateDefaultSettings = {
-      method: 'POST',
-      url: 'http://127.0.0.1:5000/update-default-settings',
-      body: JSON.stringify(obj),
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    };
-    await request(updateDefaultSettings);
-    this.props.history.push('/dashboard');
+
+    const accessToken = localStorage.getItem('access_token');
+    const AuthStr = `Bearer `.concat(accessToken);
+    const headers = { Authorization: AuthStr };
+    const body = JSON.stringify(obj);
+    axios.post('http://127.0.0.1:5000/update-default-settings', { body: body  }, {headers: headers},).then((response) => {
+      if(response.status==200){
+        this.props.history.push('/dashboard');
+      }
+      console.log("ERROR WITH JWT");
+
+    });
+    // const updateDefaultSettings = {
+    //   method: 'POST',
+    //   url: 'http://127.0.0.1:5000/update-default-settings',
+    //   body: JSON.stringify(obj),
+    //   headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    // };
+    // await request(updateDefaultSettings);
+    // this.props.history.push('/dashboard');
   }
 
   render() {
