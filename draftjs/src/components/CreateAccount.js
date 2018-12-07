@@ -26,14 +26,9 @@ class CreateAccount extends React.Component {
     };
     request(postCreateAnAccountInformation, (error, response, body) => {
       if (response.statusCode === 401) {
-        /* TODO in backend:
-           -is email valid
-           -is email duplicate
-           -is fullName valid
-           -is password valid
-         */
         handleAccountError(error);
       } else {
+        console.log(body)
         const parsedData = JSON.parse(body);
         localStorage.setItem('email', email);
         localStorage.setItem('access_token', parsedData.access_token);

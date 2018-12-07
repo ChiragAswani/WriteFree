@@ -115,29 +115,30 @@ class Dashboard extends React.Component {
     });
   }
 
+    goToNote(noteID){
+        this.props.history.push({
+            pathname: `/note/${noteID}`,
+            state: { noteID },
+        });
+    }
+
   deleteNote(email, noteID) {
-      // const deleteNote = {
-      //   method: 'DELETE',
-      //   url: 'http://127.0.0.1:5000/delete-note',
-      //   qs: { email, noteID },
-      //   headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      // };
-      // request(deleteNote, (error, response, body) => {
-      //   const parsedData = JSON.parse(body);
-      //   this.setState({ notes: parsedData.notes });
-      // });
       const accessToken = localStorage.getItem('access_token');
       const AuthStr = 'Bearer '.concat(accessToken);
+      const headers = { Authorization: AuthStr, 'Content-Type': 'application/x-www-form-urlencoded' };
 
-      axios.get('http://127.0.0.1:5000/delete-note', {
-
-
-  goToNote(noteID){
-      this.props.history.push({
-          pathname: `/note/${noteID}`,
-          state: { noteID },
+      const deleteNote = {
+        method: 'DELETE',
+        url: 'http://127.0.0.1:5000/delete-note',
+        qs: { noteID },
+        headers: headers,
+      };
+      request(deleteNote, (error, response, body) => {
+        const parsedData = JSON.parse(body);
+        this.setState({ notes: parsedData.notes });
       });
   }
+
 
   createNote(email) {
     const accessToken = localStorage.getItem('access_token');
