@@ -79,8 +79,8 @@ class Dashboard extends React.Component {
         title: 'Action',
         className: "classNameOfColumn",
         render: (text, record) => (
-          <div style={ {background: record.noteColor} }>
-              <div style={{background: ''}  }>
+          <div >
+              <div>
             <a className={'editNote'} onClick={() => this.goToNote(record._id)}>Edit | </a>
               <Popconfirm
                   title="Are you sure you want to delete this note?"
@@ -200,8 +200,8 @@ class Dashboard extends React.Component {
                   if (query.trim().length !== 0){
             const filteredNotes = [];
             for (let note in parsedData.notes){
-                if (parsedData.notes[note].title.includes(query) ||
-                    parsedData.notes[note].category.includes(query)){
+                if (parsedData.notes[note].title.toLowerCase().includes(query.toLowerCase()) ||
+                    parsedData.notes[note].category.toLowerCase().includes(query.toLowerCase())){
                     filteredNotes.push(parsedData.notes[note])
                 }
             }

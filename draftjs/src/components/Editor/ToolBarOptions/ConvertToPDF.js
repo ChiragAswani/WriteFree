@@ -4,6 +4,7 @@ import React from "react";
 const ConvertToPDF = (props) => {
     return (
         <Button
+            disabled
             className={'convert-to-pdf'}
             onClick={() => window.open("http://www.localhost:5000/renderPDF?noteID="+props.noteID)}>
             Convert to PDF

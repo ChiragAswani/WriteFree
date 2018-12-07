@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
@@ -19,11 +20,15 @@ class NavigationBar extends React.Component {
                         <a onClick={() => this.logout()}>Log Out</a>
                     </Menu.Item>
                     <Menu.Item>
-                        <a onClick={() => this.props.history.push('/dashboard')}>Dashboard</a>
+                        <a onClick={() => this.goToDashBoard()}>Dashboard</a>
                     </Menu.Item>
                 </Menu>
             )
         };
+    }
+
+    goToDashBoard(){
+        this.props.history.push('/dashboard')
     }
 
     logout() {
@@ -42,7 +47,7 @@ class NavigationBar extends React.Component {
     render() {
         return (
             <div className={"top"}>
-                <img onClick={() => this.props.history.push('/dashboard')} src="https://github.com/ChiragAswani/Husky-Test/blob/master/logo.png?raw=true" height="20px"/>
+                <img onClick={() => this.goToDashBoard()} src="https://github.com/ChiragAswani/Husky-Test/blob/master/logo.png?raw=true" height="20px"/>
                 <Dropdown overlay={this.state.menu}>
                     <FontAwesomeIcon icon="user"/>
                 </Dropdown>

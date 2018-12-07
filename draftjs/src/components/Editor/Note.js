@@ -80,19 +80,6 @@ class Note extends React.Component {
     }.bind(this));
   }
 
-     async componentWillUnmount(){
-      if (this.state.noteTitle && this.state.noteCategory){
-           await this.saveNote(this.state.noteTitle, this.state.noteCategory, this.state.noteID, this.state.editorState.getCurrentContent())
-      } else if (this.state.noteTitle === undefined && this.state.noteCategory === undefined) {
-           await this.saveNote("Untitled", "N/A", this.state.noteID, this.state.editorState.getCurrentContent())
-      } else if (this.state.noteCategory === undefined) {
-           await this.saveNote(this.state.noteTitle, "N/A", this.state.noteID, this.state.editorState.getCurrentContent())
-      } else if (this.state.noteTitle === undefined) {
-           await this.saveNote("Untitled", this.state.noteCategory, this.state.noteID, this.state.editorState.getCurrentContent())
-      }
-
-    }
-
     _handleKeyCommand(command) {
         const {editorState} = this.state;
         const newState = RichUtils.handleKeyCommand(editorState, command);
@@ -103,7 +90,7 @@ class Note extends React.Component {
         return false;
     }
 
-    saveNote(title, category, noteID, noteContent){
+    async saveNote(title, category, noteID, noteContent){
         const convertedNoteContent = convertToRaw(noteContent)
         const accessToken = localStorage.getItem('access_token');
         const AuthStr = 'Bearer '.concat(accessToken);
@@ -116,7 +103,7 @@ class Note extends React.Component {
             body: JSON.stringify(obj),
             headers: headers,
         };
-        return request(saveNote)
+        return await request(saveNote)
     }
 
 
@@ -147,7 +134,7 @@ class Note extends React.Component {
                     <LineSpacingOption setDocumentLineSpacing={setDocumentLineSpacing} noteID={this.state.noteID} lineSpacing={this.state.lineSpacing}/>,
                     <SpeechOption speechText={convertToRaw(this.state.editorState.getCurrentContent())}/>,
 
-                    <NoteColor changeNoteColor ={changeNoteColor} noteID={this.state.noteID}/>]
+                    <NoteColor changeNoteColor ={changeNoteColor} noteID={this.state.noteID} noteColor={this.state.noteColor}/>]
             })
         }
     }
@@ -194,9 +181,24 @@ class Note extends React.Component {
         }
 
     }
+
+    alwaysSaveNote(){
+        if (this.state.noteTitle && this.state.noteCategory){
+            this.saveNote(this.state.noteTitle, this.state.noteCategory, this.state.noteID, this.state.editorState.getCurrentContent())
+        } else if (!this.state.noteTitle && !this.state.noteCategory) {
+            this.saveNote("Untitled", "N/A", this.state.noteID, this.state.editorState.getCurrentContent())
+        } else if (!this.state.noteCategory) {
+            this.saveNote(this.state.noteTitle, "N/A", this.state.noteID, this.state.editorState.getCurrentContent())
+        } else if (!this.state.noteTitle) {
+            this.saveNote("Untitled", this.state.noteCategory, this.state.noteID, this.state.editorState.getCurrentContent())
+        }
+
+    }
+
     render() {
         const {editorState} = this.state;
         document.body.style.backgroundColor = "#f5f5f5"
+        this.alwaysSaveNote()
         return (
             <div style={{background: "#f5f5f5"}}>
                 <NavigationBar/>
@@ -327,8 +329,7 @@ function hyphenate(child, noteID) {
 }
 
 // Function for changing the note background color. Store the changes to database
-function changeNoteColor(noteID, color)
-{
+function changeNoteColor(noteID, color) {
     var changeNoteColor = {
         method: 'POST',
         url: 'http://127.0.0.1:5000/change-note-color',
@@ -337,6 +338,7 @@ function changeNoteColor(noteID, color)
     };
     request(changeNoteColor, function (error, response, body) {
         this.setState({ noteColor: color.hex });
+        location.reload();
     }.bind(this));
 }
 

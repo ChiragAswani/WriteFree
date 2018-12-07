@@ -24,9 +24,11 @@ class CardListItem extends React.Component {
                         {note.lastUpdated}
                     </div>
                 </div>,
-            noteDelete: <img height="40px" width="40px" src={trash} onClick={() => console.log("TEST") } />
+            noteDelete: <img height="40px" width="40px" src={trash} onClick={() => console.log("clicked") } />
         });
     }
+
+
     editNote(email, noteID) {
         this.props.history.push({
             pathname: `/note/${noteID}`,
