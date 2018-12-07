@@ -277,6 +277,7 @@ def refresh():
     ret = {
         'access_token': create_access_token(identity=current_user)
     }
+    print(ret)
     return jsonify(ret), 200
 
 # Endpoint for revoking the current users access token
