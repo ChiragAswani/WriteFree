@@ -166,7 +166,6 @@ class Note extends React.Component {
 
     _handleKeyPress = (e) => {
         if (e.key === 'Enter') {
-            console.log('do validate');
         }
     };
 
@@ -323,8 +322,6 @@ function hyphenate(child) {
 // Function for changing the note background color. Store the changes to database
 function changeNoteColor(noteID, color)
 {
-    console.log(noteID);
-    console.log(color.hex);
     var changeNoteColor = {
         method: 'POST',
         url: 'http://127.0.0.1:5000/change-note-color',
