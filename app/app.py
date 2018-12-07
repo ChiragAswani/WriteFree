@@ -12,6 +12,7 @@ import datetime
 from draftjs_exporter.html import HTML
 import MongoDBCalls as dbcalls
 import control as control
+import re
 
 from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token, create_refresh_token,
@@ -73,10 +74,19 @@ def create():
     email = request.args['email']
     fullName = request.args['fullName']
     password = request.args['password']
+    match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', email)
+    if (match == None):
+        return "invalid email address", 501
+    if(len(fullName) == 0):
+        return "invalid name", 502
+    regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
+    if( len(password) < 8 or regex.search(password) == None ):
+        return "invalid password", 503
+
     createdAt = datetime.datetime.fromtimestamp(time.time()).strftime('%c')
     # hash the password and save it in pw_hash
     pw_hash = bcrypt.generate_password_hash(password.encode('utf-8'))
-    if dbcalls.DB_find_one(credentials_collection, {'email': email}):
+    if(credentials_collection.find_one({'email': email})):
         return "An account already exists with " + email, 401
     else:
         savedDocument = {
@@ -87,8 +97,12 @@ def create():
             "runTutorial": True,
             "defaultNoteSettings": {},
         }
-        document = control.new_account(credentials_collection, savedDocument)
-        return (document, 200)
+        credentials_collection.insert_one(savedDocument)
+        savedDocument["_id"] = str(savedDocument["_id"])
+        del savedDocument['password']
+        access_token = create_access_token(identity=email)
+        refresh_token = create_refresh_token(identity=email)
+        return jsonify({"credentials": savedDocument, "access_token": access_token, "refresh_token": refresh_token}), 200;
 
 # verify username and password, returns account details and notes
 @app.route('/login', methods= ['GET'])
@@ -97,8 +111,7 @@ def login():
     password = request.args['password']
     credentials = dbcalls.DB_find_one(credentials_collection, {'email': email})
     if (credentials):
-        hashed_password = bcrypt.generate_password_hash(password)
-        if (bcrypt.check_password_hash(hashed_password, password.encode('utf-8'))):
+        if (bcrypt.check_password_hash(credentials['password'], password.encode('utf-8'))):
             login_credential = control.get_credential(credentials, email)
             return login_credential, 200
         return "Invalid Email or Password", 401
@@ -162,11 +175,16 @@ def addNote():
     notes = control.add_note(notes_collection, baseNewNote)
     return notes, 200
 
-@app.route ('/save-note', methods= ['POST', 'GET', 'OPTIONS'])
+@app.route ('/save-note', methods= ['POST'])
+@jwt_required
 def saveNote():
-    form_data = json.loads(request.get_data())
-    control.save_note(notes_collection, form_data)
-    return "SAVED", 200
+    print(get_jwt_identity())
+    credentials = dbcalls.DB_find_one(credentials_collection, {'email': get_jwt_identity()})
+    if (credentials):
+        form_data = json.loads(request.get_data())
+        control.save_note(notes_collection, form_data)
+        return "SAVED", 200
+    return "NOT SAVED", 400
 
 @app.route ('/update-default-settings', methods= ['POST'])
 @jwt_required
@@ -195,9 +213,10 @@ def changeNoteColor():
     dbcalls.DB_find_one_and_update(notes_collection, {'_id': noteID}, query)
     return "Note Color Changed", 200
 
-@app.route ('/fetch-note/<note_id>', methods= ['GET', 'OPTIONS'])
+@app.route ('/fetch-note/<note_id>', methods= ['GET'])
+@jwt_required
 def fetchNote(note_id):
-    email = request.args['email']
+    email = get_jwt_identity()
     noteID = request.args['noteID']
     note_fetched = control.fetch_note(notes_collection, {'email': email, "_id": ObjectId(noteID)})
     return note_fetched, 200
