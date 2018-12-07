@@ -14,12 +14,15 @@ class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: null,
-      password: null,
+      email: "",
+      password: "",
     };
   }
 
   login(email, password) {
+      if (!email.trim() || !password.trim()){
+          return handleAccountError("Invalid Email or Password");
+      }
     axios.get(
       'http://127.0.0.1:5000/login', { params: { email, password } },
       { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },

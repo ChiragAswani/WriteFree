@@ -37,11 +37,14 @@ class Note extends React.Component {
   componentDidMount() {
       const splitValue = window.location.href.split("/")
       const noteID = splitValue[splitValue.length - 1]
+      const accessToken = localStorage.getItem('access_token');
+      const AuthStr = 'Bearer '.concat(accessToken);
+      const headers = { Authorization: AuthStr, 'Content-Type': 'application/x-www-form-urlencoded' };
     const fetchNote = {
       method: 'GET',
       url: `http://127.0.0.1:5000/fetch-note/${String(noteID)}`,
-      qs: { email: localStorage.getItem('email'), noteID },
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      qs: { noteID },
+      headers: headers,
     };
     request(fetchNote, function (error, response, body) {
         var parsedData = JSON.parse(body);
@@ -93,12 +96,16 @@ class Note extends React.Component {
 
     saveNote(title, category, noteID, noteContent){
         const convertedNoteContent = convertToRaw(noteContent)
+        const accessToken = localStorage.getItem('access_token');
+        const AuthStr = 'Bearer '.concat(accessToken);
+        const headers = { Authorization: AuthStr, 'Content-Type': 'application/x-www-form-urlencoded' };
+
         const obj = {title, category, noteID, noteContent: convertedNoteContent}
         var saveNote = {
             method: 'POST',
             url: 'http://127.0.0.1:5000/save-note',
             body: JSON.stringify(obj),
-            headers: {'Content-Type': 'application/x-www-form-urlencoded' }
+            headers: headers,
         };
         return request(saveNote)
     }

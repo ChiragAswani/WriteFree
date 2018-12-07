@@ -12,12 +12,15 @@ class CreateAccount extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: null,
-      fullName: null,
-      password: null,
+      email: "",
+      fullName: "",
+      password: "",
     };
   }
   createAccount(email, fullName, password) {
+      if (!email.trim() || !fullName.trim() || !password.trim()){
+          return handleAccountError("Missing Information");
+      }
     const postCreateAnAccountInformation = {
       method: 'POST',
       url: 'http://127.0.0.1:5000/create-account',
@@ -25,17 +28,25 @@ class CreateAccount extends React.Component {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     };
     request(postCreateAnAccountInformation, (error, response, body) => {
-      if (response.statusCode === 401) {
-        handleAccountError(error);
-      } else {
-        console.log(body)
-        const parsedData = JSON.parse(body);
-        localStorage.setItem('email', email);
-        localStorage.setItem('access_token', parsedData.access_token);
-        localStorage.setItem('id', parsedData.access_token);
-        localStorage.setItem('refresh_token', parsedData.refresh_token);
-        this.props.history.push('/default-settings');
-      }
+        if (response.statusCode === 501) {
+            var err = "Invalid email address"
+            handleAccountError(err);
+        } else if (response.statusCode === 502) {
+            var err = "Invalid name entered"
+            handleAccountError(err);
+        } else if (response.statusCode === 503) {
+            var err = "Password must be at least 8 characters long and contain 1 special character"
+            handleAccountError(err);
+        }
+        else {
+            console.log(body)
+            const parsedData = JSON.parse(body);
+            localStorage.setItem('email', email);
+            localStorage.setItem('access_token', parsedData.access_token);
+            localStorage.setItem('id', parsedData.access_token);
+            localStorage.setItem('refresh_token', parsedData.refresh_token);
+            this.props.history.push('/default-settings');
+        }
     });
   }
 
