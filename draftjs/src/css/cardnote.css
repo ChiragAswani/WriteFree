@@ -56,3 +56,9 @@
     background-color: #466fb5;
     border-radius: 15px !important;
 }
+
+.note-data-below{
+    font-size: 15px;
+    font-family: brown-bold;
+    padding-top: 80px;
+}

@@ -150,7 +150,7 @@ class Dashboard extends React.Component {
   }
 
   switchView(child) {
-    if (!child) {
+    if (child) {
       this.setState({ isTableView: true });
     } else {
       this.setState({ isTableView: false });
@@ -190,7 +190,7 @@ class Dashboard extends React.Component {
 
   render() {
     document.body.style.backgroundColor = "#eaeaea";
-    if (this.state.isTableView) {
+    if (!this.state.isTableView) {
       return (
         <div style={{background: "#eaeaea"}}>
             <NavigationBar/>
