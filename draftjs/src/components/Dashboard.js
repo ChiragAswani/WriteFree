@@ -157,7 +157,7 @@ class Dashboard extends React.Component {
     console.log(headers);
     axios.get('http://127.0.0.1:5000/new-note', {headers:headers}).then((response) => {
         const parsedData = response.data;
-        this.goToNote(parsedData._id);
+        goToNote(parsedData._id);
     });
 
   }

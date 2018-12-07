@@ -1,6 +1,7 @@
 import request from "request";
 import {Select} from "antd";
 import React from "react";
+import '../../../css/note.css';
 const Option = Select.Option;
 
 const WordSpacingOption = (props) => {
@@ -18,7 +19,7 @@ const WordSpacingOption = (props) => {
     }
 
     return (
-        <div>
+        <div className={"word-spacing"}>
             <h4>Word Spacing</h4>
             <Select
                 defaultValue={props.wordSpacing}

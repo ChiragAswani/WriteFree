@@ -133,7 +133,6 @@ class Note extends React.Component {
                     <WordSpacingOption setDocumentWordSpacing={setDocumentWordSpacing} noteID={this.state.noteID} wordSpacing={this.state.wordSpacing}/>,
                     <LineSpacingOption setDocumentLineSpacing={setDocumentLineSpacing} noteID={this.state.noteID} lineSpacing={this.state.lineSpacing}/>,
                     <SpeechOption speechText={convertToRaw(this.state.editorState.getCurrentContent())}/>,
-
                     <NoteColor changeNoteColor ={changeNoteColor} noteID={this.state.noteID} noteColor={this.state.noteColor}/>]
             })
         }
