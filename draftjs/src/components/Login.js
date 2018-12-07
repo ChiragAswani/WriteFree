@@ -34,7 +34,12 @@ class Login extends React.Component {
       localStorage.setItem('refresh_token', parsedData.refresh_token);
       return this.props.history.push('/dashboard');
     }).catch((error) => {
-      handleAccountError(error.response.data);
+        try{
+            handleAccountError(error.response.data);
+        } catch {
+            handleAccountError("We are having trouble connecting...");
+        }
+
     });
   }
   googleLogin(response) {
@@ -51,7 +56,11 @@ class Login extends React.Component {
       localStorage.setItem('refresh_token', parsedData.refresh_token);
       this.props.history.push('/dashboard');
     }).catch((error) => {
-      handleAccountError(error.response.data);
+        try{
+            handleAccountError(error.response.data);
+        } catch {
+            handleAccountError("We are having trouble connecting...");
+        }
     });
   }
 

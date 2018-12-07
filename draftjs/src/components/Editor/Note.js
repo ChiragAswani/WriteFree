@@ -15,6 +15,7 @@ import NoteColor from "./ToolBarOptions/NoteColor";
 import SpeechOption from "./ToolBarOptions/TextToSpeech";
 import WordSpacingOption from "./ToolBarOptions/WordSpacing";
 import LineSpacingOption from "./ToolBarOptions/LineSpacing";
+import {stateToHTML} from 'draft-js-export-html';
 
 class Note extends React.Component {
   constructor(props) {
@@ -205,7 +206,7 @@ class Note extends React.Component {
                     <Input className={"enter-title-here"} placeholder={"Untitled"} onKeyPress={this._handleKeyPress} value={this.state.noteTitle} onChange={noteTitle => this.setState({noteTitle: noteTitle.target.value})}></Input>
                     <Icon type="book" theme="filled" style={{'color': this.state.noteCategoryIconColor}} className={"note-category-icon"} />
                     <Input className={"enter-category-here"} placeholder={"Category"} value={this.state.noteCategory} onChange={noteCategory => this.changeNoteCategory(noteCategory.target.value)}></Input>
-                    <ConvertToPDF noteID={this.state.noteID}/>
+                    <ConvertToPDF noteID={this.state.noteID} noteHTML={stateToHTML(this.state.editorState.getCurrentContent())} noteColor={this.state.noteColor}/>
                 </div>
                 <div className={"tab-bar"}>
                     <Button

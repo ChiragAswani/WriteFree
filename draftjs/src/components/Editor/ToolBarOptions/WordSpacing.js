@@ -5,6 +5,7 @@ import '../../../css/note.css';
 const Option = Select.Option;
 
 const WordSpacingOption = (props) => {
+
     function changeWordSpacing(value) {
         const obj = {'noteID': props.noteID, 'wordSpacing': value}
         const changeWordSpacing = {
