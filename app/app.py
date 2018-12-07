@@ -17,6 +17,7 @@ from flask_jwt_extended import (
 
 # initializations
 app = Flask(__name__)
+app.debug = True
 CORS(app)
 app.secret_key = 'super secret key'
 app.config['JWT_BLACKLIST_ENABLED'] = True
