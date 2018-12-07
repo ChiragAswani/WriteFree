@@ -74,7 +74,7 @@ def create():
     email = request.args['email']
     fullName = request.args['fullName']
     password = request.args['password']
-    match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', email)
+    match = re.match("\A(?P<name>[\w\-_]+)@(?P<domain>[\w\-_]+).(?P<toplevel>[\w]+)\Z",email,re.IGNORECASE)
     if (match == None):
         return "invalid email address", 501
     if(len(fullName) == 0):
