@@ -34,7 +34,8 @@ class Note extends React.Component {
     this.changeToolBar = this.changeToolBar.bind(this);
   }
   componentDidMount() {
-    const noteID = this.props.location.state.noteID;
+      const splitValue = window.location.href.split("/")
+      const noteID = splitValue[splitValue.length - 1]
     const fetchNote = {
       method: 'GET',
       url: `http://127.0.0.1:5000/fetch-note/${String(noteID)}`,

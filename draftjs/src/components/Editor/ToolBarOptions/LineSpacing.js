@@ -18,17 +18,9 @@ const LineSpacingOption = (props) => {
         });
     }
 
-    const marks = {
-        0.06: 'Default',
-        0.6: '1.6',
-        1: '2',
-        4: '5',
-    };
-
     return (
         <div>
             <h4>Line Spacing</h4>
-            <Slider style={{ width: 400, margin: 50 }} marks={marks} step={null} defaultValue={0.06} />
             <Select defaultValue={props.lineSpacing} style={{ width: 150 }} onChange={(value) => changeLineSpacing(value)}>
             <Option value="0.05" disabled>Line Spacing</Option>
             <Option value="0.06">Default</Option>

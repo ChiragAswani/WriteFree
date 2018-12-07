@@ -42,7 +42,7 @@ class NavigationBar extends React.Component {
     render() {
         return (
             <div className={"top"}>
-                <img src="https://github.com/ChiragAswani/Husky-Test/blob/master/logo.png?raw=true" height="20px"/>
+                <img onClick={() => this.props.history.push('/dashboard')} src="https://github.com/ChiragAswani/Husky-Test/blob/master/logo.png?raw=true" height="20px"/>
                 <Dropdown overlay={this.state.menu}>
                     <FontAwesomeIcon icon="user"/>
                 </Dropdown>

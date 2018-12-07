@@ -1,6 +1,6 @@
 import React from "react";
 import {Card} from "antd";
-import CardList from "./CardList";
+import '../../css/cardnote.css';
 
 class CardListItem extends React.Component {
     constructor(props) {
@@ -22,7 +22,7 @@ class CardListItem extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className={"card"}>
                 <Card
                     extra={this.state.noteDelete}
                     onClick={() => this.editNote(localStorage.getItem('email'), this.state.note._id)}

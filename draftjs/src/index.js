@@ -16,6 +16,7 @@ library.add( faUser)
 const history = createHistory()
 
 ReactDOM.render(
+
     <BrowserRouter >
         <Switch>
             <Route path="/create-account" component={CreateAccount} />

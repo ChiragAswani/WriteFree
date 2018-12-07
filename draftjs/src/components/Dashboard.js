@@ -22,13 +22,13 @@ class Dashboard extends React.Component {
       menu: (
         <Menu>
           <Menu.Item>
-            <a onClick={() => this.sortNotes('category')}>Document Category</a>
+            <a onClick={() => this.sortNotes('category')}>By Category</a>
           </Menu.Item>
           <Menu.Item>
-            <a onClick={() => this.sortNotes('lastUpdated')}>Date Modified</a>
+            <a onClick={() => this.sortNotes('lastUpdated')}>By Last Updated</a>
           </Menu.Item>
           <Menu.Item>
-            <a onClick={() => this.sortNotes('title')}>Document Name</a>
+            <a onClick={() => this.sortNotes('title')}>By Name (A-Z)</a>
           </Menu.Item>
         </Menu>
       ),
