@@ -46,3 +46,4 @@ export function mergeSort(arr, option) {
 
   return merge(mergeSort(left, option), mergeSort(right, option), option);
 }
+

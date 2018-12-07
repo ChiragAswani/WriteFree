@@ -35,6 +35,9 @@ class Note extends React.Component {
     this.changeToolBar = this.changeToolBar.bind(this);
   }
   componentDidMount() {
+      if (!localStorage.getItem('id')){
+          return this.props.history.push('/login')
+      }
       const splitValue = window.location.href.split("/")
       const noteID = splitValue[splitValue.length - 1]
       const accessToken = localStorage.getItem('access_token');

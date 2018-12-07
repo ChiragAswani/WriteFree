@@ -96,6 +96,9 @@ class Dashboard extends React.Component {
   }
 
   componentDidMount() {
+      if (!localStorage.getItem('id')){
+          return this.props.history.push('/login')
+      }
     const id = localStorage.getItem('id');
     const refreshToken = localStorage.getItem('refresh_token');
     let AuthStr = 'Bearer '.concat(refreshToken);
