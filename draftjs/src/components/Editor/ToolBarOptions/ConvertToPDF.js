@@ -1,6 +1,5 @@
 import {Button} from "antd";
 import React from "react";
-import request from 'request';
 import axios from "axios";
 
 const ConvertToPDF = (props) => {
