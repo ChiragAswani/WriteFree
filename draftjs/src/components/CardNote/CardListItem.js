@@ -1,6 +1,7 @@
 import React from "react";
 import {Card, Icon} from "antd";
 import '../../css/cardnote.css';
+import trash from '../../assets/trashcan.png';
 
 class CardListItem extends React.Component {
     constructor(props) {
@@ -23,7 +24,7 @@ class CardListItem extends React.Component {
                         {note.lastUpdated}
                     </div>
                 </div>,
-            noteDelete: <img height="40px" width="40px" src={"https://github.com/ChiragAswani/Husky-Test/blob/master/delete@3x.png?raw=true"} />
+            noteDelete: <img height="40px" width="40px" src={trash} onClick={() => console.log("TEST") } />
         });
     }
     editNote(email, noteID) {

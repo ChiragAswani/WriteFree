@@ -80,6 +80,7 @@ class Dashboard extends React.Component {
         className: "classNameOfColumn",
         render: (text, record) => (
           <div style={ {background: record.noteColor} }>
+              <div style={{background: ''}  }>
             <a className={'editNote'} onClick={() => this.goToNote(record._id)}>Edit | </a>
               <Popconfirm
                   title="Are you sure you want to delete this note?"
@@ -88,6 +89,7 @@ class Dashboard extends React.Component {
                   cancelText="No">
                   <a className={'deleteNote'}>Delete</a>
               </Popconfirm>
+              </div>
           </div>
         ),
       }],
@@ -102,11 +104,14 @@ class Dashboard extends React.Component {
     const refreshToken = localStorage.getItem('refresh_token');
     let AuthStr = 'Bearer '.concat(refreshToken);
     axios.get('http://127.0.0.1:5000/refresh', { headers: { Authorization: AuthStr } }).then((response) => {
-      localStorage.setItem('access_token', response.data.access_token)
+        console.log("NEW ACCESS TOKEN");
+      localStorage.setItem('access_token', response.data.access_token);
+        console.log(localStorage.getItem('access_token'));
     }).catch((error) => {
       console.log(error, 'ERROR - BAD REFRESH TOKEN');
     });
-    AuthStr = 'Bearer '.concat(id);
+    const access_token_new = localStorage.getItem('access_token');
+    AuthStr = 'Bearer '.concat(access_token_new);
     axios.get('http://127.0.0.1:5000/get-data', { headers: { Authorization: AuthStr }, params: { id } }).then((response) => {
       this.setState({
         notes: response.data.notes,
