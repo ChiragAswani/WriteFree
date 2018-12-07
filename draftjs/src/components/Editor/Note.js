@@ -205,7 +205,7 @@ class Note extends React.Component {
                     <Input className={"enter-title-here"} placeholder={"Untitled"} onKeyPress={this._handleKeyPress} value={this.state.noteTitle} onChange={noteTitle => this.setState({noteTitle: noteTitle.target.value})}></Input>
                     <Icon type="book" theme="filled" style={{'color': this.state.noteCategoryIconColor}} className={"note-category-icon"} />
                     <Input className={"enter-category-here"} placeholder={"Category"} value={this.state.noteCategory} onChange={noteCategory => this.changeNoteCategory(noteCategory.target.value)}></Input>
-                    <ConvertToPDF/>
+                    <ConvertToPDF noteID={this.state.noteID}/>
                 </div>
                 <div className={"tab-bar"}>
                     <Button
