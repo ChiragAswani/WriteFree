@@ -53,16 +53,20 @@ class Note extends React.Component {
       headers: headers,
     };
     request(fetchNote, function (error, response, body) {
+        if (response.statusCode === 404){
+            return this.props.history.push('/error404')
+        }
         var parsedData = JSON.parse(body);
         if (parsedData.noteSettings){
             setDocumentWordSpacing(parsedData.wordSpacing);
             setDocumentLineSpacing(parsedData.lineSpacing);
-            let contentState = parsedData.noteSettings
+            let contentState = parsedData.noteSettings;
             this.setState({
                 editorState: EditorState.createWithContent(convertFromRaw((contentState))),
                 noteColor: parsedData.noteColor,
                 wordSpacing: parsedData.wordSpacing,
-                lineSpacing: parsedData.lineSpacing
+                lineSpacing: parsedData.lineSpacing,
+                noteID: noteID,
             });
         }
         if (parsedData.title){
@@ -72,7 +76,8 @@ class Note extends React.Component {
                 noteTitle: parsedData.title,
                 noteCategory: parsedData.category,
                 noteCategoryIconColor: "#466fb5",
-                noteColor: parsedData.noteColor
+                noteColor: parsedData.noteColor,
+                noteID: noteID,
             });
         }
     }.bind(this));
@@ -81,13 +86,13 @@ class Note extends React.Component {
     async componentWillUnmount(){
       this.mounted = false;
       if (this.state.noteTitle && this.state.noteCategory){
-          await this.saveNote(this.state.noteTitle, this.state.noteCategory, this.props.location.state.noteID, this.state.editorState.getCurrentContent())
+          await this.saveNote(this.state.noteTitle, this.state.noteCategory, this.state.noteID, this.state.editorState.getCurrentContent())
       } else if (this.state.noteTitle === undefined && this.state.noteCategory === undefined) {
-          await this.saveNote("Untitled", "N/A", this.props.location.state.noteID, this.state.editorState.getCurrentContent())
+          await this.saveNote("Untitled", "N/A", this.state.noteID, this.state.editorState.getCurrentContent())
       } else if (this.state.noteCategory === undefined) {
-          await this.saveNote(this.state.noteTitle, "N/A", this.props.location.state.noteID, this.state.editorState.getCurrentContent())
+          await this.saveNote(this.state.noteTitle, "N/A", this.state.noteID, this.state.editorState.getCurrentContent())
       } else if (this.state.noteTitle === undefined) {
-          await this.saveNote("Untitled", this.state.noteCategory, this.props.location.state.noteID, this.state.editorState.getCurrentContent())
+          await this.saveNote("Untitled", this.state.noteCategory, this.state.noteID, this.state.editorState.getCurrentContent())
       }
     }
 
@@ -141,10 +146,11 @@ class Note extends React.Component {
                 'toolbar': {'options': []},
                 'toolbarCustomButtons': [
                     <HyphenationOption hyphenate={hyphenate}/>,
-                    <WordSpacingOption setDocumentWordSpacing={setDocumentWordSpacing} noteID={this.props.location.state.noteID} wordSpacing={this.state.wordSpacing}/>,
-                    <LineSpacingOption setDocumentLineSpacing={setDocumentLineSpacing} noteID={this.props.location.state.noteID} lineSpacing={this.state.lineSpacing}/>,
+                    <WordSpacingOption setDocumentWordSpacing={setDocumentWordSpacing} noteID={this.state.noteID} wordSpacing={this.state.wordSpacing}/>,
+                    <LineSpacingOption setDocumentLineSpacing={setDocumentLineSpacing} noteID={this.state.noteID} lineSpacing={this.state.lineSpacing}/>,
                     <SpeechOption speechText={convertToRaw(this.state.editorState.getCurrentContent())}/>,
-                    <NoteColor changeNoteColor ={changeNoteColor} noteID={this.props.location.state.noteID}/>]
+
+                    <NoteColor changeNoteColor ={changeNoteColor} noteID={this.state.noteID}/>]
             })
         }
     }
