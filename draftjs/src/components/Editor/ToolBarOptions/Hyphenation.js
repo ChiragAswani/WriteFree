@@ -10,6 +10,6 @@ const HyphenationOption = (props) => {
         </div>
 
     );
-}
+};
 
 export default HyphenationOption;

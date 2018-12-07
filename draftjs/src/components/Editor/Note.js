@@ -27,7 +27,8 @@ class Note extends React.Component {
         toolsButtonHighlight: {'background-color': '#466fb5', 'color': 'white', isSelected: true},
         noteSettingsButtonHighlight: {'border': 'none', isSelected: false}
     };
-    hyphenate = hyphenate.bind(this)
+    hyphenate = hyphenate.bind(this);
+    changeNoteColor = changeNoteColor.bind(this);
     this.focus = () => this.refs.editor.focus();
     this.onChange = editorState => this.setState({ editorState });
     this.handleKeyCommand = command => this._handleKeyCommand(command);
@@ -128,7 +129,7 @@ class Note extends React.Component {
                     <WordSpacingOption setDocumentWordSpacing={setDocumentWordSpacing} noteID={this.props.location.state.noteID} wordSpacing={this.state.wordSpacing}/>,
                     <LineSpacingOption setDocumentLineSpacing={setDocumentLineSpacing} noteID={this.props.location.state.noteID} lineSpacing={this.state.lineSpacing}/>,
                     <SpeechOption speechText={convertToRaw(this.state.editorState.getCurrentContent())}/>,
-                    <NoteColor noteColor={this.state.noteColor} noteID={this.props.location.state.noteID}/>]
+                    <NoteColor changeNoteColor={changeNoteColor} noteID={this.props.location.state.noteID}/>]
             })
         }
     }
@@ -146,7 +147,7 @@ class Note extends React.Component {
         if (e.key === 'Enter') {
             console.log('do validate');
         }
-    }
+    };
 
     showSelectedButton(buttonType){
       if (buttonType === "tools"){
@@ -294,6 +295,22 @@ function hyphenate(child) {
             editorState: EditorState.createWithContent(convertFromRaw((newContents))),
         });
     }
+}
+
+// Function for changing the note background color. Store the changes to database
+function changeNoteColor(noteID, color)
+{
+    console.log(noteID);
+    console.log(color.hex);
+    var changeNoteColor = {
+        method: 'POST',
+        url: 'http://127.0.0.1:5000/change-note-color',
+        qs: {noteID, noteColor: color.hex},
+        headers: {'Content-Type': 'application/x-www-form-urlencoded' }
+    };
+    request(changeNoteColor, function (error, response, body) {
+        this.setState({ noteColor: color.hex });
+    }.bind(this));
 }
 
 export default withRouter(Note);

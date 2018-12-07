@@ -1,7 +1,19 @@
 import React from "react";
-import request from "request";
 import {CirclePicker} from "react-color";
 
+const NoteColor = (props) => {
+    return (
+        <div>
+            <CirclePicker
+                //color={this.state.noteColor}
+                onChangeComplete={color => props.changeNoteColor(props.noteID, color)}
+                colors={["#FCDFD7", "#FCF9DA", "#D4ECDC", "#E1EBF5", "#F0E5EB"]}
+            />
+        </div>
+    );
+};
+
+/*
 class NoteColor extends React.Component {
     constructor(props){
         super(props)
@@ -37,5 +49,5 @@ class NoteColor extends React.Component {
         );
     }
 }
-
+*/
 export default NoteColor;
