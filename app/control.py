@@ -124,8 +124,9 @@ def fetch_note(cred_db, value):
 #       noteID: value used for retrieval
 # output: response
 def render_PDF(note_db, noteID):
-    noteData = dbcalls.DB_find_one(noteID)
+    noteData = dbcalls.DB_find_one(note_db, noteID)
     noteContent = noteData['content']
+    print(noteContent)
     config = {}
     exporter = HTML(config)
     noteHTML = exporter.render(noteContent)

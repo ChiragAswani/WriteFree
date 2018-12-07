@@ -247,7 +247,7 @@ def fetchNote(note_id):
 
 @app.route ('/renderPDF', methods= ['GET', 'OPTIONS'])
 def renderPDF():
-    noteID = request.args['noteID']
+    noteID = ObjectId(request.args['noteID'])
     response = control.render_PDF(notes_collection, noteID)
     return response
 
