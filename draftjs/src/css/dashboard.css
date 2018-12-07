@@ -1,3 +1,13 @@
+@font-face {
+    font-family: brown-bold;
+    src: url(../fonts/Brown/Brown-Bold.otf);
+}
+
+@font-face {
+    font-family: brown-regular;
+    src: url(../fonts/Brown/Brown-Regular.otf);
+}
+
 .cont {
     display: flex;
     flex-wrap: wrap;
@@ -6,5 +16,42 @@
 .item {
     margin: 6px;
 }
+.top{
+    display: flex;
+    justify-content: space-between;
+    padding-right: 60px;
+    padding-left: 60px;
+    border-bottom:0.5px solid #cccccc;
+    background: white;
+    height: 60px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
 
+.middle{
+    display: flex;
+    height: 50px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 60px;
+    padding-left: 60px;
+    border: 0px solid;
+    box-shadow: 3px 0.1px #cccccc;
+    background: white;
+}
+.child {
+    margin-left: auto;
+}
+
+.bottom{
+    padding-top: 36px;
+    padding-bottom: 30px;
+    padding-right: 60px;
+    padding-left: 60px;
+}
+
+.generateNewNote{
+    font-family: brown-bold;
+    font-size: 14px;
+}
 

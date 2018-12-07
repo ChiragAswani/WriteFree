@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 import { GoogleLogin } from 'react-google-login';
 import GoogleButton from 'react-google-button';
 import Alert from 'react-s-alert';
-import { handleAccountError } from '../constants';
+import { handleAccountError } from '../defaults/constants';
 
 class CreateAccount extends React.Component {
   constructor(props) {
@@ -75,6 +75,7 @@ class CreateAccount extends React.Component {
   }
 
   render() {
+    document.body.style.backgroundColor = "#f5f5f5"
     return (
       <div>
         <Alert timeout={3000} />

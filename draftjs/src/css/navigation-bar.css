@@ -1,0 +1,11 @@
+.top{
+    display: flex;
+    justify-content: space-between;
+    padding-right: 60px;
+    padding-left: 60px;
+    border-bottom:0.5px solid #cccccc;
+    background: white;
+    height: 60px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}

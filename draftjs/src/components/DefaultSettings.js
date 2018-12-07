@@ -77,6 +77,7 @@ class DefaultSettings extends React.Component {
   }
 
   render() {
+    document.body.style.backgroundColor = "#f5f5f5"
     return (
       <div>
         <br />
