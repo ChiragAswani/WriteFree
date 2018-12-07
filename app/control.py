@@ -123,13 +123,7 @@ def fetch_note(cred_db, value):
 #       note_db: the note database object
 #       noteID: value used for retrieval
 # output: response
-def render_PDF(note_db, noteID):
-    noteData = dbcalls.DB_find_one(note_db, noteID)
-    noteContent = noteData['content']
-    print(noteContent)
-    config = {}
-    exporter = HTML(config)
-    noteHTML = exporter.render(noteContent)
+def render_PDF(noteID, noteHTML):
     pdf = pdfkit.from_string(noteHTML, False)
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'

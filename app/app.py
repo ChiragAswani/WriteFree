@@ -245,10 +245,15 @@ def fetchNote(note_id):
 
 
 
-@app.route ('/renderPDF', methods= ['GET', 'OPTIONS'])
+@app.route ('/renderPDF', methods= ['GET'])
 def renderPDF():
-    noteID = ObjectId(request.args['noteID'])
-    response = control.render_PDF(notes_collection, noteID)
+    print("HERE", request.args['noteHTML'])
+    #form_data = json.loads(request.get_data())
+    noteHTML = request.args['noteHTML']
+    noteID = request.args['noteID']
+    print(noteID)
+    print(noteHTML)
+    response = control.render_PDF(noteID, noteHTML)
     return response
 
 @app.route ('/change-word-spacing', methods= ['POST', 'OPTIONS'])
