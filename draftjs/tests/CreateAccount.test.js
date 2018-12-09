@@ -1,8 +1,7 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import { configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+configure({ adapter: new Adapter() });
 import CreateAccount from '../src/components/CreateAccount';
-import {shallow} from 'enzyme';
+import { shallow, mount, render } from 'enzyme';
 
-it('renders without crashing', () => {
-    shallow(<CreateAccount />);
-});
+const wrapper = shallow(<CreateAccount />);

@@ -22,10 +22,10 @@
     "npm": "^6.4.1",
     "pdfmake": "^0.1.38",
     "prop-types": "^15.6.2",
-    "react": "^16.5.2",
+    "react": "^16.6.3",
     "react-addons-css-transition-group": "^15.6.2",
     "react-color": "^2.14.1",
-    "react-dom": "^16.5.2",
+    "react-dom": "^16.6.3",
     "react-draft-wysiwyg": "^1.12.13",
     "react-dropdown": "^1.6.2",
     "react-google-button": "^0.5.3",
@@ -56,11 +56,24 @@
   ],
   "devDependencies": {
     "babel-eslint": "^8.2.3",
+    "babel-jest": "^23.6.0",
+    "enzyme": "^3.7.0",
+    "enzyme-adapter-react-16": "^1.7.0",
+    "enzyme-to-json": "^3.3.5",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-loader": "^2.0.0",
     "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint-plugin-react": "^7.9.1"
+    "eslint-plugin-react": "^7.9.1",
+    "jest": "^23.6.0"
+  },
+  "jest": {
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
+    "setupFiles": [
+      "./tests/setUpTests.js"
+    ]
   }
 }
