@@ -21,7 +21,7 @@ use WriteFreeDB
 6. Import the application.json collection and the data should be populated
 
 
-#### Install Virtual Enviornment
+### Install Virtual Enviornment
 
 #### Install Python 3 
 ```
