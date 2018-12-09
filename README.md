@@ -20,13 +20,8 @@ use WriteFreeDB
 5. On the top tool bar click on "Collection" and "Import Data"
 6. Import the application.json collection and the data should be populated
 
-## Configure Virtual Enviornment
 
-### Important Note
-We "conveniently" pushed our venv enviornment to GitHub.
-Below is a set up of how to freshly install a virtual environment 
-
-### Install Virtual Enviornment (Optional)
+#### Install Virtual Enviornment
 
 #### Install Python 3 
 ```
@@ -43,7 +38,7 @@ python3 -m venv venv
 ```
 source venv/bin/activate
 ```
-#### Install Dependencies:
+#### Install Dependencies (need to be in the app folder)
 ```
 pip install -r requirements.txt
 ```
