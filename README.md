@@ -4,7 +4,6 @@
 2. ``` npm install```
 3. ``` npm start```
 4. Open localhost:3000/login
-Optional: install and use Chrome.
 ## Known Bugs
 1. HTML/CSS gets inconsistent when you resize the window.
 2. CovertToPDF doesn't work pefectly: it only works with background color, bold and italic.
