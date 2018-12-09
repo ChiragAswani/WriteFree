@@ -6,10 +6,12 @@
 4. Open localhost:3000/login
 
 ##How to Run Tests
-1. cd into draftjs folder
+1. cd into draftjs/src/tests
+2. for every file run... ()
 ````
-npm test
+npm test <file_name>
 ````
+^we were unable to automate this but follow the tutorial for running Enzyme and Jest for React component testing.
 
 ## Known Bugs
 1. HTML/CSS gets inconsistent when you resize the window.
