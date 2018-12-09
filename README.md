@@ -50,3 +50,11 @@ cd into the app/ folder (cd .., cd .., cd app/)
 FLASK_APP=app.py
 flask run
 ```
+
+## How to Run Test Cases
+1. Switch to the unit-tests branch. (git checkout unit-tests)
+2. Activate the virtual enviornment and install the dependencies (see above)
+3. cd into the app/tests folder
+````
+pytest test_login.py -p no:warnings
+````
