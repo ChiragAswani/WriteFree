@@ -1,7 +1,7 @@
 import React from "react";
 import {Card, Icon} from "antd";
 import '../../css/cardnote.css';
-import trash from '../../assets/trashcan.png';
+import trash from '../../images/trashcan.png';
 
 class CardListItem extends React.Component {
     constructor(props) {
