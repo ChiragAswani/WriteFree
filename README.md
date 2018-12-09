@@ -6,6 +6,7 @@
 4. Open localhost:3000/login
 
 ##How to Run Tests
+1. cd into draftjs folder
 ````
 npm test
 ````
