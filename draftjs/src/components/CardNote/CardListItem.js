@@ -13,10 +13,6 @@ class CardListItem extends React.Component {
         };
     }
 
-    handleChildClick(e) {
-        e.stopPropagation();
-        this.props.deleteNote(localStorage.getItem('email'), this.state.note._id)
-    }
 
     displayNoteData(note) {
         this.setState({
@@ -31,10 +27,7 @@ class CardListItem extends React.Component {
                         {note.lastUpdated}
                     </div>
                 </div>,
-            noteDelete:
-                <div onClick={e => this.handleChildClick(e)}>
-                    <img height="40px" width="40px" src={trash} alt={"trash"}/>
-                </div>
+            noteDelete: <img height="40px" width="40px" src={trash} alt={"trash"}/>
         });
     }
 

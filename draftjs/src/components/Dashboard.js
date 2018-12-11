@@ -16,8 +16,6 @@ const Search = Input.Search;
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
-    deleteNote = deleteNote.bind(this);
-    goToNote = goToNote.bind(this);
     this.state = {
 
       notes: null,
@@ -82,22 +80,19 @@ class Dashboard extends React.Component {
       }, {
         title: 'Action',
         className: "classNameOfColumn",
-          render(text, record) {
-              return {
-                  props: {
-                      style: { background: record.noteColor },
-                  },
-                  children: <div>
-                       <a className={'editNote'} onClick={() => goToNote(record._id)}>Edit | </a>
-                             <Popconfirm
-                                 title="Are you sure you want to delete this note?"
-                                 onConfirm={() => deleteNote(localStorage.getItem('email'), record._id)}
-                                 okText="Yes"
-                                 cancelText="No">
-                                 <a className={'deleteNote'}>Delete</a>
-                             </Popconfirm>
-                             </div>,
-              };
+          render: (text, record) => {
+              return (
+              <div>
+                  <a className={'editNote'} onClick={() => this.goToNote(record._id)}>Edit | </a>
+                  <Popconfirm
+                      title="Are you sure you want to delete this note?"
+                      onConfirm={() => this.deleteNote(localStorage.getItem('email'), record._id)}
+                      okText="Yes"
+                      cancelText="No">
+                      <a className={'deleteNote'}>Delete</a>
+                  </Popconfirm>
+              </div>
+          );
           },
       }],
     };
@@ -130,6 +125,7 @@ class Dashboard extends React.Component {
   }
 
 
+
   createNote(email) {
     const accessToken = localStorage.getItem('access_token');
     const AuthStr = 'Bearer '.concat(accessToken);
@@ -138,7 +134,7 @@ class Dashboard extends React.Component {
     console.log(headers);
     axios.get('http://127.0.0.1:5000/new-note', {headers:headers}).then((response) => {
         const parsedData = response.data;
-        goToNote(parsedData._id);
+        this.goToNote(parsedData._id);
     });
 
   }
@@ -191,6 +187,31 @@ class Dashboard extends React.Component {
       });
   }
 
+    deleteNote(email, noteID) {
+        const accessToken = localStorage.getItem('access_token');
+        const AuthStr = 'Bearer '.concat(accessToken);
+        const headers = { Authorization: AuthStr, 'Content-Type': 'application/x-www-form-urlencoded' };
+
+        const deleteNote = {
+            method: 'DELETE',
+            url: 'http://127.0.0.1:5000/delete-note',
+            qs: { noteID },
+            headers: headers,
+        };
+        request(deleteNote, (error, response, body) => {
+
+            const parsedData = JSON.parse(body);
+            this.setState({ notes: parsedData.notes });
+        });
+    }
+
+    goToNote(noteID){
+        this.props.history.push({
+            pathname: `/note/${noteID}`,
+            state: { noteID },
+        });
+    }
+
   render() {
     document.body.style.backgroundColor = "#eaeaea";
     if (!this.state.isTableView) {
@@ -213,7 +234,7 @@ class Dashboard extends React.Component {
                 </div>
             </div>
             <div className={"bottom"}>
-              <CardNote notes={this.state.notes} history={this.props.history} deleteNote={deleteNote}/>
+              <CardNote notes={this.state.notes} history={this.props.history}/>
             </div>
         </div>
       )
@@ -249,30 +270,6 @@ class Dashboard extends React.Component {
       </div>
     );
   }
-}
-
-function deleteNote(email, noteID) {
-    const accessToken = localStorage.getItem('access_token');
-    const AuthStr = 'Bearer '.concat(accessToken);
-    const headers = { Authorization: AuthStr, 'Content-Type': 'application/x-www-form-urlencoded' };
-
-    const deleteNote = {
-        method: 'DELETE',
-        url: 'http://127.0.0.1:5000/delete-note',
-        qs: { noteID },
-        headers: headers,
-    };
-    request(deleteNote, (error, response, body) => {
-        const parsedData = JSON.parse(body);
-        this.setState({ notes: parsedData.notes });
-    });
-}
-
-function goToNote(noteID){
-    this.props.history.push({
-        pathname: `/note/${noteID}`,
-        state: { noteID },
-    });
 }
 
 export default withRouter(Dashboard);

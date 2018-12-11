@@ -23,7 +23,7 @@ const WordSpacingOption = (props) => {
         <div className={"word-spacing"}>
             <h4>Word Spacing</h4>
             <Select defaultValue={props.wordSpacing} style={{width: 150}} max={51} onChange={(value) => changeWordSpacing(value)}>
-                <Option value="0.9px">0.9px</Option>
+                <Option value="0.9px">Default</Option>
                 <Option value="10px">10px</Option>
                 <Option value="20px">20px</Option>
                 <Option value="50px">50px</Option>
