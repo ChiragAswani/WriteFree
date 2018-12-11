@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import '../../css/cardnote.css';
 
 const CardNote = props => (
-    <CardList notes={props.notes} history={props.history} />
+    <CardList notes={props.notes} history={props.history} deleteNote={props.deleteNote}/>
 );
 
 export default withRouter(CardNote);

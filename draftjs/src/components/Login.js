@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import GoogleLogin from 'react-google-login';

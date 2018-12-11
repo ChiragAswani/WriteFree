@@ -4,9 +4,6 @@ import 'antd/dist/antd.css';
 import '../css/login.css';
 
 class Error404 extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         document.body.style.backgroundColor = "#f5f5f5"

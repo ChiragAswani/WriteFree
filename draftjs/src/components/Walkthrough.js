@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import 'antd/dist/antd.css';
 import { withRouter } from 'react-router-dom';

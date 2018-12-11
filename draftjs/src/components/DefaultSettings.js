@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import { Button } from 'antd';
 import 'antd/dist/antd.css';
@@ -62,7 +63,7 @@ class DefaultSettings extends React.Component {
     const body = JSON.stringify(obj);
     console.log("UPDATING NOTE SETTINGS", obj)
     axios.post('http://127.0.0.1:5000/update-default-settings', { body: body  }, {headers: headers},).then((response) => {
-      if(response.status==200){
+      if(response.status === 200){
         this.props.history.push('/dashboard');
       }
       else {

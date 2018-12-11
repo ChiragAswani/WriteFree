@@ -5,7 +5,7 @@ import '../../css/cardnote.css';
 const CardList = (props) => {
     try{
         const cardItems = props.notes.map(note => (
-            <CardListItem  key={note._id} note={note} history={props.history} />
+            <CardListItem  key={note._id} note={note} history={props.history} deleteNote={props.deleteNote}/>
         ));
         return (
             <div className="cards">

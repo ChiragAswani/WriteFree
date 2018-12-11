@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import { Table, Button, Switch, Input, Menu, Dropdown, Icon, Popconfirm } from 'antd';
 import 'antd/dist/antd.css';
@@ -129,29 +130,9 @@ class Dashboard extends React.Component {
   }
 
 
-  // deleteNote(email, noteID) {
-  //     const accessToken = localStorage.getItem('access_token');
-  //     const AuthStr = 'Bearer '.concat(accessToken);
-  //     const headers = { Authorization: AuthStr, 'Content-Type': 'application/x-www-form-urlencoded' };
-  //
-  //     const deleteNote = {
-  //       method: 'DELETE',
-  //       url: 'http://127.0.0.1:5000/delete-note',
-  //       qs: { noteID },
-  //       headers: headers,
-  //     };
-  //     request(deleteNote, (error, response, body) => {
-  //       const parsedData = JSON.parse(body);
-  //       this.setState({ notes: parsedData.notes });
-  //     });
-  // }
-
-
   createNote(email) {
     const accessToken = localStorage.getItem('access_token');
-    const refreshToken = localStorage.getItem('refresh_token');
     const AuthStr = 'Bearer '.concat(accessToken);
-    const AuthStr2 = 'Bearer '.concat(refreshToken);
     const headers = { Authorization: AuthStr };
 
     console.log(headers);
@@ -190,9 +171,7 @@ class Dashboard extends React.Component {
 
   searchNotes(query){
       const accessToken = localStorage.getItem('access_token');
-      const refreshToken = localStorage.getItem('refresh_token');
       const AuthStr = 'Bearer '.concat(accessToken);
-      const AuthStr2 = 'Bearer '.concat(refreshToken);
       const headers = { Authorization: AuthStr };
 
       axios.get('http://127.0.0.1:5000/get-notes', {headers:headers}).then((response) => {
@@ -234,7 +213,7 @@ class Dashboard extends React.Component {
                 </div>
             </div>
             <div className={"bottom"}>
-              <CardNote notes={this.state.notes} history={this.props.history} />
+              <CardNote notes={this.state.notes} history={this.props.history} deleteNote={deleteNote}/>
             </div>
         </div>
       )

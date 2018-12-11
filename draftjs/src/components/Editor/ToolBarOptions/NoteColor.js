@@ -1,7 +1,5 @@
 import React from "react";
 import {CirclePicker} from "react-color";
-import request from 'request';
-
  const NoteColor = (props) => {
      return (
          <div>

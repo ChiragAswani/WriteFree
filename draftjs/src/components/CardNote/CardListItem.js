@@ -6,11 +6,18 @@ import trash from '../../images/trashcan.png';
 class CardListItem extends React.Component {
     constructor(props) {
         super(props);
+        console.log("PROPS", props)
         this.state = {
             noteTitle: props.note.title,
             note: props.note,
         };
     }
+
+    handleChildClick(e) {
+        e.stopPropagation();
+        this.props.deleteNote(localStorage.getItem('email'), this.state.note._id)
+    }
+
     displayNoteData(note) {
         this.setState({
             moreNoteData:
@@ -24,7 +31,10 @@ class CardListItem extends React.Component {
                         {note.lastUpdated}
                     </div>
                 </div>,
-            noteDelete: <img height="40px" width="40px" src={trash} onClick={() => console.log("clicked") } />
+            noteDelete:
+                <div onClick={e => this.handleChildClick(e)}>
+                    <img height="40px" width="40px" src={trash} alt={"trash"}/>
+                </div>
         });
     }
 

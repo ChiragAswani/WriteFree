@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import request from 'request';
 import { Input, Button, Card } from 'antd';
@@ -28,14 +29,15 @@ class CreateAccount extends React.Component {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     };
     request(postCreateAnAccountInformation, (error, response, body) => {
+        let err = "";
         if (response.statusCode === 501) {
-            var err = "Invalid email address"
+            err = "Invalid email address"
             handleAccountError(err);
         } else if (response.statusCode === 502) {
-            var err = "Invalid name entered"
+            err = "Invalid name entered"
             handleAccountError(err);
         } else if (response.statusCode === 503) {
-            var err = "Password must be at least 8 characters long and contain 1 special character"
+            err = "Password must be at least 8 characters long and contain 1 special character"
             handleAccountError(err);
         }
         else {
