@@ -193,4 +193,13 @@
     max-width: 23vw;
 }
 
-
+.DraftEditor-editorContainer{
+    word-break: break-all;
+    word-wrap: break-spaces;
+    word-wrap: break-word;
+}
+.DraftEditor-content{
+    word-break: break-all;
+    word-wrap: break-spaces;
+    word-wrap: break-word;
+}

@@ -22,11 +22,10 @@ const LineSpacingOption = (props) => {
         <div>
             <h4>Line Spacing</h4>
             <Select defaultValue={props.lineSpacing} style={{ width: 150 }} onChange={(value) => changeLineSpacing(value)}>
-            <Option value="0.05" disabled>Line Spacing</Option>
-            <Option value="0.06">Default</Option>
-            <Option value="0.6">1.6</Option>
-            <Option value="1">2</Option>
-            <Option value="4">5</Option>
+                <Option value="0.06">Default</Option>
+                <Option value="0.6">1.6</Option>
+                <Option value="1">2</Option>
+                <Option value="4">5</Option>
             </Select>
 
         </div>

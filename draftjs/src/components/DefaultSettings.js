@@ -45,7 +45,6 @@ class DefaultSettings extends React.Component {
   }
 
   changeNoteColor(color) {
-      console.log("changing note color to, ", color.hex)
     this.setState({ noteColor: color.hex });
   }
 
@@ -71,14 +70,6 @@ class DefaultSettings extends React.Component {
       }
 
     });
-    // const updateDefaultSettings = {
-    //   method: 'POST',
-    //   url: 'http://127.0.0.1:5000/update-default-settings',
-    //   body: JSON.stringify(obj),
-    //   headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    // };
-    // await request(updateDefaultSettings);
-    // this.props.history.push('/dashboard');
   }
 
     render() {
