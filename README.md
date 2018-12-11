@@ -21,7 +21,7 @@ npm test <file_name>
 5. Trash can icon on the notecard does not work.
 6. Text does not wrap when typing a note. It just overlapstext on eachother
 7. Always have your developer console running during testing. If you see the error below. Please reload the application.
-![alt text] https://github.com/ChiragAswani/WriteFree-frontend/blob/master/draftjs/src/images/async%20error.png?raw=true
+![https://github.com/ChiragAswani/WriteFree-frontend/blob/master/draftjs/src/images/async%20error.png?raw=true]
 
 ## Important!
 Before you run, configure the steps from the README in [WriteFree-backend](https://github.com/ChiragAswani/WriteFree-backend)
