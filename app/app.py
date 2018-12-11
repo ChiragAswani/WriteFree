@@ -162,7 +162,7 @@ def getNotes():
     notes = control.get_note(notes_collection, email)
     return notes, 200
 
-@app.route ('/delete-note', methods= ['DELETE', 'OPTIONS'])
+@app.route ('/delete-note', methods= ['DELETE'])
 @jwt_required
 def deleteNote():
     email = get_jwt_identity()
