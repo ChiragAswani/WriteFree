@@ -188,7 +188,7 @@ def addNote():
         "category": None,
         "noteColor": credentials['defaultNoteSettings']['noteColor'],
         "wordSpacing": "0.9px",
-        "lineSpacing": "0.05",
+        "lineSpacing": "1",
         "isHyphenated": False
     }
     notes = control.add_note(notes_collection, baseNewNote)
