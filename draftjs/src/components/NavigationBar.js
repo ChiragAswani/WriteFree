@@ -7,6 +7,7 @@ import 'antd/dist/antd.css';
 import '../css/navigation-bar.css';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {Dropdown, Menu} from "antd";
+import {backendURL} from "../dependency";
 
 class NavigationBar extends React.Component {
     constructor(props) {
@@ -37,8 +38,8 @@ class NavigationBar extends React.Component {
         const AuthStr = 'Bearer '.concat(accessToken);
         const AuthStr2 = 'Bearer '.concat(refreshToken);
         const headers = { Authorization: AuthStr };
-        axios.get('http://127.0.0.1:5000/logout', { headers });
-        axios.get('http://127.0.0.1:5000/logout2', { headers: { Authorization: AuthStr2 } }).then((response) => {
+        axios.get(`${backendURL}/logout`, { headers });
+        axios.get(`${backendURL}/logout2`, { headers: { Authorization: AuthStr2 } }).then((response) => {
             localStorage.clear();
             this.props.history.push('/login');
         });

@@ -10,6 +10,7 @@ import 'antd/dist/antd.css';
 import Alert from 'react-s-alert';
 import { handleAccountError } from '../defaults/constants';
 import '../css/login.css';
+import {backendURL} from "../dependency";
 
 class Login extends React.Component {
   constructor(props) {
@@ -25,7 +26,7 @@ class Login extends React.Component {
           return handleAccountError("Invalid Email or Password");
       }
     axios.get(
-      'http://127.0.0.1:5000/login', { params: { email, password } },
+        `${backendURL}/login`, { params: { email, password } },
       { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
     ).then((res) => {
       const parsedData = res.data;
@@ -47,7 +48,7 @@ class Login extends React.Component {
     const email = response.profileObj.email;
     const googleID = response.profileObj.googleId;
     axios.get(
-      'http://127.0.0.1:5000/login-google', { params: { email, googleID } },
+        `${backendURL}/login-google`, { params: { email, googleID } },
       { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
     ).then((res) => {
       const parsedData = res.data;
