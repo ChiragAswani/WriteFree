@@ -7,7 +7,9 @@ import { withRouter } from 'react-router-dom';
 import { GoogleLogin } from 'react-google-login';
 import GoogleButton from 'react-google-button';
 import Alert from 'react-s-alert';
+import '../css/create-account.css';
 import { handleAccountError } from '../defaults/constants';
+import book from '../images/book.png';
 
 class CreateAccount extends React.Component {
   constructor(props) {
@@ -87,7 +89,9 @@ class CreateAccount extends React.Component {
     return (
       <div>
         <Alert timeout={3000} />
-        <Card
+        <div className={"create-account-container"} style ={ { backgroundImage: "url("+book+")" }}>
+          <div className={"create-account"}>
+            <Card
           title="Create An Account"
           style={{ width: 400 }}
         >
@@ -112,6 +116,8 @@ class CreateAccount extends React.Component {
             <GoogleButton label="Sign up With Google" />
           </GoogleLogin>
         </Card>
+          </div>
+        </div>
       </div>
     );
   }

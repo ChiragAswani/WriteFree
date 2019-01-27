@@ -11,6 +11,7 @@ import * as serviceWorker from './serviceWorker';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {faUser} from '@fortawesome/free-solid-svg-icons'
 import Error404 from "./components/Error404";
+import Landing from "./components/Landing";
 library.add( faUser)
 
 ReactDOM.render(
@@ -21,7 +22,7 @@ ReactDOM.render(
             <Route path="/dashboard" component={Dashboard}/>
             <Route path="/default-settings" component={DefaultSettings}/>
             <Route path="/note/:noteid" component={NewNote}/>
-            <Route path="/" component={Error404}/>
+            <Route path="/" component={Landing}/>
 
         </Switch>
     </BrowserRouter >,

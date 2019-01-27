@@ -1,0 +1,16 @@
+
+
+.create-account-container {
+    padding: 20px;
+    width: 100vw;
+    height: 100vh;
+    display: table-cell;
+    vertical-align: middle;
+    background-size: cover;
+}
+
+.create-account {
+    text-align: center;
+    width:30vw;
+    margin: auto;
+}

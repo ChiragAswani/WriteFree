@@ -14,10 +14,13 @@
     height: 100vh;
     display: table-cell;
     vertical-align: middle;
+    background-size: cover;
 }
 
 .login-center-center {
     text-align: center;
+    width:30vw;
+    margin: auto;
 }
 
 .sign-in{

@@ -10,6 +10,8 @@ import 'antd/dist/antd.css';
 import Alert from 'react-s-alert';
 import { handleAccountError } from '../defaults/constants';
 import '../css/login.css';
+import features from '../images/features.png';
+import book from '../images/book.png';
 
 class Login extends React.Component {
   constructor(props) {
@@ -68,7 +70,7 @@ class Login extends React.Component {
   render() {
     document.body.style.backgroundColor = "#f5f5f5"
     return (
-      <div className={"login-center"}>
+      <div className={"login-center"} style ={ { backgroundImage: "url("+book+")" }}>
         <div className={"login-center-center"}>
             <p className={"sign-in"}>Sign In</p>
             <Alert timeout={3000} />
