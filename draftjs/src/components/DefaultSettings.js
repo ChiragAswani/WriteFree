@@ -7,6 +7,7 @@ import { CirclePicker } from 'react-color';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import axios from "axios";
+import {backendURL} from "../dependency";
 
 class DefaultSettings extends React.Component {
   constructor(props) {
@@ -23,7 +24,7 @@ class DefaultSettings extends React.Component {
       const accessToken = localStorage.getItem('access_token');
       const AuthStr = `Bearer `.concat(accessToken);
       const headers = { Authorization: AuthStr };
-      axios.get('http://127.0.0.1:5000/get-default-settings', {headers: headers}).then((response) => {
+      axios.get(`${backendURL}/get-default-settings`, {headers: headers}).then((response) => {
           console.log(response)
           const parsedData =response.data;
           let val = '';
@@ -62,7 +63,7 @@ class DefaultSettings extends React.Component {
     const headers = { Authorization: AuthStr };
     const body = JSON.stringify(obj);
     console.log("UPDATING NOTE SETTINGS", obj)
-    axios.post('http://127.0.0.1:5000/update-default-settings', { body: body  }, {headers: headers},).then((response) => {
+    axios.post(`${backendURL}/update-default-settings`, { body: body  }, {headers: headers},).then((response) => {
       if(response.status === 200){
         this.props.history.push('/dashboard');
       }

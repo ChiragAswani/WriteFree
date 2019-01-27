@@ -10,6 +10,7 @@ import CardNote from './CardNote/CardNote';
 import NavigationBar from './NavigationBar';
 import '../css/dashboard.css';
 import { mergeSort } from '../defaults/constants';
+import {backendURL} from "../dependency";
 
 const Search = Input.Search;
 
@@ -105,7 +106,7 @@ class Dashboard extends React.Component {
     const id = localStorage.getItem('id');
     const refreshToken = localStorage.getItem('refresh_token');
     let AuthStr = 'Bearer '.concat(refreshToken);
-    axios.get('http://127.0.0.1:5000/refresh', { headers: { Authorization: AuthStr } }).then((response) => {
+    axios.get(`${backendURL}/refresh`, { headers: { Authorization: AuthStr } }).then((response) => {
         console.log("NEW ACCESS TOKEN");
       localStorage.setItem('access_token', response.data.access_token);
         console.log(localStorage.getItem('access_token'));
@@ -114,7 +115,7 @@ class Dashboard extends React.Component {
     });
     const access_token_new = localStorage.getItem('access_token');
     AuthStr = 'Bearer '.concat(access_token_new);
-    axios.get('http://127.0.0.1:5000/get-data', { headers: { Authorization: AuthStr }, params: { id } }).then((response) => {
+    axios.get(`${backendURL}/get-data`, { headers: { Authorization: AuthStr }, params: { id } }).then((response) => {
       this.setState({
         notes: response.data.notes,
         credentials: response.data.credentials,
@@ -132,7 +133,7 @@ class Dashboard extends React.Component {
     const headers = { Authorization: AuthStr };
 
     console.log(headers);
-    axios.get('http://127.0.0.1:5000/new-note', {headers:headers}).then((response) => {
+    axios.get(`${backendURL}/new-note`, {headers:headers}).then((response) => {
         const parsedData = response.data;
         this.goToNote(parsedData._id);
     });
@@ -145,8 +146,8 @@ class Dashboard extends React.Component {
     const AuthStr = 'Bearer '.concat(accessToken);
     const AuthStr2 = 'Bearer '.concat(refreshToken);
     const headers = { Authorization: AuthStr };
-    axios.get('http://127.0.0.1:5000/logout', { headers });
-    axios.get('http://127.0.0.1:5000/logout2', { headers: { Authorization: AuthStr2 } }).then((response) => {
+    axios.get(`${backendURL}/logout`, { headers });
+    axios.get(`${backendURL}/logout2`, { headers: { Authorization: AuthStr2 } }).then((response) => {
       localStorage.clear();
       this.props.history.push('/login');
     });
@@ -170,7 +171,7 @@ class Dashboard extends React.Component {
       const AuthStr = 'Bearer '.concat(accessToken);
       const headers = { Authorization: AuthStr };
 
-      axios.get('http://127.0.0.1:5000/get-notes', {headers:headers}).then((response) => {
+      axios.get(`${backendURL}/get-notes`, {headers:headers}).then((response) => {
           var parsedData = response.data;
                   if (query.trim().length !== 0){
             const filteredNotes = [];
@@ -194,7 +195,7 @@ class Dashboard extends React.Component {
 
         const deleteNote = {
             method: 'DELETE',
-            url: 'http://127.0.0.1:5000/delete-note',
+            url: `${backendURL}/delete-note`,
             qs: { noteID },
             headers: headers,
         };
