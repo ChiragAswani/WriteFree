@@ -20,7 +20,9 @@ from flask_jwt_extended import (
 )
 
 # initializations
-db_address = 'mongodb://localhost:27017/'
+
+db_address = 'mongodb+srv://writefree_test:Il7hyiodq6WFQ32T@writefree-mgdru.gcp.mongodb.net/test?retryWrites=true'
+#mongodb://localhost:27017/
 app = Flask(__name__)
 CORS(app)
 app.secret_key = 'super secret key'
@@ -34,11 +36,18 @@ jwt = JWTManager(app)
 blacklist = set()
 CORS(app, expose_headers='Authorization')
 
-client = MongoClient('mongodb://localhost:27017/')
+client = MongoClient(db_address)
 
 credentials_collection = client['WriteFreeDB']['credentials']
 notes_collection = client['WriteFreeDB']['notes']
 application_collection = client['WriteFreeDB']['application']
+
+@app.route('/status', methods= ['GET', 'OPTIONS'])
+def status():
+    app_test_collection = client['WriteFreeDB']['application']
+    application_json = app_test_collection.find_one({})
+    del application_json['_id']
+    return json.dumps(application_json)
 
 @jwt.token_in_blacklist_loader
 def check_if_token_in_blacklist(decrypted_token):
