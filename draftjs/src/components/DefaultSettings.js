@@ -18,6 +18,7 @@ class DefaultSettings extends React.Component {
   }
 
   componentDidMount() {
+    console.log("COMPONENT MOUNTED?")
       if (!localStorage.getItem('id')){
           return this.props.history.push('/login')
       }
@@ -25,7 +26,7 @@ class DefaultSettings extends React.Component {
       const AuthStr = `Bearer `.concat(accessToken);
       const headers = { Authorization: AuthStr };
       axios.get(`${backendURL}/get-default-settings`, {headers: headers}).then((response) => {
-          console.log(response)
+          console.log("HERE", response)
           const parsedData =response.data;
           let val = '';
           try {
@@ -41,7 +42,9 @@ class DefaultSettings extends React.Component {
               fontSizes: parsedData.applicationSettings.fontSizes,
           });
 
-      });
+      }).catch(e => {
+        console.log("ERROR HERE", e)
+      })
 
 
   }
