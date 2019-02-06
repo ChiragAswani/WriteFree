@@ -9,7 +9,8 @@ import GoogleButton from 'react-google-button';
 import Alert from 'react-s-alert';
 import '../css/create-account.css';
 import { handleAccountError } from '../defaults/constants';
-import book from '../images/book.png';
+import book from '../images/book_landing.png';
+import LandingNavigation from './LandingNavigation';
 
 class CreateAccount extends React.Component {
   constructor(props) {
@@ -88,18 +89,19 @@ class CreateAccount extends React.Component {
     document.body.style.backgroundColor = "#f5f5f5"
     return (
       <div>
+      <LandingNavigation/>
         <Alert timeout={3000} />
         <div className={"create-account-container"} style ={ { backgroundImage: "url("+book+")" }}>
           <div className={"create-account"}>
             <Card
           title="Create An Account"
-          style={{ width: 400 }}
+          style={{ "width": "400px", "background":"none", "border":"0px solid black"}}
         >
-          <Input placeholder="Email" onChange={email => this.setState({ email: email.target.value })} /> <br />
-          <Input placeholder="Full Name" onChange={fullName => this.setState({ fullName: fullName.target.value })} /> <br />
-          <Input placeholder="Password" type="password" onChange={password => this.setState({ password: password.target.value })} /> <br />
+          <Input style={{"margin":"10px auto"}} placeholder="Email" onChange={email => this.setState({ email: email.target.value })} /> <br />
+          <Input style={{"margin":"10px auto"}} placeholder="Full Name" onChange={fullName => this.setState({ fullName: fullName.target.value })} /> <br />
+          <Input style={{"margin":"10px auto"}} placeholder="Password" type="password" onChange={password => this.setState({ password: password.target.value })} /> <br />
           <Button type="primary" onClick={() => this.createAccount(this.state.email, this.state.fullName, this.state.password)}>Sign Up</Button><br />
-          <Card>
+          <Card style={{"background":"none", "border":"0px solid black"}}>
             <p>Have an account? <a onClick={() => this.props.history.push("/login")}> Login </a> </p>
           </Card>
           <GoogleLogin

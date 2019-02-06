@@ -58,7 +58,7 @@ class LandingNavigation extends React.Component {
     }
 
     goToDashBoard(){
-        this.props.history.push('/dashboard')
+        this.props.history.push('/')
     }
 
     logout() {
@@ -78,7 +78,7 @@ class LandingNavigation extends React.Component {
         return (
             <div className={"top"}>
                 <img onClick={() => this.goToDashBoard()} src="https://github.com/ChiragAswani/Husky-Test/blob/master/logo.png?raw=true" height="20px"/>
-                <Button type="primary" onClick={this.showModal}>
+                <Button type="primary" className={"styledButton"} onClick={this.showModal}>
                   Submit Feedback
                 </Button>
                 <Modal

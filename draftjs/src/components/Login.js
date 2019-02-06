@@ -11,7 +11,8 @@ import Alert from 'react-s-alert';
 import { handleAccountError } from '../defaults/constants';
 import '../css/login.css';
 import features from '../images/features.png';
-import book from '../images/book.png';
+import book from '../images/book_landing.png';
+import LandingNavigation from './LandingNavigation';
 
 import {backendURL} from "../dependency";
 
@@ -73,44 +74,47 @@ class Login extends React.Component {
   render() {
     document.body.style.backgroundColor = "#f5f5f5"
     return (
-      <div className={"login-center"} style ={ { backgroundImage: "url("+book+")" }}>
-        <div className={"login-center-center"}>
-            <p className={"sign-in"}>Sign In</p>
-            <Alert timeout={3000} />
+      <div>
+        <LandingNavigation/>
+        <div className={"login-center"} style ={ { backgroundImage: "url("+book+")" }}>
+          <div className={"login-center-center"}>
+              <p className={"sign-in"}>Sign In</p>
+              <Alert timeout={3000} />
 
-            <Input
-                placeholder="Email"
-                onChange={email => this.setState({ email: email.target.value })}
-                className={"email-input"}
-            />
-            <br />
-            <Input
-                placeholder="Password"
-                type="password"
-                onChange={password => this.setState({ password: password.target.value })}
-                className={"password-input"}
-            />
-            <br />
-            <p className={"forgot-password"}>Forgot Password?</p>
-            <Button type="primary" onClick={() => this.login(this.state.email, this.state.password)}>Sign In</Button>
-            <Card>
-                <p>Dont have an account? <a onClick={() => this.props.history.push("/create-account")}> Sign Up </a> </p>
-            </Card>
-            <GoogleLogin
-                clientId="402919311024-18n9b01dptgeg774297fp4u9ir18sb6g.apps.googleusercontent.com"
-                onSuccess={succ => this.googleLogin(succ)}
-                onFailure={fail => this.googleLogin(fail)}
-                style={{
-                    border: 'none',
-                    background: 'none',
-                    padding: 0,
-                    margin: 0,
-                }}
-            >
-                <GoogleButton />
-            </GoogleLogin>
+              <Input
+                  placeholder="Email"
+                  onChange={email => this.setState({ email: email.target.value })}
+                  className={"email-input"}
+              />
+              <br />
+              <Input
+                  placeholder="Password"
+                  type="password"
+                  onChange={password => this.setState({ password: password.target.value })}
+                  className={"password-input"}
+              />
+              <br />
+              <p className={"forgot-password"}>Forgot Password?</p>
+              <Button type="primary" onClick={() => this.login(this.state.email, this.state.password)}>Sign In</Button>
+              <Card style={{"background":"none", "border":"0px solid black"}}>
+                  <p>Dont have an account? <a onClick={() => this.props.history.push("/create-account")}> Sign Up </a> </p>
+              </Card>
+              <GoogleLogin
+                  clientId="402919311024-18n9b01dptgeg774297fp4u9ir18sb6g.apps.googleusercontent.com"
+                  onSuccess={succ => this.googleLogin(succ)}
+                  onFailure={fail => this.googleLogin(fail)}
+                  style={{
+                      border: 'none',
+                      background: 'none',
+                      padding: 0,
+                      margin: 0,
+                  }}
+              >
+                  <GoogleButton />
+              </GoogleLogin>
+          </div>
+
         </div>
-
       </div>
     );
   }

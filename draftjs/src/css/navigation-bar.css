@@ -18,3 +18,10 @@
 .ant-modal-footer {
 	display: none !important;
 }
+
+.ant-btn {
+    height: 30px;
+    width: 140px;
+    background-color: #466fb5 !important;
+    border-radius: 15px !important;
+}

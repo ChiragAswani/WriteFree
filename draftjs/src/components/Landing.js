@@ -31,12 +31,12 @@ class Landing extends React.Component {
 	      	<Row className={["centered-text", "full-container", "intro"]} style ={{ backgroundImage: "url("+book+")" }}>
 	      		<Col span={24}>
 		    		<p className={"header"}>A simple, free to use note taking application for people affected with dyslexia!</p>
-		    		<Button onClick={() => this.login()} type="primary">Take me to the App!</Button>
+		    		<Button style={{"height": "50px", "width": "200px", "font-size": "18px"}} onClick={() => this.login()} type="primary">Take me there!</Button>
 	      		</Col>
 	      	</Row>
 	      	<Row className={"centered"}>
 			    <Col xs={{ span: 24}} lg={{ span: 10}}>
-			    	<Card className={["landing-card", "centered-text", "centered"]}>
+			    	<Card className={["landing-card", "centered-text", "centered", "shadow"]}>
 						<h2>Beautiful, personalized interface</h2>
 						<h5>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi laoreet dapibus ultrices. Phasellus neque augue, bibendum nec sem ac, aliquam faucibus massa.</h5>
 					</Card>
@@ -50,23 +50,28 @@ class Landing extends React.Component {
 					<img className={"demo-images"} src={ipad}/>
 				</Col>
 		    	<Col xs={{ span: 24}} lg={{ span: 10}}>
-			    	<Card className={["landing-card", "centered-text", "centered"]}>
+			    	<Card className={["landing-card", "centered-text", "centered", "shadow"]}>
 			    		<h2>Easy to use tools made for people with Dyslexia</h2>
 			    		<h5>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi laoreet dapibus ultrices. Phasellus neque augue, bibendum nec sem ac, aliquam faucibus massa.</h5>
 			    	</Card>
 			    </Col>
 		    </Row>
-		    <Row className={["centered-text", "full-container"]}>
+		    <Row className={["centered-text"]}>
 		    	<Col span={24}>
 		    		<Col span={12} offset={6}>
-		    			<Card className={"styled-card"}>
+		    			<Card className={["styled-card", "shadow"]}>
 							<p>WriteFree is a not for profit, open-source application! Help contribute to our cause</p>
 						</Card>
 		    		</Col>
 		    		<Col span={12} offset={6}>
-		    			<a target="_blank" href="https://github.com/ChiragAswani/WriteFree-backend"><Button type="primary">Github</Button></a>
-		    			<a target="_blank" href="#"><Button type="primary">Donate</Button></a>
+		    			<a target="_blank" href="https://github.com/ChiragAswani/WriteFree-backend"><Button style={{"height": "50px", "width": "200px", "font-size": "18px", "margin":"20px"}} type="primary">Github</Button></a>
+		    			<a target="_blank" href="#"><Button style={{"height": "50px", "width": "200px", "font-size": "18px", "margin":"20px"}} type="primary">Donate</Button></a>
 		    		</Col>
+		    	</Col>
+		    </Row>
+		    <Row className={["centered-text"]}>
+		    	<Col span={24}>
+		    		<h3>WriteFree is an <a target="_blank" href="https://instituteofethics.org"><b>Institute of Ethics</b></a> initiative!</h3>
 		    	</Col>
 		    </Row>
 	      	
