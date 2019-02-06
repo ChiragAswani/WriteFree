@@ -9,3 +9,12 @@
     padding-top: 20px;
     padding-bottom: 20px;
 }
+
+.ant-modal-content {
+	height: 600px !important;
+	width: 600px !important;
+}
+
+.ant-modal-footer {
+	display: none !important;
+}

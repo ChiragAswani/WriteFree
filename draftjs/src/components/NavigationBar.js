@@ -6,13 +6,15 @@ import PropTypes from 'prop-types';
 import 'antd/dist/antd.css';
 import '../css/navigation-bar.css';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {Dropdown, Menu} from "antd";
+import {Dropdown, Menu, Modal, Button} from "antd";
 import {backendURL} from "../dependency";
+import { ReactTypeformEmbed } from 'react-typeform-embed';
 
 class NavigationBar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            visible: false,
             email: null,
             password: null,
             menu: (
@@ -27,6 +29,38 @@ class NavigationBar extends React.Component {
             )
         };
     }
+
+
+
+    showSubmitFeedbackModal = () => {
+        this.setState({
+          visible: true,
+        });
+      }
+
+    showFeedbackModal = () => {
+        const feedback = axios.get(
+                                    `https://api.typeform.com/forms/HBVMMC/responses`, 
+                                    { headers: {Authorization: `Bearer EDGtnwFmvGATtjiQ2EXL4Jh3ZCcE1xFmKkPb6kATMP5S`}});
+        console.log(feedback);
+        this.setState({
+          visible: true,
+        });
+      }
+
+      handleOk = (e) => {
+        console.log(e);
+        this.setState({
+          visible: false,
+        });
+      }
+
+      handleCancel = (e) => {
+        console.log(e);
+        this.setState({
+          visible: false,
+        });
+      }
 
     goToDashBoard(){
         this.props.history.push('/dashboard')
@@ -49,6 +83,17 @@ class NavigationBar extends React.Component {
         return (
             <div className={"top"}>
                 <img onClick={() => this.goToDashBoard()} src="https://github.com/ChiragAswani/Husky-Test/blob/master/logo.png?raw=true" height="20px"/>
+                <Button type="primary" onClick={this.showSubmitFeedbackModal}>
+                  Submit Feedback
+                </Button>
+                <Modal
+                  title="Submit Feedback"
+                  visible={this.state.visible}
+                  onOk={this.handleOk}
+                  onCancel={this.handleCancel}
+                >
+                  <ReactTypeformEmbed url="https://ioe.typeform.com/to/HBVMMC" />
+                </Modal>
                 <Dropdown overlay={this.state.menu}>
                     <FontAwesomeIcon icon="user"/>
                 </Dropdown>

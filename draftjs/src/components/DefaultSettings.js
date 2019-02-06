@@ -32,7 +32,7 @@ class DefaultSettings extends React.Component {
           try {
               val = parsedData.credentials.defaultNoteSettings.fontSize.toString();
           } catch (err) {
-              val = '12';
+              val = '16';
           }
           this.setState({
               noteColor: parsedData.credentials.defaultNoteSettings.noteColor,
@@ -78,10 +78,10 @@ class DefaultSettings extends React.Component {
   }
 
     render() {
-        document.body.style.backgroundColor = "#f5f5f5"
+        
         console.log(this.state)
         return (
-            <div>
+            <div style={{'margin': '50px'}}>
                 <br />
                 <p>Note Color</p>
                 <CirclePicker

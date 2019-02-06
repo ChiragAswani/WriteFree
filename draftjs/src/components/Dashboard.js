@@ -224,14 +224,14 @@ class Dashboard extends React.Component {
                     <Walkthrough runTutorial={this.state.credentials.runTutorial} />
                     <Search
                         onChange={searchContent => this.searchNotes(searchContent.target.value)}
-                        style={{ width: 200 }}
+                        style={{ width: 200, marginRight: 20 }}
                     />
                     <Dropdown overlay={this.state.menu}>
-                       <Icon type="filter" theme="filled" style={{'color': '#466fb5'}}/>
+                       <Icon type="filter" theme="filled" style={{'color': '#466fb5', 'margin-right': '20px'}}/>
                     </Dropdown>
-                    <Switch checkedChildren="table" unCheckedChildren="card" onChange={child => this.switchView(child)} />
-                    <Icon type="setting" theme="filled" onClick={() => this.props.history.push('/default-settings')} />
-                    <Button type="primary" className="generateNewNote" onClick={() => this.createNote(localStorage.getItem('email'))}>New Document</Button>
+                    <Switch checkedChildren="table" unCheckedChildren="card" onChange={child => this.switchView(child)} style={{'margin-right': '20px'}} />
+                    <Icon type="setting" theme="filled" onClick={() => this.props.history.push('/default-settings')} style={{'margin-right': '20px'}}/>
+                    <Button type="primary" className="generateNewNote" onClick={() => this.createNote(localStorage.getItem('email'))} style={{'margin-right': '20px'}}>New Document</Button>
                 </div>
             </div>
             <div className={"bottom"}>
@@ -264,7 +264,7 @@ class Dashboard extends React.Component {
                 className="notesTable"
                 rowKey="_id"
                 columns={this.state.noteColumns}
-                pagination={{defaultPageSize: 5}}
+                pagination={{defaultPageSize: 10}}
                 rowClassName={(record) => record.noteColor}
             />
         </div>

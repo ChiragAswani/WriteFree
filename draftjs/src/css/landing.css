@@ -16,6 +16,9 @@
 
 .intro {
 	background-size: cover;
+	display: flex;
+	text-align: center;
+	align-items: center;
 }
 
 .header {
@@ -27,11 +30,20 @@
 	text-align: center;
 	align-items: center;
 }
-
+@media (max-width: 1000px) {
+	.centered {
+		display: block !important;
+		text-align: center;
+	}
+}
 .landing-card {
 	width: 90%;
 	border: 0px solid black;
 	margin: auto;
+}
+
+.styled-card {
+	background-color: blue;
 }
 
 .shadow {

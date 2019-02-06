@@ -13,6 +13,8 @@ import { mergeSort } from '../defaults/constants';
 import features from '../images/features.png';
 import layout from '../images/layout.png';
 import book from '../images/book_landing.png';
+import macbook from '../images/macbook.png';
+import ipad from '../images/ipad.png';
 import { Row, Col, Card } from 'antd';
 
 class Landing extends React.Component {
@@ -26,36 +28,38 @@ class Landing extends React.Component {
 	    return (
 	      <div className={["testing"]}>
 	      	<LandingNavigation/>
-	      	<Row className={["centered-text", "full-container", "intro", "centered"]} style ={ { backgroundImage: "url("+book+")" } }>
+	      	<Row className={["centered-text", "full-container", "intro"]} style ={{ backgroundImage: "url("+book+")" }}>
 	      		<Col span={24}>
 		    		<p className={"header"}>A simple, free to use note taking application for people affected with dyslexia!</p>
 		    		<Button onClick={() => this.login()} type="primary">Take me to the App!</Button>
 	      		</Col>
 	      	</Row>
 	      	<Row className={"centered"}>
-			    <Col xs={{ span: 24}} lg={{ span: 12}}>
-			    	<Card className={["landing-card", "centered-text"]}>
-						<p>Beautiful, personalized interface</p>
+			    <Col xs={{ span: 24}} lg={{ span: 10}}>
+			    	<Card className={["landing-card", "centered-text", "centered"]}>
+						<h2>Beautiful, personalized interface</h2>
+						<h5>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi laoreet dapibus ultrices. Phasellus neque augue, bibendum nec sem ac, aliquam faucibus massa.</h5>
 					</Card>
 			    </Col>
-			    <Col xs={{ span: 24}} lg={{ span: 12}}>
-			    	<img className={"demo-images"} src={layout}/>
+			    <Col xs={{ span: 24}} lg={{ span: 14}}>
+			    	<img className={"demo-images"} src={macbook}/>
 			    </Col>
 			</Row>
 	      	<Row className={"centered"}>
-		  		<Col xs={{ span: 24}} lg={{ span: 12}}>
-					<img className={"demo-images"} src={features}/>
+		  		<Col xs={{ span: 24}} lg={{ span: 14}}>
+					<img className={"demo-images"} src={ipad}/>
 				</Col>
-		    	<Col className={"centered"} xs={{ span: 24}} lg={{ span: 12}}>
-			    	<Card className={["landing-card", "centered-text"]}>
-			    		Easy to use tools made for people with Dyslexia
+		    	<Col xs={{ span: 24}} lg={{ span: 10}}>
+			    	<Card className={["landing-card", "centered-text", "centered"]}>
+			    		<h2>Easy to use tools made for people with Dyslexia</h2>
+			    		<h5>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi laoreet dapibus ultrices. Phasellus neque augue, bibendum nec sem ac, aliquam faucibus massa.</h5>
 			    	</Card>
 			    </Col>
 		    </Row>
 		    <Row className={["centered-text", "full-container"]}>
 		    	<Col span={24}>
 		    		<Col span={12} offset={6}>
-		    			<Card className={"landing-card"}>
+		    			<Card className={"styled-card"}>
 							<p>WriteFree is a not for profit, open-source application! Help contribute to our cause</p>
 						</Card>
 		    		</Col>

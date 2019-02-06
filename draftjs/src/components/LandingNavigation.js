@@ -6,12 +6,14 @@ import PropTypes from 'prop-types';
 import 'antd/dist/antd.css';
 import '../css/navigation-bar.css';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {Dropdown, Menu} from "antd";
+import {Dropdown, Menu, Modal, Button} from "antd";
+import { ReactTypeformEmbed } from 'react-typeform-embed';
 
 class LandingNavigation extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            visible: false,
             email: null,
             password: null,
             menu: (
@@ -26,6 +28,26 @@ class LandingNavigation extends React.Component {
             )
         };
     }
+
+    showModal = () => {
+        this.setState({
+          visible: true,
+        });
+      }
+
+      handleOk = (e) => {
+        console.log(e);
+        this.setState({
+          visible: false,
+        });
+      }
+
+      handleCancel = (e) => {
+        console.log(e);
+        this.setState({
+          visible: false,
+        });
+      }
 
     goToCreateAccount() {
         this.props.history.push('/create-account')
@@ -56,6 +78,18 @@ class LandingNavigation extends React.Component {
         return (
             <div className={"top"}>
                 <img onClick={() => this.goToDashBoard()} src="https://github.com/ChiragAswani/Husky-Test/blob/master/logo.png?raw=true" height="20px"/>
+                <Button type="primary" onClick={this.showModal}>
+                  Submit Feedback
+                </Button>
+                <Modal
+                  title="Basic Modal"
+                  visible={this.state.visible}
+                  onOk={this.handleOk}
+                  onCancel={this.handleCancel}
+                >
+                  // <ReactTypeformEmbed url="https://demo.typeform.com/to/njdbt5" />
+                  <ReactTypeformEmbed url="https://ioe.typeform.com/to/HBVMMC" />
+                </Modal>
                 <Dropdown overlay={this.state.menu}>
                     <FontAwesomeIcon icon="user"/>
                 </Dropdown>
