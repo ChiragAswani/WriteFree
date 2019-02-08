@@ -6,13 +6,15 @@ import time
 from pymongo import MongoClient
 import json
 from bson.objectid import ObjectId
-from flask_bcrypt import Bcrypt
+
+# from pybcrypt import bcrypt
 import pdfkit
 import datetime
 from draftjs_exporter.html import HTML
 import MongoDBCalls as dbcalls
 import control as control
 import re
+import flask_bcrypt
 
 from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token, create_refresh_token,
@@ -29,7 +31,7 @@ app.secret_key = 'super secret key'
 app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
 SESSION_TYPE = 'redis'
-bcrypt = Bcrypt(app)
+bcrypt = flask_bcrypt.Bcrypt(app)
 
 #JWT stuff ->
 jwt = JWTManager(app)

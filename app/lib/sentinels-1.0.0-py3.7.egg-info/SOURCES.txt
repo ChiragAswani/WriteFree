@@ -1,0 +1,15 @@
+LICENSE
+MANIFEST.in
+README.rst
+setup.cfg
+setup.py
+tox.ini
+sentinels/__init__.py
+sentinels/__version__.py
+sentinels.egg-info/PKG-INFO
+sentinels.egg-info/SOURCES.txt
+sentinels.egg-info/dependency_links.txt
+sentinels.egg-info/namespace_packages.txt
+sentinels.egg-info/top_level.txt
+tests/test__readme_doctest.py
+tests/test__readme_doctest.pyc
