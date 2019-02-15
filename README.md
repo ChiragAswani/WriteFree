@@ -1,5 +1,4 @@
 # WriteFree-FrontEnd
-## Learn more on my [Website](https://sidpremkumar.com/writefree.html)
 ## Installation
 1. ``` cd draftjs/```
 2. ``` npm install```
