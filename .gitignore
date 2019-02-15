@@ -5,7 +5,7 @@ draftjs/node_modules
 node_modules/
 
 #webstorm
-.idea/
+/.idea/
 
 # testing
 /coverage
@@ -31,3 +31,19 @@ yarn-debug.log*
 *.json
 .idea/workspace.xml
 draftjs/package.json
+.idea/
+venv_1/
+venv/
+__pycache__/
+*.pyc
+
+*.xml
+
+package-lock.json
+
+node_modules
+*.xml
+/app/virt/
+app/virt/
+app/venv/
+/app/venv
