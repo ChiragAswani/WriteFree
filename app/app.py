@@ -139,6 +139,8 @@ def login():
     email = request.args['email']
     password = request.args['password']
     credentials = dbcalls.DB_find_one(credentials_collection, {'email': email})
+    print("credentials: ", credentials)
+    print("password: ", password)
     if (credentials):
         if (bcrypt.check_password_hash(credentials['password'], password.encode('utf-8'))):
             login_credential = control.get_credential(credentials, email)
