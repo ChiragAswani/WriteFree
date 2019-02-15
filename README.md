@@ -5,7 +5,7 @@
 3. ``` npm start```
 4. Open localhost:3000/login
 
-##How to Run Tests
+## How to Run Tests
 1. cd into draftjs/src/tests
 2. for every file run... ()
 ````
