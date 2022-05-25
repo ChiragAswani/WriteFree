@@ -24,7 +24,7 @@ pluggy==0.8.0
 py==1.7.0
 py-bcrypt==0.4
 pycparser==2.19
-PyJWT==1.7.1
+PyJWT==2.4.0
 pymongo==3.7.1
 pytest==4.0.1
 pytest-mongodb==2.1.2
